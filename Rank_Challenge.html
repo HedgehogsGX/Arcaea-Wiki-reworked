@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>段位挑战 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .update-content li::before {
+            content: "•";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        .update-content li {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .update-content li:hover {
+            transform: translateX(10px);
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        /* 防止图片压缩 */
+        img {
+            max-width: 100%;
+            height: auto !important;
+            /* 覆盖Tailwind的固定高度 */
+            object-fit: contain;
+            /* 保持原始比例且完整显示 */
+            width: auto !important;
+            /* 禁用固定宽度 */
+        }
+
+        /* 覆盖表格中图片的固定高度 */
+        td img.h-24,
+        td img.h-16 {
+            height: auto !important;
+            max-height: 100px;
+            /* 根据实际需求调整 */
+        }
+
+        /* 覆盖卡片中图片的固定高度 */
+        .card img.h-32 {
+            height: auto !important;
+            max-height: 150px;
+            /* 根据实际需求调整 */
+        }
+
+        /* Add consistent table styles */
+        .world-mode-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .world-mode-table th,
+        .world-mode-table td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .world-mode-table th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .world-mode-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .world-mode-table tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        /* Add decorative title elements */
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 2px rgba(0,0,0,0.5);">段位挑战</h1>
+
+            <!-- 概述部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">概述</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">段位挑战（Course Mode）是Arcaea的供玩家挑战自我的一种特殊游戏模式。</p>
+                    <p class="text-gray-600">与其他游戏的段位模式类似，玩家需要在生命值限制内，连续游玩段位指定的四首歌曲并存活，方可通过段位认定。</p>
+                    <p class="text-gray-600">在移动版中，和世界模式一样，玩家需要联网并登录才能进入该模式。建议在网络条件良好的环境下进行挑战！</p>
+                </div>
+            </div>
+
+            <!-- 构成与流程部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">构成与流程</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex justify-center mb-6">
+                        <a href="#"><img src="IMG/Core_bypass.png" alt="次元结晶" class="h-32 mx-2"
+                                style="object-fit: contain;"></a>
+                    </div>
+                    <p class="text-gray-600">段位挑战模式提供了若干段位（Phase），每个段位有一个独有的名称，包含4个固定的谱面。</p>
+                    <p class="text-gray-600">玩家可自选一个段位，消耗4点体力或1个次元结晶以开始对应的段位挑战。</p>
+                    <p class="text-gray-600">初始解锁Phase 1至Phase 8，更高的段位需要通过其前置段位以解锁，未解锁前相应位置将以黑色框占位。</p>
+                    <p class="text-gray-600">特别地，Phase 12在未解锁所需的全部谱面之前完全不可见，且如果未通过Phase 11，其也不计入总段位数量。解锁所需的全部谱面会使得Phase
+                        12正常显示，未通过Phase 11时也正常以黑色框占位。</p>
+                    <ul>
+                        <li>使用体力游玩段位时，要求段位内的谱面全部解锁，否则无法游玩。</li>
+                        <li>使用次元结晶游玩段位时，不需要解锁全部曲目，可以直接游玩段位内的所有谱面，但本次游玩所有的成绩均不会上传至服务器，即不会对潜力值造成影响，其中未解锁谱面成绩也不会记录于本地存档。
+                        </li>
+                        <li>次元结晶目前可通过世界模式获取。</li>
+                        <li>Phase 10及之后的段位即使使用次元结晶挑战也要求拥有该段位的全部曲目，否则玩家无法使用次元结晶开始挑战，且隐藏曲目在解锁前不会显示相应曲绘，而是以灰色的图片占位。</li>
+                    </ul>
+                    <p class="text-gray-600 mt-4">开始段位挑战后，玩家将按照给出的谱面顺序依次进行游玩。</p>
+                    <ul>
+                        <li>若玩家存在未下载的歌曲，需要在开始游玩前下载。</li>
+                        <li>取消下载后系统将提示是否重新下载，所以不必担心因锁屏等意外情况而中断挑战。</li>
+                        <li>若执意取消下载，视为放弃挑战，消耗的体力/次元结晶不会返还。</li>
+                    </ul>
+                    <p class="text-gray-600 mt-4">游玩开始后不可暂停（不显示暂停按钮）。</p>
+                    <ul>
+                        <li>强行暂停（如黑屏）时每首歌仅提供总计30秒的暂停时间，将游戏置于后台也不会使倒计时暂停。</li>
+                        <li>30秒倒计时结束后"返回"按钮会被屏蔽，玩家只能点击退出放弃挑战，此时判定本次段位挑战失败。</li>
+                        <li>游戏无响应时自动判定挑战失败。</li>
+                    </ul>
+                    <p class="text-gray-600 mt-4">段位挑战使用特殊的Course回忆收集条（与当前搭档无关），带有COURSE外框，每首歌曲之间会继承剩余回忆率。</p>
+                    <ul>
+                        <li>回忆率降至0时立即判定本次段位挑战失败。</li>
+                        <li>回忆率以Hard模式为基础，仅在回忆率≥40时Lost判定扣除的回忆率有差异[1]：</li>
+                        <ul>
+                            <li>回忆率 ≥ 40时：回忆率 -10</li>
+                        </ul>
+                    </ul>
+                    <p class="text-gray-600 mt-4">如果单次游玩达成Track Complete，单次段位结算界面标记为Hard Clear。</p>
+                    <ul>
+                        <li>但是在线成绩标记为Easy Clear，本地成绩则不会给出任何通关标记，除非达成了FR或PM。</li>
+                        <li>如果在本地成绩无通关标记的情况下通过云端存档备份并在新设备上还原存档，则会显示L标记；如果原通关状态为Track Lost则不做改动。</li>
+                    </ul>
+                    <p class="text-gray-600 mt-4">每次结算均需要联网，并立即结算潜力值、段位总分，提供快速同步按钮，并在开始下一首游玩前提供60秒的休息时间。</p>
+                    <ul>
+                        <li>休息截止时间在谱面结束的时候就已经确定并由云端计算，请不要试图通过断网、息屏等操作来获取额外的休息时间。</li>
+                        <li>因此，如果网络环境较差导致上传成绩的时间过长，将有可能导致休息时间减少甚至本次挑战直接判定为失败；</li>
+                        <li>若倒计时结束时游戏处在后台，玩家没有及时回到游戏内，也将立即判定段位挑战失败。</li>
+                        <li>剩余10秒钟时会有倒计时音效提示，剩余时间结束后将立即进行下一曲的游玩。</li>
+                    </ul>
+                    <p class="text-gray-600 mt-4">段位挑战结束后将记录最高段位总分和通关类型，若第一次成功通过则可以获得对应段位奖励。</p>
+                    <ul>
+                        <li>重复通关已完成的段位将没有任何奖励。</li>
+                        <li>只要回忆率不为0并成功通过四首曲目即视为挑战成功，分数的高低不会影响段位通过结果。</li>
+                        <li>不会根据当前的搭档给出相应的通关类型。达成Track Complete时，使用任何搭档均给出Normal Clear。</li>
+                        <li>四首歌曲全部达成Full Recall及以上，但未能全部达成Pure Memory时，通关类型计为Full Recall；</li>
+                        <li>四首歌曲全部达成Pure Memory时，通关类型计为Pure Memory。</li>
+                    </ul>
+                    <p class="text-gray-600 mt-4">段位背景框的整体颜色、左侧累计的菱形数量和边框层数反映了对应的段位。背景框显示与解锁顺序无关，仅显示最高段位。</p>
+                    <p class="text-gray-600">在移动版v5.7.0更新后，玩家在订阅Arcaea Online期间可任意选择已解锁的背景框在游戏中显示</p>
+                </div>
+            </div>
+
+            <!-- 移动版段位一览 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">段位一览（移动版）</span>
+                </div>
+                <div class="update-content">
+                    <div class="overflow-x-auto">
+                        <table class="world-mode-table">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">段位名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="4">
+                                        考核曲目</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">奖励</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">关联付费曲包</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 1：新世界的第一步<br>(First Step in a New
+                                        World)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_inkarusi.jpg" alt="Inkarusi"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 4</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_snowwhite.jpg" alt="Snow White"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 5</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_sakurafubuki.jpg" alt="Sakura Fubuki"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 6</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_purgatorium.jpg" alt="Purgatorium"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 6</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">300 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_1.png" alt="Phase 1 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">本段位曲目均可免费解锁</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 2：一次心跳的加速<br>(Swept up in a
+                                        Heartbeat)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_vexaria.jpg" alt="Vexaria" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 7</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_clotho.jpg" alt="Clotho" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 7+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_brandnewworld.jpg" alt="Brand New World"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 7+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_oblivia.jpg" alt="Oblivia" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">400 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_2.png" alt="Phase 2 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">本段位曲目均可免费解锁</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 3：永不屈服的精神<br>(Unceasing Spirit)
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_suomi.jpg" alt="Suomi" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 7+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_grimheart.jpg" alt="Grimheart"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 8+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_bookmaker.jpg" alt="Bookmaker"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_avril.jpg" alt="Avril" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">500 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_3.png" alt="Phase 3 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">本段位曲目均可免费解锁</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 4：光芒的永恒之地<br>(The Eternal Realm
+                                        of Light)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_gekka.jpg" alt="Gekka" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_vividtheory.jpg" alt="Vivid Theory"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 8+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_kanagawa.jpg" alt="Kanagawa"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_iconoclast.jpg" alt="Iconoclast"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">600 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_4.png" alt="Phase 4 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Extend Archive 1 (免费/付费包)<br>Eternal
+                                        Core<br>Vicious Labyrinth</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 5：玻璃之中的残酷<br>(The Brutality of
+                                        Glass)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_faintlight.jpg" alt="Faint Light"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_eveninginscarlet.jpg" alt="Evening in Scarlet"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_kyogenkigo.jpg" alt="Kyogen Kigo"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_blrink.jpg" alt="Blrink" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">700 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_5.png" alt="Phase 5 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Extend Archive 1 (免费/付费包)<br>Memory
+                                        Archive (单曲付费)<br>Adverse Prelude</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 6：沉浸于悲喜交加<br>(In Grief and Great
+                                        Delight)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_vindication.jpg" alt="Vindication"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_heartjackin.jpg" alt="Heart Jackin"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_ascent.jpg" alt="Ascent" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_macromod.jpg" alt="Macromod"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">800 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_6.png" alt="Phase 6 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Adverse Prelude<br>Ephemeral Page - The
+                                        Journey Onwards<br>Binary Enfold - Shared Time<br>Memory Archive (单曲付费)</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 7：在命运到来之际<br>(On Fate's Approach)
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_galaxyfriends.jpg" alt="Galaxy Friends"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_neokosmo.jpg" alt="Neo Kosmo"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_conflict.jpg" alt="Conflict"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_redolentshape.jpg" alt="Redolent Shape"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">900 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_7.png" alt="Phase 7 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Memory Archive (单曲付费)<br>Divided
+                                        Heart<br>Vicious Labyrinth</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 8：趋于混沌的时空<br>(The Disfigured Flow
+                                        of Time)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_corruption.jpg" alt="Corruption"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_neowings.jpg" alt="Neo Wings"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_valhallazero.jpg" alt="Valhalla Zero"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_izana.jpg" alt="Izana" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">1000 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_8.png" alt="Phase 8 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Absolute Reason<br>Memory Archive
+                                        (单曲付费)<br>Sunset Radiance</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 9：分崩离析的自我<br>(Ego's Demise)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_felis.jpg" alt="Felis" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_lightningscrew.jpg" alt="Lightning Screw"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_seclusion.jpg" alt="Seclusion"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_livefastdieyoung.jpg" alt="Live Fast Die Young"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">1000 残片<br>10 以太之滴<br><a href="#"><img
+                                                src="IMG/Banner_course_9.png" alt="Phase 9 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Ephemeral Page<br>Divided
+                                        Heart<br>Esoteric Order<br>Binary Enfold - Shared Time</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 10：光与对立的洪流<br>(A Torrent of Light
+                                        and Conflict)[2]</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_cyaegha.jpg" alt="Cyaegha" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_divinelight.jpg" alt="Divine Light"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_dantalion.jpg" alt="Dantalion"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_aegleseeker.jpg" alt="Aegleseeker"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">1000 残片<br>10 以太之滴<br><a href="#"><img
+                                                src="IMG/Banner_course_10.png" alt="Phase 10 Banner"
+                                                class="h-16 mx-auto" style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Absolute Reason<br>Esoteric Order -
+                                        Light of Salvation<br>Black Fate<br>Esoteric Order</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 11：创世之曙光<br>(Radiant Genesis)
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_infinitestrife.jpg" alt="Infinite Strife"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>BYD 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_grievouslady.jpg" alt="Grievous Lady"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_fractureray.jpg" alt="Fracture Ray"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_tempestissimo.jpg" alt="Tempestissimo"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>BYD 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">2000 残片<br>20 以太之滴<br><a href="#"><img
+                                                src="IMG/Banner_course_11.png" alt="Phase 11 Banner"
+                                                class="h-16 mx-auto" style="object-fit: contain;"></a></td>
+                                    <td class="border border-gray-300 px-4 py-2">Final Verdict<br>Vicious
+                                        Labyrinth<br>Luminous Sky<br>Black Fate</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 12：侵蚀万物的色彩<br>(Irruption of New
+                                        Color)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_abstrusedilemma.jpg" alt="Abstruse Dilemma"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_worldender.jpg" alt="World Ender"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>BYD 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_alterego.jpg" alt="Alter Ego"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>ETR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_designant.jpg" alt="Designant"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>BYD 11+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">2000 残片<br>20 以太之滴<br>
+                                        <a href="#"><img src="IMG/Banner_course_12.png" alt="Phase 12 Banner"
+                                                class="h-16 mx-auto" style="object-fit: contain;"></a>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">Lasting Eden<br>Final
+                                        Verdict<br>Absolute Nihil<br>Lucent Historia</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NS版调整 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Nintendo Switch版调整</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">在Nintendo Switch版中，段位挑战经过了调整，包括：</p>
+                    <ul>
+                        <li>无需网络即可在任何时刻进行段位挑战；</li>
+                        <li>初始仅解锁Phase 1，更高的段位需要通过其前置段位以解锁；</li>
+                        <li>两种操作模式不共享已解锁的段位；最高分数、通关状态、最高段位两种操作模式相互独立。</li>
+                        <li>段位内的谱面需要全部解锁，否则无法游玩。</li>
+                        <li>调整了部分考核曲目。</li>
+                        <ul>
+                            <li>实际为替换了部分需要购买DLC才能解锁的曲目。</li>
+                        </ul>
+                        <li>段位通过时给出的通关类型为Hard Clear。</li>
+                        <li>NS版中段位挑战失败将没有潜力值保护，有可能会使潜力值下降。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- NS版段位一览 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">段位一览（NS版）</span>
+                </div>
+                <div class="update-content">
+                    <div class="overflow-x-auto">
+                        <table class="world-mode-table">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">段位名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="4">
+                                        考核曲目</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">奖励</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 1：新世界的第一步(First Step in a New
+                                        World)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_inkarusi.jpg" alt="Inkarusi"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 4</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_snowwhite.jpg" alt="Snow White"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 5</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_sakurafubuki.jpg" alt="Sakura Fubuki"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 5</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_purgatorium.jpg" alt="Purgatorium"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>PRS 6</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">300 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_1.png" alt="Phase 1 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 2：一次心跳的加速(Swept up in a
+                                        Heartbeat)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_vexaria.jpg" alt="Vexaria" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 7</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_clotho.jpg" alt="Clotho" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 7</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_brandnewworld.jpg" alt="Brand New World"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 7</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_oblivia.jpg" alt="Oblivia" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">400 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_2.png" alt="Phase 2 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 3：永不屈服的精神(Unceasing Spirit)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_suomi.jpg" alt="Suomi" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 7</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_grimheart.jpg" alt="Grimheart"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_bookmaker.jpg" alt="Bookmaker"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_avril.jpg" alt="Avril" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">500 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_3.png" alt="Phase 3 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 4：光芒的永恒之地(The Eternal Realm of
+                                        Light)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_gekka.jpg" alt="Gekka" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_vividtheory.jpg" alt="Vivid Theory"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 8</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_kanagawa.jpg" alt="Kanagawa"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_iconoclast.jpg" alt="Iconoclast"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">600 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_4.png" alt="Phase 4 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 5：玻璃之中的残酷(The Brutality of Glass)
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_faintlight.jpg" alt="Faint Light"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_mahoroba.jpg" alt="Mahoroba"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_kyogenkigo.jpg" alt="Kyogen Kigo"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_lethaeus.jpg" alt="Lethaeus"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">700 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_5.png" alt="Phase 5 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 6：沉浸于悲喜交加(In Grief and Great
+                                        Delight)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_themessage.jpg" alt="The Message"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_scarletcage.jpg" alt="Scarlet Cage"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_memoryforest.jpg" alt="Memory Forest"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_blacklotus.jpg" alt="Black Lotus"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">800 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_6.png" alt="Phase 6 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 7：在命运到来之际(On Fate's Approach)
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_galaxyfriends.jpg" alt="Galaxy Friends"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_neokosmo.jpg" alt="Neo Kosmo"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_conflict.jpg" alt="Conflict"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_etherstrike.jpg" alt="Ether Strike"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">900 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_7.png" alt="Phase 7 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 8：趋于混沌的时空(The Disfigured Flow of
+                                        Time)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_corruption.jpg" alt="Corruption"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 9+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_sheriruth.jpg" alt="Sheriruth"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_valhallazero.jpg" alt="Valhalla Zero"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_metallicpunisher.jpg" alt="Metallic Punisher"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">1000 残片<br><a href="#"><img
+                                                src="IMG/Banner_course_8.png" alt="Phase 8 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 9：分崩离析的自我(Ego's Demise)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_corpssansorganes.jpg" alt="Corps Sans Organes"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_lightningscrew.jpg" alt="Lightning Screw"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_gloryroad.jpg" alt="Glory Road"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_axiumcrisis.jpg" alt="Axium Crisis"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">1000 残片<br>10 以太之滴<br><a href="#"><img
+                                                src="IMG/Banner_course_9.png" alt="Phase 9 Banner" class="h-16 mx-auto"
+                                                style="object-fit: contain;"></a></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 10：光与对立的洪流(A Torrent of Light and
+                                        Conflict)[3]</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_cyaegha.jpg" alt="Cyaegha" class="h-24 mx-auto"
+                                                style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_ringedgenesis.jpg" alt="Ringed Genesis"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_dantalion.jpg" alt="Dantalion"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <a href="#"><img src="IMG/120px-Songs_saikyostronger.jpg" alt="Saikyo Stronger"
+                                                class="h-24 mx-auto" style="object-fit: contain;"></a>
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">1000 残片<br>10 以太之滴<br><img
+                                            src="IMG/Banner_course_10.png" alt="Phase 10 Banner" class="h-16 mx-auto"
+                                            style="object-fit: contain;"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">Phase 11：创世之曙光(Radiant Genesis)</td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <img src="IMG/120px-Songs_infinitestrife.jpg" alt="Infinite Strife"
+                                            class="h-24 mx-auto" style="object-fit: contain;">
+                                        <p>BYD 10+</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <img src="IMG/120px-Songs_grievouslady.jpg" alt="Grievous Lady" class="h-24 mx-auto"
+                                            style="object-fit: contain;">
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <img src="IMG/120px-Songs_fractureray.jpg" alt="Fracture Ray" class="h-24 mx-auto"
+                                            style="object-fit: contain;">
+                                        <p>FTR 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 text-center">
+                                        <img src="IMG/120px-Songs_tempestissimo.jpg" alt="Tempestissimo" class="h-24 mx-auto"
+                                            style="object-fit: contain;">
+                                        <p>BYD 11</p>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">2000 残片<br>20 以太之滴<br><img
+                                            src="IMG/Banner_course_11.png" alt="Phase 11 Banner" class="h-16 mx-auto"
+                                            style="object-fit: contain;"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 你知道吗部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">你知道吗</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">由于移动版中绝大多数曲目需要付费解锁，故：</p>
+                    <ul>
+                        <li>如果玩家想挑战所有的段位，则需要花费最多8900记忆源点（约551元人民币）以购买相应曲目和曲包，包括：</li>
+                        <ul>
+                            <li>4首Memory Archive单曲。</li>
+                            <li>Extend Archive 1（在未解锁曲目的条件下）。</li>
+                            <li>所有9个主线故事（Act I和Act II）曲包、5个支线曲包和3个Pack Append。</li>
+                        </ul>
+                        <li>即使通过次元结晶挑战段位避免购买某些曲目和曲包，玩家也必须花费4800记忆源点（约297元人民币）以购买Phase 10及之后的相应曲包，包括：</li>
+                        <ul>
+                            <li>主线曲包（Act I）Luminous Sky、Vicious Labyrinth、Black Fate和Final Verdict。</li>
+                            <li>主线曲包（Act II）Lasting Eden、Absolute Nihil、Lucent Historia。</li>
+                            <li>支线曲包Absolute Reason、Esoteric Order和其Pack Append "Light of Salvation"。</li>
+                        </ul>
+                    </ul>
+                    <p class="text-gray-600 mt-2">
+                        虽然看起来所有的段位只需要解锁曲目（或使用次元结晶）游玩，但实际上存在必须要求解锁全部曲目，且有曲目解锁条件要求潜力值的段位，这也连带导致这个段位必须达到特定潜力值才能挑战（参见下方注释）。
+                    </p>
+                    <p class="text-gray-600">在这个情况下，玩家必须达到特定潜力值才能通过所有的段位。</p>
+                </div>
+            </div>
+
+            <!-- 注释部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">注释</span>
+                </div>
+                <div class="update-content">
+                    <ul>
+                        <li>[1] 参考机制</li>
+                        <li>[2] 由于挑战此段位需要解锁所有所需曲目，且包含Aegleseeker的FTR难度谱面，因此本段位实际上还需要玩家潜力值大于等于11.00才可挑战。</li>
+                        <li>[3] 由于挑战此段位需要解锁所有所需曲目，且包含SAIKYO STRONGER的FTR难度谱面，因此本段位实际上还需要玩家潜力值到达过11.00，并解锁过SAIKYO
+                            STRONGER的FTR难度谱面才可挑战。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

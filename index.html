@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arcaea Wiki - 非官方 Arcaea 游戏百科全书，提供游戏指南、版本更新、工具等资源">
+    <meta name="keywords" content="Arcaea, 音游, 韵律游戏, Wiki, 百科, lowiro">
+    <meta name="author" content="Arcaea Wiki Community">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>Arcaea Wiki - 非官方 Arcaea 游戏百科全书</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="css/style.css" as="style">
+
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
+    <script src="js/main.js" defer></script>
+    <style>
+        /* Page-specific styles only */
+        .nav-dropdown {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .absolute.-top-\[calc\(45\%-120px\)\] {
+            top: calc(45% - 155px) !important;
+        }
+
+        .card-featured {
+            display: block;
+            transition: all 0.3s ease;
+            will-change: transform;
+        }
+
+        .card-featured:hover {
+            text-decoration: none;
+        }
+
+        .card-featured .card {
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-featured:hover .card {
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .glide__arrows {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .glide:hover .glide__arrows {
+            opacity: 1;
+        }
+
+        .glide__arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .glide__arrow:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .glide__arrow--left {
+            left: 20px;
+        }
+
+        .glide__arrow--right {
+            right: 20px;
+        }
+
+        .glide__arrow i {
+            color: rgba(0, 0, 0, 0.8);
+            font-size: 16px;
+        }
+
+        .world-mode-slider .glide__arrow {
+            background: rgba(255, 255, 255, 0.7);
+            width: 36px;
+            height: 36px;
+        }
+
+        .world-mode-slider .glide__arrow i {
+            font-size: 14px;
+        }
+
+        .world-mode-slider .glide__bullets {
+            bottom: -25px;
+        }
+
+        .world-mode-slider .glide__bullet {
+            width: 10px;
+            height: 10px;
+            margin: 0 4px;
+        }
+
+        .world-mode-slider .card {
+            transform: none !important;
+        }
+
+        .world-mode-slider .card:hover {
+            transform: none !important;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelector('a[href="#latest-updates"]').addEventListener('click', function (e) {
+                e.preventDefault();
+                const element = document.getElementById('latest-updates');
+                const headerOffset = 80;
+                const elementPosition = element.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</head>
+
+<body class="bg-gray-900">
+    <div class="background-parallax"></div>
+    <div class="background-overlay"></div>
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html" class="block px-4 py-2 text-white hover:bg-primary/20">Link
+                                        Play</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="son-format.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <section class="glass-effect rounded-lg p-8 mb-12 relative overflow-hidden"
+                style="background: rgba(0, 0, 0, 0.6); min-height: 200px"> .
+                <img src="IMG/Partner_hikari_&_tairitsu_reunion.png" alt="Arcaea Hero"
+                    class="absolute -top-[calc(45%-120px)] right-0 h-[250%] w-1/2 object-contain object-left">
+                <div class="relative z-10 max-w-[50%]">
+                    <h1 class="text-4xl font-bold text-white mb-4" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                        欢迎来到 Arcaea Wiki</h1>
+                    <p class="text-gray-200 text-lg mb-6" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        探索音乐世界的无限可能，在这里你可以找到关于 Arcaea 的一切。</p>
+                    <button class="bg-primary hover:bg-opacity-90 text-white px-6 py-3 rounded-button">开始探索</button>
+                </div>
+            </section>
+            <section id="latest-updates" class="mb-12">
+                <h2 class="text-2xl font-bold text-white mb-6">最新更新</h2>
+                <div class="glide relative glass-effect rounded-lg overflow-hidden">
+                    <div class="glide__track" data-glide-el="track">
+                        <ul class="glide__slides">
+                            <li class="glide__slide">
+                                <div class="relative">
+                                    <img src="IMG/AI-chan.png" class="w-full" alt="Ai酱复刻">
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mb-2">纪念活动</span>
+                                        <h3 class="text-xl font-semibold text-white mb-2">Ai酱复刻</h3>
+                                        <p class="text-gray-200">Arcaea 角色复刻～</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="glide__slide">
+                                <div class="relative">
+                                    <img src="IMG/Fools_day.jpg" class="w-full" alt="愚人节限定曲目">
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mb-2">特别活动</span>
+                                        <h3 class="text-xl font-semibold text-white mb-2">愚人节限定曲目</h3>
+                                        <p class="text-gray-200">Arcaea × UNDERTALE 愚人节限定曲目以上线</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="glide__slide">
+                                <div class="relative">
+                                    <img src="IMG/1100px-News_20250307_1.jpg" class="w-full" alt="光与对立立绘更新">
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mb-2">立绘更新</span>
+                                        <h3 class="text-xl font-semibold text-white mb-2">光与对立立绘更新</h3>
+                                        <p class="text-gray-200">全新立绘现已上线，展现光与对立的崭新形象！</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="glide__slide">
+                                <div class="relative">
+                                    <img src="IMG/song_new_select.jpg" class="w-full" alt="全新曲包选择页面">
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mb-2">联动曲目</span>
+                                        <h3 class="text-xl font-semibold text-white mb-2">全新曲包选择页面</h3>
+                                        <p class="text-gray-200">全新曲包选择页面已更新</p>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="glide__slide">
+                                <div class="relative">
+                                    <img src="IMG/WorldExtended3(song).png" class="w-full" alt="World Extended 3 新曲">
+                                    <div
+                                        class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
+                                        <span
+                                            class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800 mb-2">特别活动</span>
+                                        <h3 class="text-xl font-semibold text-white mb-2">World Extended 3 新曲</h3>
+                                        <p class="text-gray-200">全新曲目以上线，通过世界模式解锁</p>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <div class="glide__arrows" data-glide-el="controls">
+                            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="glide__bullets" data-glide-el="controls[nav]">
+                        <button class="glide__bullet bg-[rgba(255,255,255,0.5)]" data-glide-dir="=0"></button>
+                        <button class="glide__bullet bg-[rgba(255,255,255,0.5)]" data-glide-dir="=1"></button>
+                        <button class="glide__bullet bg-[rgba(255,255,255,0.5)]" data-glide-dir="=2"></button>
+                        <button class="glide__bullet bg-[rgba(255,255,255,0.5)]" data-glide-dir="=3"></button>
+                        <button class="glide__bullet bg-[rgba(255,255,255,0.5)]" data-glide-dir="=4"></button>
+                    </div>
+                </div>
+                <script>
+                    const glideInstance = new Glide('.glide', {
+                        type: 'carousel',
+                        autoplay: 6000,
+                        animationDuration: 1000,
+                        gap: 0,
+                        perView: 1,
+                        focusAt: 0
+                    }).mount();
+                    // 初始化第一个指示器为白色不透明
+                    document.querySelector('[data-glide-dir="=0"]').classList.add('bg-white');
+                    document.querySelector('[data-glide-dir="=0"]').classList.remove('bg-white/50');
+                    document.querySelectorAll('[data-glide-dir]').forEach((button, index) => {
+                        button.addEventListener('click', () => {
+                            // 更新指示器样式
+                            document.querySelectorAll('[data-glide-dir]').forEach(btn => {
+                                btn.classList.remove('bg-white');
+                                btn.classList.add('bg-white/50');
+                            });
+                            button.classList.remove('bg-white/50');
+                            button.classList.add('bg-white');
+                            // 直接跳转到对应的幻灯片
+                            glideInstance.go(`=${index}`);
+                        });
+                    });
+                    glideInstance.on('move', function () {
+                        const index = glideInstance.index;
+                        document.querySelectorAll('[data-glide-dir]').forEach((btn, i) => {
+                            if (i === index) {
+                                btn.classList.remove('bg-white/50');
+                                btn.classList.add('bg-white');
+                            } else {
+                                btn.classList.remove('bg-white');
+                                btn.classList.add('bg-white/50');
+                            }
+                        });
+                    });
+                </script>
+            </section>
+
+            <!-- Featured Content -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-white mb-6">精选内容</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 新手指南 - 修改为可点击卡片 -->
+                    <a href="gameplay.html"
+                        class="card-featured transform transition-transform duration-300 hover:scale-[1.02]">
+                        <div class="card p-6 h-full">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-book text-2xl text-primary"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-xl font-semibold mb-2">新手指南</h3>
+                                    <p class="text-gray-600">从基础操作到进阶技巧，帮助你快速上手 Arcaea。</p>
+                                    <ul class="mt-4 space-y-2 text-gray-600">
+                                        <li>• 基础操作教程</li>
+                                        <li>• 评分系统说明</li>
+                                        <li>• 搭档系统介绍</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <!-- 谱面数据库 -->
+                    <a href="#" class="card-featured transform transition-transform duration-300 hover:scale-[1.02]">
+                        <div class="card p-6 h-full">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-chart-line text-2xl text-primary"></i>
+                                </div>
+                                <div class="ml-4 flex-1">
+                                    <h3 class="text-xl font-semibold mb-2">谱面数据库</h3>
+                                    <p class="text-gray-600 mb-4">最全面的谱面信息和难度评级。</p>
+                                    <div class="grid grid-cols-4 gap-4">
+                                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-primary">452+</div>
+                                            <div class="text-sm text-gray-600">总曲目数</div>
+                                        </div>
+                                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-primary">1360+</div>
+                                            <div class="text-sm text-gray-600">谱面数量</div>
+                                        </div>
+                                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-primary">1-12</div>
+                                            <div class="text-sm text-gray-600">难度等级</div>
+                                        </div>
+                                        <div class="text-center p-3 bg-gray-50 rounded-lg">
+                                            <div class="text-2xl font-bold text-primary">100+</div>
+                                            <div class="text-sm text-gray-600">曲师数量</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <!-- World Mode Status -->
+            <section class="world-mode-status mb-12">
+                <h2 class="text-2xl font-bold text-white mb-6">世界模式活动</h2>
+
+                <!-- 曲目活动行 -->
+                <div class="flex justify-between mb-8">
+                    <!-- Metallic Punisher -->
+                    <div
+                        class="song-card w-[32%] relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105">
+                        <div class="aspect-square bg-gray-800">
+                            <img src="IMG/Metallic_Punisher.jpg" alt="Metallic Punisher"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-sm text-gray-300">剩余10天11小时</p>
+                            <h3 class="text-lg font-bold text-white">Metallic Punisher</h3>
+                        </div>
+                        <div
+                            class="song-details absolute inset-0 bg-black/90 p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold text-white mb-2">Metallic Punisher</h3>
+                                <p class="text-gray-300 text-sm">剩余时间: 10天11小时</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div>
+                                    <p class="text-gray-400 text-xs">地图阶数</p>
+                                    <p class="text-white font-medium">111</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-xs">地图步数</p>
+                                    <p class="text-white font-medium">1154</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-xs mb-1">奖励</p>
+                                <ul class="text-white text-sm space-y-1">
+                                    <li>• Metallic Punisher (曲目)</li>
+                                    <li>• 2516残片</li>
+                                    <li>• 4以太之滴</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Black Mirror on the Wall -->
+                    <div
+                        class="song-card w-[32%] relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105">
+                        <div class="aspect-square bg-gray-800">
+                            <img src="IMG/BlackMirrorOnTheWall.png" alt="Black Mirror on the Wall"
+                                class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-sm text-gray-300">剩余10天11小时</p>
+                            <h3 class="text-lg font-bold text-white">Black Mirror on the Wall</h3>
+                        </div>
+                        <div
+                            class="song-details absolute inset-0 bg-black/90 p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold text-white mb-2">Black Mirror on the Wall</h3>
+                                <p class="text-gray-300 text-sm">剩余时间: 10天11小时</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div>
+                                    <p class="text-gray-400 text-xs">地图阶数</p>
+                                    <p class="text-white font-medium">53</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-xs">地图步数</p>
+                                    <p class="text-white font-medium">850</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-xs mb-1">奖励</p>
+                                <ul class="text-white text-sm space-y-1">
+                                    <li>• Black Mirror on the Wall (曲目)</li>
+                                    <li>• 1300残片</li>
+                                    <li>• 4以太之滴</li>
+                                    <li>• 1次元结晶</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TRPNO -->
+                    <div
+                        class="song-card w-[32%] relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105">
+                        <div class="aspect-square bg-gray-800">
+                            <img src="IMG/TRPNO.jpg" alt="TRPNO" class="w-full h-full object-cover">
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-sm text-gray-300">剩余10天11小时</p>
+                            <h3 class="text-lg font-bold text-white">TRPNO</h3>
+                        </div>
+                        <div
+                            class="song-details absolute inset-0 bg-black/90 p-4 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center">
+                            <div class="mb-4">
+                                <h3 class="text-xl font-bold text-white mb-2">TRPNO</h3>
+                                <p class="text-gray-300 text-sm">剩余时间: 10天11小时</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 mb-4">
+                                <div>
+                                    <p class="text-gray-400 text-xs">地图阶数</p>
+                                    <p class="text-white font-medium">53</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-xs">地图步数</p>
+                                    <p class="text-white font-medium">878</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-xs mb-1">奖励</p>
+                                <ul class="text-white text-sm space-y-1">
+                                    <li>• TRPNO (曲目)</li>
+                                    <li>• 1300残片</li>
+                                    <li>• 4以太之滴</li>
+                                    <li>• 1次元结晶</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 角色活动行 -->
+                <div class="flex justify-between">
+                    <!-- Crimson Throne -->
+                    <div
+                        class="character-card w-[49%] relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105">
+                        <div class="aspect-[4/3] bg-gray-800 overflow-hidden">
+                            <img src="IMG/10u.png" alt="Crimson Throne"
+                                class="w-full h-[170%] object-cover object-top -translate-y-[76px] transform transition-transform duration-300 hover:scale-110">
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-sm text-gray-300">剩余10天11小时</p>
+                            <h3 class="text-lg font-bold text-white">Crimson Throne</h3>
+                        </div>
+                        <div
+                            class="character-details absolute inset-0 bg-black/90 p-6 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center">
+                            <div class="mb-6">
+                                <h3 class="text-2xl font-bold text-white mb-3">Crimson Throne</h3>
+                                <p class="text-gray-300 text-base">剩余时间: 10天11小时</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <p class="text-gray-400 text-sm">地图阶数</p>
+                                    <p class="text-white font-bold text-lg">68</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-sm">地图步数</p>
+                                    <p class="text-white font-bold text-lg">1113</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm mb-2">奖励</p>
+                                <ul class="text-white text-base space-y-2">
+                                    <li class="font-medium">• 角色名称 (待确认)</li>
+                                    <li class="font-medium">• 2700残片</li>
+                                    <li class="font-medium">• 4以太之滴</li>
+                                    <li class="font-medium">• 30暗影核心</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ultradiaxon-N3 -->
+                    <div
+                        class="character-card w-[49%] relative overflow-hidden rounded-lg transition-all duration-300 hover:scale-105">
+                        <div class="aspect-[4/3] bg-gray-800 overflow-hidden">
+                            <img src="IMG/75.png" alt="ultradiaxon-N3"
+                                class="w-full h-[180%] object-cover object-top transition-transform duration-300 hover:scale-110">
+                        </div>
+                        <div class="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent">
+                            <p class="text-sm text-gray-300">剩余16天11小时</p>
+                            <h3 class="text-lg font-bold text-white">ultradiaxon-N3</h3>
+                        </div>
+                        <div
+                            class="character-details absolute inset-0 bg-black/90 p-6 opacity-0 hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center">
+                            <div class="mb-6">
+                                <h3 class="text-2xl font-bold text-white mb-3">ultradiaxon-N3</h3>
+                                <p class="text-gray-300 text-base">剩余时间: 16天11小时</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 mb-6">
+                                <div>
+                                    <p class="text-gray-400 text-sm">地图阶数</p>
+                                    <p class="text-white font-bold text-lg">61</p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-400 text-sm">地图步数</p>
+                                    <p class="text-white font-bold text-lg">1080</p>
+                                </div>
+                            </div>
+                            <div>
+                                <p class="text-gray-400 text-sm mb-2">奖励</p>
+                                <ul class="text-white text-base space-y-2">
+                                    <li class="font-medium">• Ai酱 (角色)</li>
+                                    <li class="font-medium">• 2460残片</li>
+                                    <li class="font-medium">• 4以太之滴</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <style>
+                .character-card {
+                    position: relative;
+                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s, box-shadow 0.3s;
+                }
+
+                .character-card:hover {
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+                    z-index: 20;
+                }
+
+                .character-card img {
+                    transition: transform 0.5s ease;
+                }
+
+                .character-card:hover img {
+                    transform: scale(1.1);
+                }
+
+                .character-details {
+                    backdrop-filter: blur(8px);
+                    transition: opacity 0.3s ease;
+                    font-size: 1rem;
+                }
+
+                .character-card .character-details {
+                    pointer-events: none;
+                }
+
+                .character-card:hover .character-details {
+                    pointer-events: auto;
+                }
+
+                .character-details h3 {
+                    font-size: 1.5rem;
+                    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+                }
+
+                .character-details p,
+                .character-details li {
+                    font-size: 1.125rem;
+                }
+
+                .character-details .text-lg {
+                    font-size: 1.25rem;
+                }
+
+                .character-details .text-base {
+                    font-size: 1.125rem;
+                }
+            </style>
+
+            <!-- Quick Tools -->
+            <section class="mb-12">
+                <h2 class="text-2xl font-bold text-white mb-6">快捷工具</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <a href="Score_Calculator.html" class="card p-6 text-center hover:shadow-lg transition-all">
+                        <i class="fas fa-calculator text-3xl text-primary mb-4"></i>
+                        <h3 class="text-lg font-semibold">分数计算器</h3>
+                    </a>
+                    <a href="#" class="card p-6 text-center hover:shadow-lg transition-all">
+                        <i class="fas fa-search text-3xl text-primary mb-4"></i>
+                        <h3 class="text-lg font-semibold">谱面查询</h3>
+                    </a>
+                    <a href="#" class="card p-6 text-center hover:shadow-lg transition-all">
+                        <i class="fas fa-chart-bar text-3xl text-primary mb-4"></i>
+                        <h3 class="text-lg font-semibold">数据统计</h3>
+                    </a>
+                    <a href="https://tieba.baidu.com/f?kw=arcaea"
+                        class="card p-6 text-center hover:shadow-lg transition-all">
+                        <i class="fas fa-users text-3xl text-primary mb-4"></i>
+                        <h3 class="text-lg font-semibold">社区论坛</h3>
+                    </a>
+                </div>
+            </section>
+        </div>
+        <!-- 主内容 -->
+    </main>
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki 是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://arcaea.lowiro.com/" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">
+                        登录编辑
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

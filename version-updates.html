@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <!-- 继承主页所有元数据和样式 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>版本更新日志 - Arcaea Wiki</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/glide.min.js"></script>
+    <style>
+        /* 完全复制v3.9的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        /* 更新日志专用样式 */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .update-content li::before {
+            content: "•";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        /* 搜索框基础样式 */
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+            transition: all 0.3s;
+        }
+
+        /* 占位符文字颜色 */
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* 聚焦状态效果 */
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.5);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制v3.9的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html" class="block px-4 py-2 text-white hover:bg-primary/20">Link
+                                        Play</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">版本更新日志</h1>
+
+            <!-- 更新条目内容（与之前一致） -->
+            <!-- 2025年3月9日更新 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">2025年3月9日</span>
+                    <span class="text-gray-500 ml-2">移动版 v6.3.0</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>进行与Undertale的联动活动：
+                            <ul class="ml-6 mt-2 space-y-2">
+                                <li>推出UNDERTALE Collaboration，包含五首歌曲：
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>Heartache - Toby Fox</li>
+                                        <li>Death By Glamour - Toby Fox</li>
+                                        <li>Your Best Nightmare - Toby Fox</li>
+                                        <li>Last Goodbye - Toby Fox</li>
+                                        <li>MEGALOVANIA - Toby Fox</li>
+                                    </ul>
+                                </li>
+                                <li>Memory Archive新增：
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>MEGALOVANIA (Camellia Remix) - Camellia</li>
+                                        <li>八周年纪念单曲 Placebo♥Battler - OSTER Project</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>限时内容：
+                            <ul class="ml-6 text-gray-600">
+                                <li>UNDERTALE曲包限时获取：2025.3.9 ~ 2026.3.9</li>
+                                <li>奈美（暮光）复刻活动：2025.3.9 8:00 ~ 2025.3.30 23:00 (UTC+8)</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2025年2月26日更新 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">2025年2月26日</span>
+                    <span class="text-gray-500 ml-2">移动版 v6.2.6</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>新增内容：
+                            <ul class="ml-6 text-gray-600">
+                                <li>原创曲目：Aether Crest: Astral - void × 水野健治</li>
+                                <li>新搭档：光 & 赛润妮·雪儿（Fracture & MIR-203）</li>
+                            </ul>
+                        </li>
+                        <li>解锁条件：
+                            <ul class="ml-6 text-gray-600">
+                                <li>需拥有 CHUNITHM Collaboration Chapter 4 Pack Append</li>
+                                <li>ETR难度需拥有全部CHUNITHM联动曲包</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2025年2月24日更新 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">2025年2月24日</span>
+                    <span class="text-gray-500 ml-2">特别活动</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>Arcaea vs CHUNITHM - Cross Axis
+                            <ul class="ml-6 text-gray-600">
+                                <li>活动规则：
+                                    <ul class="ml-6">
+                                        <li>通过游玩指定歌曲推进进度</li>
+                                        <li>双方进度达100%解锁基础奖励</li>
+                                        <li>率先达100%阵营获得额外奖励</li>
+                                    </ul>
+                                </li>
+                                <li>当前状态：
+                                    <ul class="ml-6">
+                                        <li>已结束，Arcaea获胜</li>
+                                        <li>更新至v6.2.6即可领取奖励</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- 完全复制主页的页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki 是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

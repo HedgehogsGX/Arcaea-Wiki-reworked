@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arcaea Wiki 页面模板 - 提供一致的用户体验和现代化的界面设计">
+    <meta name="keywords" content="Arcaea, Wiki, 模板, 页面">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>页面模板 - Arcaea Wiki</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="css/style.css" as="style">
+
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/component-loader.js" defer></script>
+
+</head>
+
+<body class="bg-gray-900">
+    <!-- Shared Navigation Component -->
+    <div id="navigation-container"></div>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- 这里放置子页面的专属内容 -->
+            <!-- 例如： -->
+            <h1 class="text-4xl font-bold text-white mb-8">子页面标题</h1>
+            <div class="card p-6">
+                <p class="text-gray-600">这是子页面的内容。</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Shared Footer Component -->
+    <div id="footer-container"></div>
+</body>
+
+</html>

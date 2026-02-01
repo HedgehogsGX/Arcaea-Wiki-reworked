@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>世界模式 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-header {
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(250, 250, 250, 0.8);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .table-header {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #4a5568;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .table-cell {
+            padding: 0.75rem 1rem;
+            color: #4a5568;
+            border-bottom: 1px solid #f7fafc;
+        }
+
+        /* 新增样式 */
+        .section-title {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin: 2rem 0 1rem;
+            font-weight: 600;
+            color: #4a5568;
+        }
+
+        .subsection-title {
+            border-left: 3px solid #a855f7;
+            padding-left: 0.75rem;
+            margin: 1.5rem 0 0.75rem;
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .note-box {
+            background-color: #f0f4ff;
+            border-left: 4px solid #6366f1;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .formula-box {
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 4px;
+            font-family: monospace;
+            color: #6366f1;
+        }
+
+        .world-mode-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .world-mode-table th,
+        .world-mode-table td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .world-mode-table th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .world-mode-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .world-mode-table tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content li {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .update-content li:hover {
+            transform: translateX(10px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">世界模式
+            </h1>
+
+            <!-- 概述卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">概述</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">世界模式（World
+                        Mode）是Arcaea的主要游戏模式之一，玩家通过在世界模式中游玩曲目推进世界进度，可以获得以太之滴和残片奖励、解锁搭档、曲目等游戏内容。</p>
+                </div>
+            </div>
+
+            <!-- 构成与流程卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">构成与流程</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">世界模式为在线功能，玩家需要登录账号后才能体验，且游玩过程中必须联网，否则无法正常结算和推进世界进度。</p>
+
+                    <p class="text-gray-700">你不能在世界模式游玩期间，或游玩后结算时重试曲目。</p>
+
+                    <p class="text-gray-700">世界模式中有若干章节，包括：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>存有限时（活动）地图的额外章；</li>
+                        <li>存有常驻地图的9个普通章节；</li>
+                        <li>存有解锁Beyond谱面地图与解锁Beyond场景地图的失落章（因差异过大后述）。</li>
+                        <li>存有解锁Beyond谱面地图的陷落章（因差异过大后述）。</li>
+                    </ul>
+
+                    <p class="text-gray-700">选择一个章节进入后，玩家还需要选择一张可用的地图，地图图标会显示下一个注目奖励。</p>
+
+                    <p class="text-gray-700">进入地图后将会出现由若干级台阶，每个台阶有一定的步数。</p>
+
+                    <div class="flex justify-center my-4">
+                        <img src="IMG/World_step_example.jpg" alt="世界模式台阶示例" class="rounded-lg max-w-full h-auto">
+                        <p class="text-center text-gray-500 text-sm mt-2">台阶示意图</p>
+                    </div>
+
+                    <p class="text-gray-700">此时玩家即可开始一次世界模式游戏，结算后将可获得世界模式进度，逐级登上台阶，直到该地图台阶全部完成后即完成此地图。</p>
+
+                    <p class="text-gray-700">获得的世界模式进度即为行进的步数，按照以下方式结算：</p>
+
+                    <div class="formula-box">
+                        <div>游玩结果 = 2.5 + 2.45√单曲潜力值</div>
+                        <div>搭档效果 = 搭档Step值 ÷ 50</div>
+                        <div>搭档技能：部分搭档的技能会对世界模式进度有额外的影响。受技能影响而增加/减少的步数会单独列在右侧。</div>
+                        <div class="mt-2 font-semibold">本次游玩的世界模式进度 = 游玩结果 × 搭档效果 + 搭档技能</div>
+                    </div>
+
+                    <p class="text-gray-700">当本次行进的步数大于当前台阶的剩余步数时即可跨越此台阶到下一级，否则视为停留在这一级上。</p>
+
+                    <p class="text-gray-700">如果游玩时使用了未封印的搭档，该搭档也会获得 单曲潜力值 × 6 的经验以提升等级。</p>
+
+                    <p class="text-gray-700">通常情况下地图完成后将无法再次游玩此地图，除非在后续更新中此地图增加了台阶。</p>
+                </div>
+            </div>
+
+            <!-- 体力系统卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">体力</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">世界模式中存在体力系统，通常情况下视地图类型需要消耗0-3点体力才能进行一次游玩。</p>
+
+                    <p class="text-gray-700">玩家拥有12点自然回复的体力上限，但体力槽只能容纳6点体力，多余部分将溢出为+X。</p>
+
+                    <p class="text-gray-700">持有的体力可以通过购买体力超过12点，进一步可以停留在体力奖励台阶上或完成新手任务等超过17点。</p>
+
+                    <p class="text-gray-700">显示为满槽+6时即为满体力。</p>
+
+                    <p class="text-gray-700">可通过以下方式恢复体力：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>自然时间恢复（30分钟/1点）</li>
+                        <li>使用残片恢复（1000残片/6点，交换后有23小时的冷却期）</li>
+                        <li>使用记忆源点恢复（50记忆源点/6点）</li>
+                        <li>停留在体力奖励台阶上（后述）</li>
+                        <li>新手任务</li>
+                    </ul>
+
+                    <p class="text-gray-700">体力达到上限时，无法通过除体力台阶、新手任务之外的方式继续获得体力。</p>
+
+                    <p class="text-gray-700">体力在开始游玩的瞬间就会被扣除，且不会以任何形式归还（包括中途放弃）。</p>
+                </div>
+            </div>
+
+            <!-- 步数增幅卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">步数增幅</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">在开始游玩前，玩家可选择支付50记忆源点开启"源韵强化"功能：开启后的下一次结算，该次游玩的步数将提升至原来的4倍。</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>增幅效果在原来的计算结果完成后触发，所以中途放弃游玩不会消耗已激活的强化。</li>
+                        <li>搭档也会因此获得4倍的经验。</li>
+                        <li>若当前地图剩余台阶数不多于总台阶数的10%（不计入当前所处台阶），尝试激活源韵强化时会提示"您已接近此地图的尾声！ 您确认要激活源韵强化吗？"，再次点击确认后才会激活。
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-700">如果玩家的Arcaea Online处于订阅有效期，会获得"世界强化"功能。</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>增幅效果会在每次结算时生效，且订阅有效期内无次数限制。</li>
+                        <li>普通地图内计算顺序在搭档加成之后，源律强化之前；1体力地图和失落/陷落章节中与残片增幅/残片深化位于相同乘区。</li>
+                        <li>增幅效果随着玩家连续订阅时间的增加而提升，初始为20%，后续每个月提升5%，至多提升至30%。</li>
+                    </ul>
+
+                    <p class="text-gray-700">所有消耗1体力的地图[1]会使用特别的"Play+"机制，此时：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>不可使用源韵强化功能，也不会消耗已启用的源韵强化。</li>
+                        <li>单次游玩仅消耗1体力，不影响结算结果。</li>
+                        <li>可使用Play+在减少游玩次数的同时增幅步数，包括两部分，可叠乘：
+                            <ul class="list-disc pl-6 mt-1">
+                                <li>体力增幅：本次游玩消耗2/4/6点体力，使结算步数变为2/4/6倍；
+                                    <ul class="list-disc pl-6">
+                                        <li>搭档也会因此获得对应倍数的经验值。</li>
+                                    </ul>
+                                </li>
+                                <li>残片增幅：本次游玩消耗0/100/250/500残片，使结算步数变为1/1.1/1.25/1.5倍；
+                                    <ul class="list-disc pl-6">
+                                        <li>增幅使用的残片会在进入歌曲时与体力一同扣除，开始后以任意方式退出均不会归还。</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>无法在不使用体力增幅的情况下使用残片增幅。</li>
+                        <li>与世界强化位于相同乘区。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 台阶类型卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">台阶</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">地图中存在若干级"台阶"，反映了本地图的大致进度。</p>
+
+                    <p class="text-gray-700">根据台阶的效果可以大致分为三种类型，它们之间可以互相叠加：</p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                        <div class="bg-white bg-opacity-90 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <h4 class="font-semibold text-gray-800 mb-2 flex items-center">
+                                <span class="w-3 h-3 rounded-full bg-gray-400 mr-2"></span>
+                                <span>普通台阶</span>
+                            </h4>
+                            <p class="text-gray-600 text-sm">没有特殊的效果。</p>
+                        </div>
+
+                        <div class="bg-white bg-opacity-90 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <h4 class="font-semibold text-gray-800 mb-2 flex items-center">
+                                <span class="w-3 h-3 rounded-full bg-green-400 mr-2"></span>
+                                <span>奖励台阶</span>
+                            </h4>
+                            <ul class="text-gray-600 text-sm space-y-1">
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>含有奖励的台阶。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>一般的奖励台阶，只要抵达过即可获得其上的奖励，包括残片、以太之滴、核心、曲目和搭档等。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>体力奖励台阶，其上会出现Step banner plusstamina.png标志。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>玩家必须停留在此台阶才能获得对应的体力。</span>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white bg-opacity-90 p-4 rounded-lg border border-gray-200 shadow-sm">
+                            <h4 class="font-semibold text-gray-800 mb-2 flex items-center">
+                                <span class="w-3 h-3 rounded-full bg-yellow-400 mr-2"></span>
+                                <span>限制台阶</span>
+                            </h4>
+                            <ul class="text-gray-600 text-sm space-y-1">
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>含有限制效果的台阶，玩家停留在此处时会受到限制效果。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>曲目限制台阶，其上会出现Step banner restrict.png标志。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>玩家将无法自由选曲，改为从给定的曲目范围中选择一首开始游玩。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>随机曲目台阶，其上会出现Step banner random.png标志。</span>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-gray-400 mr-1">•</span>
+                                    <span>速度限制台阶，其上会出现Step banner speedrestrict.png标志。</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="note-box mt-4">
+                        <p class="text-gray-700">※可能出现仅限一首曲目的情况；可能存在限制难度的情况。</p>
+                        <p class="text-gray-700">※限定范围为特定曲包时，该曲包的Pack Append也会加入限制范围。</p>
+                        <p class="text-gray-700">※曲目在进入选曲列表时确定，退出重进会重新抽取。</p>
+                        <p class="text-gray-700">※直到游玩开始前玩家都无法确认具体曲目（包括曲名、曲封、曲目信息、难度等级数字、预览音频、BPM等），但玩家仍能选择要挑战的难度。
+                        </p>
+                        <p class="text-gray-700">※选中Beyond或Eternal难度开始时，若曲目没有Beyond或Eternal难度，则会使用Future难度开始游玩。</p>
+                        <p class="text-gray-700">※默认为全曲随机，但可能存在限制曲目范围/难度的情况。若限制范围为特定曲包或全部曲目则会在曲包按钮位置显示范围（All
+                            Songs或曲包名称），否则不予显示。</p>
+                        <p class="text-gray-700">※给定范围内的所有可选择的曲目平分抽取概率，但地图内可以多次添加一首曲目来提升某曲目（以及降低其它曲目）的出率。</p>
+                        <p class="text-gray-700">※有可能抽取到需要下载的曲目，但玩家无法得知需要下载的曲目/曲包信息，但玩家可以通过删除已下载的曲目来在一定程度上控制随机范围。
+                        </p>
+                        <p class="text-gray-700">※在开始游玩曲目前会弹出临时设置供调整（仅影响当次游玩）。</p>
+                    </div>
+
+                    <p class="text-gray-700 mt-4">玩家可看到自身所在位置附近的台阶（至多5级），可以通过长按画面顶部查看一部分后续台阶。</p>
+                </div>
+            </div>
+
+            <!-- 失落章特殊机制卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">失落章特殊机制</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">失落章是用来解锁Beyond谱面的专用章节，玩家潜力值达到9.00后才能解锁。</p>
+
+                    <p class="text-gray-700">如果解锁后潜力值掉回9.00以下且未解锁过任何地图，章节将会被回锁。</p>
+
+                    <p class="text-gray-700">相较于一般地图，失落章的地图具有下列不同点：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>不再存在台阶，代之以从起始点到终点的一条直线路径。玩家在地图中只存在Beyond进度，从而可以位于路径上的任意一点。</li>
+                        <li>无法查看自身位置附近可能的限制情况，只能看到有奖励的位置、最后的Beyond谱面位置以及自身所在位置的限制效果。</li>
+                        <li>相较于一般地图，失落章的限制效果会更加独特，如：随进度逐渐缩小流速范围的限速、限制难度的曲目限制和随机曲目，甚至限制11难度的FTR谱面随机等。</li>
+                        <li>开启一次游玩需要消耗3点体力。</li>
+                        <li>常规的Easy、Normal和Hard收集条会触发特殊的Beyond Challenge：在原有回忆收集条和技能效果的影响下，Far判定改为流失Lost一半的回忆率。
+                            <ul class="list-disc pl-6 mt-1">
+                                <li>这里的"流失一半回忆率"会根据搭档技能的不同做出特殊调整（如光（Zero）），详见各搭档技能详细信息。</li>
+                                <li>对改变回忆收集条效果的特殊搭档无效（例如对立（Tempest）的风暴收集条）。</li>
+                                <li>可通过进入游戏时的技能显示动画顶部及回忆条CHALLENGE外框确认是否触发Beyond Challenge。</li>
+                            </ul>
+                        </li>
+                        <li>Beyond进度按照下列规则计算：
+                            <div class="formula-box mt-2">
+                                <div>精彩程度 = (2.5 × 挑战加成 + 2.45 × √单曲潜力值) ÷ 地图除数</div>
+                                <div>搭档加成 = 搭档Over值 ÷ 50</div>
+                                <div>相性契合：由地图决定，标注在地图右上角，也会在搭档列表中自动置顶于已收藏搭档下方。当次游玩使用对应搭档时可获得对应倍率，否则始终×1</div>
+                                <div class="mt-2 font-semibold">本次游玩的Beyond进度 = 精彩程度 × 搭档加成 × 相性契合</div>
+                            </div>
+                            <ul class="list-disc pl-6 mt-1">
+                                <li>挑战加成在触发Beyond Challenge并成功通过时为3，否则为1。</li>
+                                <li>地图除数是每个地图单独设置的一个数值，不同的地图可能不同，在游戏内不会直接显示。</li>
+                            </ul>
+                        </li>
+                        <li>Beyond进度可使用世界强化和另外三种增幅：
+                            <ul class="list-disc pl-6 mt-1">
+                                <li>源韵强化：支付50记忆源点启用，使当次游玩的Beyond进度+200%；
+                                    <ul class="list-disc pl-6">
+                                        <li>与通常地图的源韵强化相同地，强化在下一次结算时生效，中途退出游玩不会使强化失效。</li>
+                                    </ul>
+                                </li>
+                                <li>Beyond强化：通过消耗体力游玩失落章以外的地图填充Beyond强化槽，累积至至少100%后，可选择消耗100%/200%的强化槽填充，使当次游玩的Beyond进度+100%/200%。
+                                    <ul class="list-disc pl-6">
+                                        <li>潜力值在未达到过9.00前无法获得Beyond强化。</li>
+                                        <li>每次失落章以外游玩将填充 (27 + 2.45√单曲潜力值)% 的强化槽进度，不受任何增幅影响。</li>
+                                        <li>虽然没有说明，但段位挑战界面也会显示Beyond强化槽，且消耗体力游玩段位挑战也能填充Beyond强化槽。</li>
+                                        <li>使用的强化槽会在进行结算时才扣除，若在结算前退出游玩则强化槽不会扣除。</li>
+                                    </ul>
+                                </li>
+                                <li>残片深化：本次游玩消耗0/100/250/500残片，使当次游玩的Beyond进度变为1/1.1/1.25/1.5倍。
+                                    <ul class="list-disc pl-6">
+                                        <li>与1体力地图的残片增幅相同地，使用的残片会在进入歌曲时与体力一同扣除，开始后以任意方式退出均不会归还。</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>三种增幅的叠加关系为：源韵强化与Beyond强化作加法叠加后，换算为倍率，再与残片深化和世界强化作乘法叠加。</li>
+                        <li>在失落章的游玩过程中，任何曲目背景都会被强制替换成Beyond背景（见背景列表byd_light和byd_conflict）。
+                            <ul class="list-disc pl-6">
+                                <li>4.0版本新加入的消色侧曲目的背景也会被替换为byd_light，但轨道仍为消色侧轨道（淡紫色）</li>
+                                <li>6.0版本新加入的Lephon侧曲目的背景也会被替换为byd_light。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 陷落章特殊机制卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">陷落章特殊机制</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">和失落章一样，陷落章也是用来解锁Beyond谱面的专用章节，玩家潜力值达到9.00后才能解锁。</p>
+
+                    <p class="text-gray-700">如果解锁后潜力值掉回9.00以下且未解锁过任何地图，章节将会被回锁。</p>
+
+                    <p class="text-gray-700">陷落章的地图机制与失落章相似，但有以下区别：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>从起始点到终点的路径改为环形，搭档图标固定在底部而不再跟随进度指示前进。</li>
+                        <li>取消相性契合机制，由法则机制取而代之。
+                            <ul class="list-disc pl-6 mt-1">
+                                <li>不同的地图的法则会有不同，会在地图的右上角显示法则和相关的计算公式。</li>
+                                <li>游玩时会依照当次游玩使用的搭档相关数值计算镌刻法则加成。</li>
+                                <li>可能用到的数值包括但不限于搭档的等级、Frag值、Step值、Over值。</li>
+                                <li>后三者在公式中分别以残数、步数、超量表示，且会先除以50折算为倍率。</li>
+                                <li>在搭档处于封印状态时，镌刻法则加成的公式中的Frag、Step和Over均按照50（即1倍）计算[2]。</li>
+                                <li>如果搭档的技能会临时改变自身的数值（例如维塔、百合咲美香），公式中会使用改变后的数值计算。</li>
+                                <li>若法则为"进度=..."，则取消搭档自身的Over加成，若为"进度x=..."则不会取消[3]。</li>
+                            </ul>
+                        </li>
+                        <li>在失落章的游玩过程中，任何曲目背景都会被强制替换成Beyond背景（见背景列表byd_2_light和byd_2_conflict）。
+                            <ul class="list-disc pl-6">
+                                <li>消色侧曲目的背景也会被替换为byd_2_light，但轨道仍为消色侧轨道（淡紫色）</li>
+                                <li>Lephon侧曲目的背景也会被替换为byd_2_light。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 云端同步相关卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">云端同步相关</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-700">由于移动端世界模式为在线功能，故本模式所有地图的进度会与账号绑定，但会因为云端存档的手动同步机制存在以下特殊情况：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>一般情况下，地图分为解锁需求与解锁状态两部分，达成所有解锁需求时，解锁状态即重写为"已解锁"并立刻存入云端。</li>
+                        <li>若云端保存的解锁状态为"未解锁"，点击地图将会显示解锁该地图的解锁需求。</li>
+                        <li>理论上只要本地满足了地图的解锁需求就可以解锁对应的地图。</li>
+                        <li>但对于解锁需求为曲包/单曲/前置谱面的地图，游戏会从云端判断相应解锁记录。如果没有相应记录，云端会强制阻止解锁。</li>
+                        <li>需要特殊条件解锁的地图（如要求完成对应异象，解锁异象曲目等等），会增加特殊解锁需求判断。</li>
+                        <li>特殊解锁需求是由普通的解锁需求延伸出的，所以判断条件依然以本地为准。</li>
+                        <li>此需求相对于前二者更优先判断，如果本地无法满足其解锁需求，则将会一直处于特殊锁定状态，无论云端是否已解锁或获得过此地图对应的内容。</li>
+                        <li>解锁状态/解锁需求/特殊解锁需求 三者均为分开判断，互不干涉。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 章节地图简表卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">章节地图简表（移动版）</span>
+                </div>
+                <div class="update-content">
+                    <div class="note-box">
+                        <p class="text-gray-700">Disambig gray.png 本文介绍的是地图简表。关于世界模式各地图详细信息，请见"世界模式地图详表"。</p>
+                        <p class="text-gray-700">此小节反映的内容为移动版独有。</p>
+                        <p class="text-gray-700">由于v6.0.0更新后，所有0体力地图的台阶步数除以6并向上取整，因此这些地图的步数可能存在问题。</p>
+                    </div>
+
+                    <h3 class="section-title">额外章：活动 (Extra Chapter: Event)</h3>
+                    <p class="text-gray-700">本章节的地图均为限时活动地图，存在一定的开放时间，时间结束后地图会被关闭，玩家将无法进入地图。</p>
+                    <p class="text-gray-700">如无特别说明，限时地图的消耗一律为 2 点体力。</p>
+                    <p class="text-gray-700">限时地图结束后进度不清空，并会在下次复刻时反映出来。</p>
+
+                    <h4 class="subsection-title">正在开放的限时地图</h4>
+                    <div class="overflow-x-auto">
+                        <table class="world-mode-table">
+                            <thead>
+                                <tr>
+                                    <th class="table-header">阶梯名称</th>
+                                    <th class="table-header">解锁条件</th>
+                                    <th class="table-header">阶梯长度</th>
+                                    <th class="table-header">奖励</th>
+                                    <th class="table-header">开放时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="table-cell">Metallic Punisher</td>
+                                    <td class="table-cell">购入Metallic Punisher</td>
+                                    <td class="table-cell">110级 / 1154步</td>
+                                    <td class="table-cell">依莉丝<br>2516 残片, 4 以太之滴</td>
+                                    <td class="table-cell">
+                                        2018/02/16~02/24<br>2018/12/16~12/23<br>2019/12/23~12/30<br>2021/06/10~06/24<br>2022/05/25~06/08<br>2023/03/02~03/23<br>2023/10/23~11/06<br>2025/03/27~04/17
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-cell">Crimson Throne</td>
+                                    <td class="table-cell">购入Crimson Throne</td>
+                                    <td class="table-cell">67级 / 1113步</td>
+                                    <td class="table-cell">2700 残片, 4 以太之滴, 30 暗影核心</td>
+                                    <td class="table-cell">2023/03/02~03/23<br>2023/10/23~11/06<br>2025/03/27~04/17
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="table-cell">Black Mirror on the Wall</td>
+                                    <td class="table-cell">默认解锁</td>
+                                    <td class="table-cell">53级 / 850步</td>
+                                    <td class="table-cell">Black Mirror on the Wall<br>1300 残片, 4 以太之滴, 1 次元结晶</td>
+                                    <td class="table-cell">2025/03/27~04/17</td>
+                                </tr>
+                                <tr>
+                                    <td class="table-cell">TRPNO</td>
+                                    <td class="table-cell">默认解锁</td>
+                                    <td class="table-cell">53级 / 878步</td>
+                                    <td class="table-cell">TRPNO<br>1300 残片, 4 以太之滴, 1 次元结晶</td>
+                                    <td class="table-cell">2025/03/27~04/17</td>
+                                </tr>
+                                <tr>
+                                    <td class="table-cell">ultradiaxon-N3</td>
+                                    <td class="table-cell">购入ultradiaxon-N3</td>
+                                    <td class="table-cell">62 / 1080步</td>
+                                    <td class="table-cell">Ai酱<br>2460 残片，4 以太之滴</td>
+                                    <td class="table-cell">2024/04/02~04/16<br>2025/04/02~04/23</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h4 class="subsection-title">当前关闭的限时地图</h4>
+                    <p class="text-gray-700">搭档<br>曲目<br>联动<br>特殊<br>已常驻</p>
+
+                    <!-- 继续添加其他章节的表格 -->
+                    <!-- 由于内容非常长，这里只展示部分内容作为示例 -->
+                    <!-- 实际应用中需要继续添加所有章节的表格内容 -->
+
+                </div>
+            </div>
+
+            <!-- Nintendo Switch版调整卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Nintendo Switch版调整</span>
+                </div>
+                <div class="update-content">
+                    <div class="note-box">
+                        <p class="text-gray-700">此小节反映的内容为Nintendo Switch版独有。</p>
+                    </div>
+
+                    <p class="text-gray-700">在Nintendo Switch版中，世界模式经过了调整，包括：</p>
+
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>因NS版本质为纯单机游戏，玩家无需网络即可进行世界模式游戏；</li>
+                        <li>移除体力系统及相关内容，玩家可以在任何时刻进行世界模式游戏；</li>
+                        <li>移除源韵强化功能；</li>
+                        <li>移除世界模式游戏重试限制，玩家可在世界模式游戏中重试曲目；</li>
+                        <li>移除古昔章节和Play+机制，作为补偿，第一章的地图步数减少；</li>
+                        <li>奖励台阶新增"曲包"，即一部分曲包需要通过世界模式解锁；</li>
+                        <li>残片奖励台阶只有在经过时才能获得其上的奖励；</li>
+                        <li>推进进度计算方式调整。</li>
+                    </ul>
+
+                    <p class="text-gray-700">等。</p>
+
+                    <p class="text-gray-700">详细信息可参阅相关介绍，此处不再赘述。</p>
+                </div>
+            </div>
+
+            <!-- 世界模式更新记录卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">世界模式更新记录</span>
+                </div>
+                <div class="update-content">
+                    <h3 class="section-title">移动版</h3>
+
+                    <h4 class="subsection-title">v1.5.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>世界模式实装。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v1.7.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>将残片交换体力后的冷却时间从48小时降低至24小时。</li>
+                        <li>增加支持Play+的"遗产地图"，第一章成为"遗产章"。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v2.4.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>新增"源韵强化"功能。</li>
+                        <li>体力上限提升至12点。</li>
+                        <li>Play+体力增幅也可使搭档经验翻倍。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v3.0.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>新增失落章。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v3.0.4</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>速度限制台阶选曲进入速度设置界面后可退出以重新选曲。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v3.2.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>源韵强化也可使搭档经验翻倍。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v3.8.6</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>增加支持Play+的"遗产地图"。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v4.3.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>增加支持Play+的"遗产地图"。</li>
+                        <li>失落章新增Beyond强化。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">未知版本（最晚v4.4.6）</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>"Legacy"的中文翻译从"遗产"更改为"古昔"。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v5.3.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>新增陷落章</li>
+                        <li>将残片交换体力后的冷却时间从24小时降低至23小时。</li>
+                    </ul>
+
+                    <h4 class="subsection-title">v6.0.0</h4>
+                    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+                        <li>增加无需体力消耗的地图。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 注释卡片 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">注释</span>
+                </div>
+                <div class="update-content">
+                    <ol class="list-decimal pl-6 text-gray-700 space-y-2">
+                        <li>6.0.0版本以前称为古昔地图</li>
+                        <li>陷落章初次更新(Arcaea v5.3.0)时由于bug会使用搭档实际数值，于当天下午热更新修复</li>
+                        <li>在编程语言中，"x="（一般写作"*="）表示将符号左边的变量乘以右边的部分并赋值给前者（即语句 a *= b 相当于 a = a *
+                            b），由于进度以Over值为基础，所以"进度x=..."相当于"进度=Over值x..."，将进度加成直接附加在搭档自身加成上，而"进度=..."相当于直接给进度赋值，所以会无视搭档加成
+                        </li>
+                        <li>此地图已于2025/02/26晚上18:00提前关闭</li>
+                        <li>参考Tempestissimo的解禁方法</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

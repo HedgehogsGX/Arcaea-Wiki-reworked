@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>Link Play - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .update-content li::before {
+            content: "•";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        .update-content li {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .update-content li:hover {
+            transform: translateX(10px);
+        }
+
+        table {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background-color: rgba(99, 102, 241, 0.1);
+            color: #4a5568;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            padding: 1rem;
+        }
+
+        td {
+            background-color: white;
+            transition: background-color 0.3s ease;
+        }
+
+        tr:hover td {
+            background-color: rgba(99, 102, 241, 0.05);
+        }
+
+        th, td {
+            border: 1px solid rgba(99, 102, 241, 0.1);
+            padding: 1rem;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .img-hover-zoom {
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .img-hover-zoom img {
+            transition: transform 0.3s ease;
+        }
+
+        .img-hover-zoom:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 卡片悬停动画 */
+        .glass-card {
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 表格样式更新 */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1rem 0;
+        }
+
+        th {
+            background: rgba(99, 102, 241, 0.1);
+            color: #1a202c;
+            font-weight: 600;
+            padding: 0.75rem 1rem;
+            text-align: left;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.8);
+            transition: background-color 0.3s ease;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        /* 列表项动画 */
+        .update-content li {
+            position: relative;
+            padding-left: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .update-content li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #6366f1;
+        }
+
+        .update-content li:hover {
+            transform: translateX(8px);
+            color: #6366f1;
+        }
+
+        /* 图片容器动画 */
+        .img-hover-zoom {
+            overflow: hidden;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .img-hover-zoom:hover {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .img-hover-zoom img {
+            transition: transform 0.5s ease;
+        }
+
+        .img-hover-zoom:hover img {
+            transform: scale(1.05);
+        }
+
+        /* 标题样式 */
+        .update-header {
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            padding: 1rem 1.5rem;
+        }
+
+        .update-header span {
+            color: #6366f1;
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+
+        .update-header span:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #6366f1;
+        }
+
+        /* Add missing styles from layout.html */
+        table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        /* Add title decorations */
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+
+        /* Add notice information style */
+        .notice {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* Add scrollbar styling */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        /* Add list item animations */
+        .update-content li {
+            transition: transform 0.2s ease;
+        }
+
+        .update-content li:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- Update title with decorative elements -->
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">Link Play</h1>
+
+            <!-- 版本提示卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">版本提示</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>此条目内容为移动版独有</li>
+                        <li>此模式于v3.10.0被添加到游戏中，在v5.10.0后得到重大更新</li>
+                        <li>需要登录后才能游玩，且游玩世界模式时无法选择此模式</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 主界面卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">主界面</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Main.png" alt="Link Play主界面"
+                                    class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2">
+                            <ul class="space-y-4">
+                                <li><strong>创建/加入房间方式：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li><span class="text-primary">公共匹配：</span>根据潜力值和解锁曲目匹配玩家</li>
+                                        <li><span class="text-primary">私人房间：</span>创建专属房间或通过号码加入</li>
+                                        <li><span class="text-primary">邀请通知：</span>接收好友邀请加入房间</li>
+                                    </ul>
+                                </li>
+                                <li><strong>注意事项：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>对网络稳定性要求较高</li>
+                                        <li>匹配可能存在潜力值差距</li>
+                                        <li>无法加入已满员或游戏中的房间</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 房间界面卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">房间界面</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4 order-2 md:order-1">
+                            <ul class="space-y-4">
+                                <li><strong>界面元素：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>玩家立绘、名称及潜力值显示</li>
+                                        <li>房间号码展示框（私人房间）</li>
+                                        <li>邀请好友按钮（未满4人时）</li>
+                                        <li>表情贴纸系统（左下角按钮）</li>
+                                    </ul>
+                                </li>
+                                <li><strong>特殊功能：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>点击房间号码可显示/隐藏</li>
+                                        <li>可分享房间链接至社交平台</li>
+                                        <li>多语言表情贴纸自动适配</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2 mb-4 order-1 md:order-2">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Create_Room.png" alt="Link Play房间界面"
+                                    class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 房间管理卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">房间管理</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Room_Options.png" alt="房间设置界面"
+                                    class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2">
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead>
+                                        <tr>
+                                            <th>设置选项</th>
+                                            <th>功能说明</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="px-4 py-2 border">房间属性</td>
+                                            <td class="px-4 py-2 border">私人/公开切换</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 border">选曲方式</td>
+                                            <td class="px-4 py-2 border">房主选择/全员轮换/投票选择</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 border">开启计时</td>
+                                            <td class="px-4 py-2 border">选曲45秒/结算60秒限制</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="px-4 py-2 border">房主权限</td>
+                                            <td class="px-4 py-2 border">转让房主/移出玩家</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 歌曲选择卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">歌曲选择</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4 order-2 md:order-1">
+                            <ul class="space-y-4">
+                                <li><strong>选曲规则：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>只能选择全员拥有的歌曲</li>
+                                        <li>可使用"可以游玩"筛选器</li>
+                                        <li>可推荐歌曲（广播消息）</li>
+                                        <li>投票模式可放弃选曲</li>
+                                    </ul>
+                                </li>
+                                <li><strong>特殊机制：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>v5.10.2优化投票界面显示</li>
+                                        <li>未下载谱面需先下载</li>
+                                        <li>可解锁部分付费曲目</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2 mb-4 order-1 md:order-2">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Voting.jpeg" alt="投票界面" class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 准备阶段卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">准备阶段</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Ready.png" alt="准备界面" class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2">
+                            <ul class="space-y-4">
+                                <li><strong>准备流程：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>选择难度后点击准备</li>
+                                        <li>全员准备后3秒倒计时</li>
+                                        <li>可取消准备（非全员准备时）</li>
+                                        <li>至少需要2名玩家</li>
+                                    </ul>
+                                </li>
+                                <li><strong>注意事项：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>准备后无法更改难度</li>
+                                        <li>可查看其他玩家最佳成绩</li>
+                                        <li>房主可返回选曲阶段</li>
+                                        <li>计时模式下超时会被移出</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 游玩过程卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">游玩过程</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4 order-2 md:order-1">
+                            <ul class="space-y-4">
+                                <li><strong>游戏界面：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>左上角实时排名和分数差</li>
+                                        <li>第一名玩家名称高亮</li>
+                                        <li>落后分数显示为红色</li>
+                                        <li>掉线玩家显示信号槽</li>
+                                    </ul>
+                                </li>
+                                <li><strong>特殊效果：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>全员FR/PM时显示连接特效</li>
+                                        <li>紫色（非全员PM）/蓝色（全员PM）</li>
+                                        <li>特效点数等于玩家数量</li>
+                                        <li>掉线玩家不影响判定</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2 mb-4 order-1 md:order-2">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Songplay.png" alt="游玩界面" class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 结算界面卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">结算界面</span>
+                </div>
+                <div class="update-content">
+                    <div class="flex flex-wrap -mx-2">
+                        <div class="w-full md:w-1/2 px-2 mb-4">
+                            <div class="img-hover-zoom">
+                                <img src="IMG/Linkplay_Result.png" alt="结算界面" class="rounded-lg shadow-md w-full h-auto">
+                            </div>
+                        </div>
+                        <div class="w-full md:w-1/2 px-2">
+                            <ul class="space-y-4">
+                                <li><strong>结算功能：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>查看最终排名和详细判定</li>
+                                        <li>影响潜力值（但不实时显示）</li>
+                                        <li>返回房间或直接离开</li>
+                                        <li>计时模式下50秒限制</li>
+                                    </ul>
+                                </li>
+                                <li><strong>特殊显示：</strong>
+                                    <ul class="ml-6 text-gray-600">
+                                        <li>全员FR显示"Linked Full Recall"</li>
+                                        <li>全员PM显示"Linked Pure Memory"</li>
+                                        <li>掉线玩家不计入判定</li>
+                                        <li>单人游戏不显示特效</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 公共房间卡片 -->
+            <div class="glass-card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">公共房间</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li><strong>限制条件：</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>不显示房间号码</li>
+                                <li>固定为投票选择模式</li>
+                                <li>强制开启计时功能</li>
+                                <li>房主退出自动指定新房主</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 残片奖励卡片 -->
+            <div class="glass-card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">残片奖励</span>
+                </div>
+                <div class="update-content">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead>
+                                <tr>
+                                    <th>条件</th>
+                                    <th>计算公式</th>
+                                    <th>倍率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 py-2 border">Linked Pure Memory</td>
+                                    <td class="px-4 py-2 border" rowspan="3">残片数 = round(((房间人数 - 1) × (游玩奖励 + 通关奖励 +
+                                        精彩表现奖励)) × 倍率)</td>
+                                    <td class="px-4 py-2 border">0.167</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border">Linked Full Recall</td>
+                                    <td class="px-4 py-2 border">0.134</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border">其他情况</td>
+                                    <td class="px-4 py-2 border">0.1</td>
+                                </tr>
+                                <tr>
+                                    <td class="px-4 py-2 border">Staff Link</td>
+                                    <td class="px-4 py-2 border">匹配到Lowiro工作人员额外+100残片</td>
+                                    <td class="px-4 py-2 border">不参与Frag计算</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

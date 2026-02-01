@@ -1,0 +1,2267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>机制 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .update-content li::before {
+            content: "•";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        /* 表格样式优化 */
+        table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        /* 添加标题装饰 */
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+
+        /* 注意信息样式 */
+        .notice {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* 滚动条美化 */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        /* 列表项动画 */
+        .update-content li {
+            transition: transform 0.2s ease;
+        }
+
+        .update-content li:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html" class="block px-4 py-2 text-white hover:bg-primary/20">Link
+                                        Play</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">机制</h1>
+            <p class="text-gray-300 mb-8" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                机制是指游戏核心部分的规则、流程以及数据。本页面描述Arcaea的机制。</p>
+
+            <!-- 难度 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">难度</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        本游戏中同一曲目通常拥有不同难度的谱面以适应不同水平的玩家，现存的谱面难度共有5个：Past、Present、Future、Eternal、Beyond，常规曲目都具有Past、Present、Future难度，部分曲目额外具有Eternal或Beyond难度<sup>[1]</sup>，后文将二者称为附加难度。难度描述中对于各物件的具体介绍详见物件类型。
+                    </p>
+
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <img src="IMG/Tag-difficulty-past.png" alt="Past" class="h-8 mr-2">
+                            <h3 class="text-lg font-semibold text-primary">Past</h3>
+                        </div>
+                        <p class="text-gray-600 ml-10">简称PST，其中多数谱面为新手准备。</p>
+                        <ul class="ml-10 text-gray-600">
+                            <li>目前该难度下的谱面等级范围为1~7+（定数范围1.0~7.8）。</li>
+                            <li>PST难度谱面特征：
+                                <ul class="ml-6">
+                                    <li>音弧到来之前有着较大的提示标记。</li>
+                                    <li>音弧只能在天空判定线（Sky Input）上左右移动。</li>
+                                    <li>通常不会出现黑线和天键<sup>[2]</sup>。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <img src="IMG/Tag-difficulty-present.png" alt="Present" class="h-8 mr-2">
+                            <h3 class="text-lg font-semibold text-primary">Present</h3>
+                        </div>
+                        <p class="text-gray-600 ml-10">简称PRS，其中多数谱面为正在熟悉玩法的玩家准备。</p>
+                        <ul class="ml-10 text-gray-600">
+                            <li>目前该难度下的谱面等级范围为3~9（定数范围3.5~9.6）。</li>
+                            <li>PRS难度谱面特征：
+                                <ul class="ml-6">
+                                    <li>相对于PST可以出现黑线和天键。</li>
+                                    <li>音弧和天键可以在梯形界（判定平面中上窄下宽的一个区域）内任意移动或出现，且音弧上下移动时会出现提示：蓝音弧的提示会出现在左上方，红音弧的提示会出现在右上方。
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <img src="IMG/Tag-difficulty-future.png" alt="Future" class="h-8 mr-2">
+                            <h3 class="text-lg font-semibold text-primary">Future</h3>
+                        </div>
+                        <p class="text-gray-600 ml-10">简称FTR，其中多数谱面为已有一定实力的玩家准备。</p>
+                        <ul class="ml-10 text-gray-600">
+                            <li>目前FTR难度下的谱面等级范围为7~11（定数范围7.0~11.3）<sup>[3]</sup>。</li>
+                            <li>FTR难度谱面特征：
+                                <ul class="ml-6">
+                                    <li>相对于PRS去除了音弧上下移动的提示。</li>
+                                    <li>大多数谱面的音弧和天键不会超出梯形界<sup>[4]</sup>。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <img src="IMG/Tag-difficulty-eternal.png" alt="Eternal" class="h-8 mr-2">
+                            <h3 class="text-lg font-semibold text-primary">Eternal</h3>
+                        </div>
+                        <p class="text-gray-600 ml-10">简称ETR，其中多数谱面为具有较高实力的玩家准备。</p>
+                        <ul class="ml-10 text-gray-600">
+                            <li>于v5.4.0版本更新时实装，目前ETR难度下的谱面等级范围为8~11（定数范围为8.5~11.5）</li>
+                            <li>ETR难度谱面特征：
+                                <ul class="ml-6">
+                                    <li>相较于FTR，音弧、黑线与天键超出梯形界的现象更为常见。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <div class="flex items-center">
+                            <img src="IMG/Tag-difficulty-beyond.png" alt="Beyond" class="h-8 mr-2">
+                            <h3 class="text-lg font-semibold text-primary">Beyond</h3>
+                        </div>
+                        <p class="text-gray-600 ml-10">简称BYD，其谱面为爱好挑战的玩家准备。</p>
+                        <ul class="ml-10 text-gray-600">
+                            <li>于v3.0.0版本更新时实装，目前该难度下的谱面等级范围为9~12（定数范围9.0~12.0）。</li>
+                            <li>BYD难度谱面特征：
+                                <ul class="ml-6">
+                                    <li>相较于ETR，音弧、黑线与天键超出梯形界的现象更为频繁，且运动幅度不受显示区域限制。</li>
+                                    <li>部分音弧、部分天键不具有黑线引导。</li>
+                                    <li>谱面中的物件发生重合的现象更为常见，例如音弧的开头附着天键/地键、音弧与长条共用判定<sup>[5]</sup>。</li>
+                                </ul>
+                            </li>
+                            <li>BYD难度具有显著区别于其它难度的特征：
+                                <ul class="ml-6">
+                                    <li>大量曲目的BYD难度具有不同于其它难度的专属曲绘（一般为后期更新追加BYD难度的曲目，除Tempestissimo和Last），极少数曲目的BYD难度甚至采用了不同的音源<sup>[6]</sup>。
+                                    </li>
+                                    <li>BYD难度谱面解锁的前置条件通常不同于上述四个难度。</li>
+                                    <li>大部分BYD难度谱面在解锁前隐藏，需要前往世界模式失落章或陷落章游玩对应的地图单独解锁，或者达成特定条件后解锁<sup>[7]</sup>。</li>
+                                    <li>当玩家选中未解锁但存在BYD难度的曲目时，难度列表中附加难度位置通常会显示为空槽位提示其存在BYD难度谱面<sup>[8]</sup>。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="mt-4">
+                        <h3 class="text-lg font-semibold text-primary">其他说明</h3>
+                        <ul class="ml-6 text-gray-600">
+                            <li>通常情况下，一首曲目在同一难度仅存在一个谱面，例外：
+                                <ul class="ml-6">
+                                    <li>Last存在两个BYD难度谱面，二者通过切换搭档技能进行切换显示。</li>
+                                </ul>
+                            </li>
+                            <li>通常情况下，一首曲目不同难度对应的谱面难度等级与定数沿PST-PRS-FTR-ETR/BYD逐渐增大，例外：
+                                <ul class="ml-6">
+                                    <li>dropdead的PRS与FTR难度谱面。</li>
+                                    <li>Singularity的FTR与BYD难度谱面。</li>
+                                </ul>
+                            </li>
+                            <li>当前版本中，ETR与BYD这类附加难度按钮均位于即第四个难度槽位（即FTR右侧）<sup>[9]</sup>。</li>
+                            <li>当一个曲目列表中同时包含ETR与BYD两种难度时，附加难度槽位左上角会出现切换图标，表示点击该位置可切换至另一个难度列表。</li>
+                            <li>若选中不具有或未解锁附加难度的曲目后点击附加难度位置（即FTR右侧空白位或空槽位），则会优先跳转至BYD难度列表，若BYD列表无曲目则会跳转至ETR难度列表。</li>
+                            <li>其他相关内容参见<a href="layout.html" class="text-blue-500 hover:underline">界面#选曲界面</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 物件类型 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">物件类型</span>
+                </div>
+                <div class="update-content">
+                    <div class="mb-6">
+                        <h3 class="text-lg font-semibold text-primary">1.地面物件：包括地面音符（Tap）和长音符（Hold）两种。</h3>
+                        <ul class="ml-6 text-gray-600">
+                            <li>
+                                <strong>地面音符（Tap）</strong>：俗称"地键"，是最普通的地面物件，仅会出现在地面轨道中，在其到达地面判定线时点击即可。
+                                <ul class="ml-6">
+                                    <li>部分谱面的地面轨道有时会由四轨道变为六轨道<sup>[10]</sup>。</li>
+                                    <li>判定时间标准为note的底端（而不是中部）接触判定线的时间。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>长音符（Hold）</strong>：俗称"长条"，是需要长按的地面物件，仅会出现在地面轨道中，当其首端到达地面判定线时，需要点中并按住，直至其尾端。长条没有尾判，在结束时可不松开。
+                                <ul class="ml-6">
+                                    <li>长条的判定与单键有略微的不同，有些谱师会用1物量长条代替单键增加难度，例如Arcahv [FTR]、Lightning Screw
+                                        [FTR]以及Designant. [BYD]。</li>
+                                    <li>长条看似需要一直按住，但是实际上是由数个判定区域结合而成，换句话说，在足够频繁的情况下快速点击长条并不会出现Lost。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>地面物件的判定：</strong>
+                                <ul class="ml-6">
+                                    <li>判定区域位于地面判定线与天空判定线（Sky Input）中点至屏幕底部，玩家在这个区域内的任意位置均可对地面物件进行判定。</li>
+                                    <li>手指击中轨道区域时，对应的轨道会改变颜色。</li>
+                                    <li>超出轨道的手指会被视为在最近的轨道上。</li>
+                                    <li>在Arcaea 4.0.0以后的版本中，由于6K轨道的出现，为了优化手感减少误触，增加了新的邻轨判定机制。此机制根据enwidencamera触发时Sky
+                                        Input的高度来决定补正范围，最大可以允许左边界外0.5倍轨道宽度/右边界外0.5倍轨道宽度的区域被判定</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-semibold text-primary">2.天空物件：包含音弧（Arc）、音轨（Trace）和天空音符（Arctap）</h3>
+                        <ul class="ml-6 text-gray-600">
+                            <li>
+                                <strong>音弧（Arc）</strong>：是出现在空中的弯曲的红色或蓝色蛇状物，俗称"蛇"。需要在其首端到达判定平面时按住，手指随其的扭动而扭动，直至其尾端。音弧没有首判和尾判，可以提前按住，且在结束时可不松开。
+                                <ul class="ml-6">
+                                    <li>高度发生变化的音弧会在其开头出现一段竖线。</li>
+                                    <li>PST难度谱面中没有出现过上下移动的音弧，PRS难度谱面中音弧上下移动时会在轨道左上或右上出现提示。</li>
+                                    <li>音弧的首端通常出现在判定区域的左上角和右上角，出现在其他位置时通常会有音轨引导<sup>[11]</sup>。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>音轨（Trace）</strong>在技术上是音弧的一种特殊形式，俗称"黑线"。单纯的音轨无需点击，但在音轨上可能会出现需要点击的天空音符(Arctap)。
+                                <ul class="ml-6">
+                                    <li>在曲目Red and Blue and Green和0xe0e1ccull的愚人节谱面(也即FTR难度谱面)以及Your Best
+                                        Nightmare的BYD难度谱面中，出现了绿音弧。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>判定原则</strong> （此部分内容基于游戏内表现推断得出，非官方确认内容）
+                                <ul class="ml-6">
+                                    <li>
+                                        <strong>基本原则：</strong>音弧在成功判定时计为大Pure，判定频率依谱面的不同而不同；未得到成功判定（而不是得到错误判定）达到一定时间后会计为Lost，具体时间依谱面的不同而不同。音弧在得到成功判定时将被点亮，得到错误判定时将变为鲜红色，大部分音弧会在未得到判定时将变淡。
+                                    </li>
+                                    <li>
+                                        <strong>判定依据：</strong>
+                                        <ul class="ml-6">
+                                            <li>手指接触屏幕时获得"触点"，并且在对应手指离开屏幕时被移除。</li>
+                                            <li>触点进入到音弧的判定范围后会被标记为音弧对应颜色，并保留至触点被移除。每个触点至多被标记一种颜色，每个颜色的触点至多同时标记一个。当多个触点同时位于音弧的判定范围内时，优先标记先出现的触点。当触点可被同时标记为多种颜色时，优先级为蓝>红>绿。
+                                            </li>
+                                            <li>当判定中的异色音弧相互靠近时，所有对应颜色音弧在逻辑上视为无色，解除原有对应触点颜色，直至音弧分离，恢复音弧颜色并重新对判定范围内的触点标记颜色。
+                                            </li>
+                                            <li>当一个触点被移除时，该触点对应的颜色进入至多1秒的"染色冷却"：在此期间任何触点无法被标记为该颜色。</li>
+                                            <li>当一条音弧结束后，解除该音弧对应颜色的染色冷却。若未处于染色冷却，则阻止其进入下一次染色冷却。</li>
+                                        </ul>
+                                    </li>
+                                    <li>
+                                        <strong>判定类型：</strong>
+                                        <ul class="ml-6">
+                                            <li>在音弧的判定范围中存在同色触点时成功判定，无色音弧可被任意触点成功判定。</li>
+                                            <li>在音弧判定范围内存在其他触点时，且该颜色音弧未得到成功判定时，得到错误判定。</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>天空音符（Arctap）</strong>：俗称"天键"，是出现在音轨上的点击物件，需要在其到达判定平面时点击。
+                                <ul class="ml-6">
+                                    <li>当天键和地键同时出现时，它们之间会出现一条极细的线代表这是天地同押。有些谱师为了避免这条对读谱极有帮助的线会去写天天同押，甚至把切分音全写天空键上，例如STAGER
+                                        (ALL STAGE CLEAR) [FTR]。</li>
+                                    <li>目前存在极少数曲目拥有无音轨引导的天键配置，例如DX Choseinou Full Metal Shojo [FTR]，ω4 [FTR]和Bookmaker
+                                        (2D Version) [BYD]（实际上这些天键出现在在长度极短的音轨上，天键会把这种极短的音轨遮住）。</li>
+                                    <li>在曲目Infinite Strife,和Arcana Eden的全难度谱面中出现了一种特殊的天键，它们都出现在Sky
+                                        input线的中间位置，有特殊的击打效果和击打音效，每个特殊键的击打音效都不同<sup>[12]</sup>。</li>
+                                </ul>
+                            </li>
+                            <li>
+                                <strong>天空物件的判定：</strong>
+                                <ul class="ml-6">
+                                    <li>判定区域为地面判定线至天空判定线之间的位置。</li>
+                                    <li>玩家手指接触屏幕时，游戏会在玩家手指位置产生一条灰色的线以确定手指的在y轴的位置，这个灰线最多存在4条，但是可以判定的手指数量没有上限。</li>
+                                    <li>超出上下边界线的触点会就近判定在边界线上<sup>[13]</sup>，例如当天空音符正好在天空判定线（Sky Input）上时，点击在天空判定线（Sky
+                                        Input）以上的位置也可以成功判定。</li>
+                                    <li>玩家不可以使用一个手指同时判定两个音符。这个手指会判定距离最近的音符而忽略距离较远的音符。</li>
+                                    <li>如果这两个音符是一个地面音符和一个天空音符，游戏会优先判定地面音符而忽略天空音符（例如Last|Eternity的开头部分）。</li>
+                                    <li>长音符和音弧则不受此限制。</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 物件颜色与视觉效果 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">物件颜色与视觉效果</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">不同的物件在不同的视觉模式下会呈现不同的颜色，以增强可读性和游戏体验。下表展示了在不同模式下的物件颜色效果。</p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">物件种类</th>
+                                    <th class="border border-gray-300 px-4 py-2">地面音符</th>
+                                    <th class="border border-gray-300 px-4 py-2">长音符</th>
+                                    <th class="border border-gray-300 px-4 py-2">蓝音弧</th>
+                                    <th class="border border-gray-300 px-4 py-2">红音弧</th>
+                                    <th class="border border-gray-300 px-4 py-2">青音弧</th>
+                                    <th class="border border-gray-300 px-4 py-2">黄音弧</th>
+                                    <th class="border border-gray-300 px-4 py-2">音轨</th>
+                                    <th class="border border-gray-300 px-4 py-2">天空音符</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">光芒侧</td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Note_side_hikari.jpg" alt="地面音符"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Hold_side_hikari.jpg" alt="长音符"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Blue_side_hikari.jpg" alt="蓝音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Red_side_hikari.jpg" alt="红音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Cyan_side_hikari.jpg" alt="青音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Yellow_side_hikari.jpg" alt="黄音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img src="IMG/Playing_Trace.jpg"
+                                            alt="音轨">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arctap_side_hikari.jpg" alt="天空音符"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">纷争侧</td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Note_side_tairitsu.jpg" alt="地面音符"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Hold_side_tairitsu.jpg" alt="长音符"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Blue_side_tairitsu.jpg" alt="蓝音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Red_side_tairitsu.jpg" alt="红音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Cyan_side_tairitsu.jpg" alt="青音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Yellow_side_tairitsu.jpg" alt="黄音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Trace_side_tairitsu.jpg" alt="音轨"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arctap_side_tairitsu.jpg" alt="天空音符"></td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">番茄技能</td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Note_side_tomato.jpg" alt="地面音符"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Hold_side_tomato.jpg" alt="长音符"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Blue_side_tomato.jpg" alt="蓝音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Red_side_tomato.jpg" alt="红音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Cyan_side_tomato.jpg" alt="青音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arc_Yellow_side_tomato.jpg" alt="黄音弧"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Trace_side_tomato.jpg" alt="音轨"></td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Playing_Arctap_side_tomato.jpg" alt="天空音符"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特殊物件 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">特殊物件</span>
+                </div>
+                <div class="update-content">
+                    <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                        <thead>
+                            <tr class="bg-gray-200">
+                                <th class="border border-gray-300 px-4 py-2">特殊物件</th>
+                                <th class="border border-gray-300 px-4 py-2">示意</th>
+                                <th class="border border-gray-300 px-4 py-2">说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-semibold">绿音弧</td>
+                                <td class="border border-gray-300 px-4 py-2"><img
+                                        src="IMG/Playing_Arc_Green_side_tairitsu.PNG" alt="绿音弧"></td>
+                                <td class="border border-gray-300 px-4 py-2">目前仅存在于愚人节纷争侧谱面 Red and Blue and Green
+                                    [FTR]、0xe0e1ccull [FTR] 以及常驻纷争侧谱面 Your Best Nightmare [BYD] 中。</td>
+                            </tr>
+                            <tr>
+                                <td class="border border-gray-300 px-4 py-2 font-semibold">Designant. 音轨</td>
+                                <td class="border border-gray-300 px-4 py-2"><img src="IMG/Playing_Trace_designant.png"
+                                        alt="Designant.音轨"></td>
+                                <td class="border border-gray-300 px-4 py-2">目前仅存在于 Lucent Historia 曲包中异像谱面 Lament Rain
+                                    以及 Designant. 中。</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- 判定部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">判定</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600 mb-4">Arcaea的判定分为“纯粹”（Pure）、“模糊”（Far）与“流失”（Lost）三种，其中Pure分为大Pure和小Pure。</p>
+
+                    <!-- 判定表格 -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300">
+                            <thead>
+                                <tr class="bg-gray-100">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">显示</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">判定区间</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">效果</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2" rowspan="2">
+                                        <img src="IMG/Play_hit_pure.png" alt="大Pure" class="h-10">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">大Pure</td>
+                                    <td class="border border-gray-300 px-4 py-2">±25ms以内</td>
+                                    <td class="border border-gray-300 px-4 py-2">获得 (Pure 基本分 +1) <br> 连击数
+                                        +1（获得理论值的必要条件）</td>
+                                    <td class="border border-gray-300 px-4 py-2">只要击中长条或音弧就一定是大Pure判定</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">小Pure</td>
+                                    <td class="border border-gray-300 px-4 py-2">±25ms 至 ±50ms</td>
+                                    <td class="border border-gray-300 px-4 py-2">获得 Pure 基本分 <br> 连击数 +1</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        如果开启设置中的“显示过快/过慢”，连击数上方会显示 Early/Late<br>
+                                        大Pure、小Pure的叫法仅为称呼方便，实际游戏中 Pure 的显示大小没有区别
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <img src="IMG/Play_hit_far.png" alt="Far" class="h-10">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Far</td>
+                                    <td class="border border-gray-300 px-4 py-2">±50ms 至 ±100ms</td>
+                                    <td class="border border-gray-300 px-4 py-2">获得 (Pure 基本分 ÷2) <br> 连击数 +1</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <img src="IMG/Play_hit_lost.png" alt="Lost" class="h-10">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Lost</td>
+                                    <td class="border border-gray-300 px-4 py-2">±100ms 内未击中 或 提前 100-120ms 击中</td>
+                                    <td class="border border-gray-300 px-4 py-2">不得分 <br> 连击数清空</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+
+                    <p class="text-gray-600 mt-4">提前 120ms 以上的点击将不会有任何结果。</p>
+                    <p class="text-gray-600 mt-4">如果连击数（Recall）大于 1，则会在判定平面的中心显示连击数。[17]</p>
+                    <p class="text-gray-600 mt-4">
+                        如果 FR/PM 指示灯开启，在谱面开始时会显示两个指示灯：
+                        <br>FR（Full Recall）指示灯（紫色，左侧）
+                        <br>PM（Pure Memory）指示灯（蓝色，右侧）。
+                    </p>
+                    <p class="text-gray-600 mt-4">
+                        如果游玩过程中出现一个 Far 或 Lost 判定，PM 指示灯将消失；出现一个 Lost 判定，FR 指示灯将消失。
+                    </p>
+                </div>
+            </div>
+            <!-- 计分方式 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">计分方式</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        计分方式分为基本分和判定附加分两部分：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>基本分</strong>：满分为10000000<sup>[18]</sup>，单个Note的分数为(10000000/谱面Note总量)，游玩过程中每个Pure获得完整的分数，Far获得一半分数，Lost不得分。
+                        </li>
+                        <li>
+                            <strong>判定附加分</strong>：每个大Pure会额外加1分，其他判定均不加分，附加分无上限。拿到所有附加分时，即成绩为（10000000+谱面Note总量）时的成绩为理论值。
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-4">
+                        举例：Tiferet
+                        [FTR]共有1086物量。某玩家在一次练习的时候打出了984大Pure，97小Pure，3Far，2Lost的成绩。忽略大Pure+1分时，Pure每个音符得分为9208.103，Far每个音符得分为4604.052，Lost每个音符得分为0，总分即为(984+97)×9208.103+3×4604.052+2×0+984=9968755.639<br>
+                        显示得分为9968755（向下取整）<sup>[19]</sup>。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        Pure Memory的判定标准为无Far/Lost判定，而非分数超过10000000。<sup>[20]</sup>
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        依据曲得分，有以下不同的评级，均于选曲页面中显示为相应的图标。分数向下取整。
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">评级</th>
+                                    <th class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Play_result_grade_ex+.png" alt="EX+" class="h-12 mx-auto"></th>
+                                    <th class="border border-gray-300 px-4 py-2"><img src="IMG/Play_result_grade_ex.png"
+                                            alt="EX" class="h-12 mx-auto"></th>
+                                    <th class="border border-gray-300 px-4 py-2"><img src="IMG/Play_result_grade_aa.png"
+                                            alt="AA" class="h-12 mx-auto"></th>
+                                    <th class="border border-gray-300 px-4 py-2"><img src="IMG/Play_result_grade_a.png"
+                                            alt="A" class="h-12 mx-auto"></th>
+                                    <th class="border border-gray-300 px-4 py-2"><img src="IMG/Play_result_grade_b.png"
+                                            alt="B" class="h-12 mx-auto"></th>
+                                    <th class="border border-gray-300 px-4 py-2"><img src="IMG/Play_result_grade_c.png"
+                                            alt="C" class="h-12 mx-auto"></th>
+                                    <th class="border border-gray-300 px-4 py-2"><img src="IMG/Play_result_grade_d.png"
+                                            alt="D" class="h-12 mx-auto"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">对应分数区间</td>
+                                    <td class="border border-gray-300 px-4 py-2">9900000或以上</td>
+                                    <td class="border border-gray-300 px-4 py-2">9800000～9899999</td>
+                                    <td class="border border-gray-300 px-4 py-2">9500000～9799999</td>
+                                    <td class="border border-gray-300 px-4 py-2">9200000～9499999</td>
+                                    <td class="border border-gray-300 px-4 py-2">8900000～9199999</td>
+                                    <td class="border border-gray-300 px-4 py-2">8600000～8899999</td>
+                                    <td class="border border-gray-300 px-4 py-2">8599999或以下</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 回忆收集条 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">回忆收集条</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        回忆收集条（Recollection Gauge）简称"回忆条"，为游玩界面左侧竖置的的窄条。在不同的回忆条类型下，它的数值（回忆率，Recollection Rate）代表着不同的通关条件。
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">回忆系数</h3>
+                    <p class="text-gray-600"><sup>[参考 1]</sup></p>
+
+                    <p class="text-gray-600 mt-2">
+                        每个谱面存在一个固定的"回忆系数"，这个系数和谱面物量与难度相关。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        当Note出现判定时，游戏将会依据判定对回忆条增减与回忆系数相关的数值，这个数值也会因为搭档技能的不同而存在变动。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        回忆系数的计算方法如下：
+                    </p>
+
+                    <div class="overflow-x-auto mt-2">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">条件</th>
+                                    <th class="border border-gray-300 px-4 py-2">计算公式</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">物量 &lt; 400</td>
+                                    <td class="border border-gray-300 px-4 py-2">80 ÷ 物量 + 0.2</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">400 ≤ 物量 &lt; 600</td>
+                                    <td class="border border-gray-300 px-4 py-2">32 ÷ 物量 + 0.2</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">物量 ≥ 600</td>
+                                    <td class="border border-gray-300 px-4 py-2">96 ÷ 物量 + 0.08</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        若谱面等级 ≥ 11级，回忆系数将额外×0.8。<sup>[21]</sup>
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        以下是一些计算例：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>dropdead [PST]物量为44，故此谱面回忆系数为2.018181；</li>
+                        <li>Diode [PRS]物量为472，故此谱面回忆系数为0.267796；</li>
+                        <li>Phantasia [FTR]物量为952，故此谱面回忆系数为0.180840；</li>
+                        <li>Fracture Ray [FTR]物量为1279，故此谱面回忆系数为0.155058...×0.8=0.124046。</li>
+                    </ul>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">通关类型</h3>
+
+                    <p class="text-gray-600 mt-2">
+                        根据回忆条的难度，玩家通关时会获得不同的通关类型。
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            若游玩一张谱面时所有音符都为Pure（无论是大Pure还是小Pure），将得到"Pure Memory"（纯净回忆）评价，简称"PM"。
+                            <ul class="ml-6">
+                                <li>通关类型覆写为PM并获得标志<img src="IMG/Play_result_clear_badge_pure.png" alt="PM"
+                                        class="h-10 inline align-middle ml-1"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            若游玩一张谱面时没有音符得到Lost并且满足通关条件，将得到"Full Recall"（完整重现）评价，简称"FR"。
+                            <ul class="ml-6">
+                                <li>通关类型覆写为FR并获得标志<img src="IMG/Play_result_clear_badge_full.png" alt="FR"
+                                        class="h-10 inline align-middle ml-1"></li>
+                            </ul>
+                        </li>
+                        <li>
+                            v5.10.0版本后，达成FR或PM评价瞬间（最后一个音符判定完毕后），画面底部会闪烁一阵对应颜色的紫色（FR）或蓝色（PM）的光芒和粒子效果作为提示。
+                        </li>
+                        <li>
+                            未能达成以上条件但满足通关的条件，将得到"Track Complete"评价，即标准的"通关"。
+                            <ul class="ml-6">
+                                <li>根据使用回忆条的通关类型不同显示为不同颜色的"C"标志。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            未能满足通关条件，将得到"Track Lost"评价，即"通关失败"。
+                            <ul class="ml-6">
+                                <li>通关类型覆写为TL并获得标志<img src="IMG/Play_result_clear_badge_fail.png" alt="Fail"
+                                        class="h-10 inline align-middle ml-1"></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-4">
+                        并不是所有搭档都满足上述条件，参见后述。
+                    </p>
+                </div>
+            </div>
+            <!-- Normal回忆条 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Normal</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        普通难度回忆条，通关类型为Normal Clear。
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">主体</th>
+                                    <th class="border border-gray-300 px-4 py-2">初始回忆率</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关条件</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关标志</th>
+                                    <th class="border border-gray-300 px-4 py-2">覆写Clear</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Normal</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Pure + 1 × 回忆系数<br>
+                                        Far + 0.5 × 回忆系数<br>
+                                        Lost - 2
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">回忆率 ≥ 70</td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Play_result_clear_badge_normal.png" alt="Normal"
+                                            class="h-10 mx-auto">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">Easy Clear</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>说明</strong><br>
+                        回忆率首次达成通关条件时会播放音效作为提示<br>
+                        搭档没有任何特殊回忆条说明时即使用此种回忆条，将任意搭档封印也会强制使用Normal回忆条。
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">变体</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Zero</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Pure + 1 × 回忆系数<br>
+                                        Far + 0.5 × 回忆系数<br>
+                                        Lost - 100
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        光（<a href="Partner.html"
+                                            class="text-blue-500 hover:underline">Zero</a>）所使用的回忆条<br>
+                                        获得Lost判定直接清零回忆率<br>
+                                        在<a href="World_Mode.html" class="text-blue-500 hover:underline">Beyond
+                                            Challenge</a>中不影响Far导致的回忆率扣除量
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Ether Strike Anomaly</td>
+                                    <td class="border border-gray-300 px-4 py-2">保持主体</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        触发解锁<a href="World_Mode.html" class="text-blue-500 hover:underline">Fracture
+                                            Ray</a>的异象时所使用的回忆条<br>
+                                        每隔一定时间自动扣除一定值的回忆率<br>
+                                        该回忆条详细见<a href="World_Mode.html" class="text-blue-500 hover:underline">Fracture
+                                            Ray</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">正常数值变体</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        咲弥、榛名、露娜 & 美亚、迷尔、凛可、咲姬、纺、千夏
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Easy回忆条 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Easy</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        简单难度回忆条，采用简单难度的搭档即使用此种回忆条，通关类型为Easy Clear。<br>
+                        以Easy难度通关的歌曲不计入通关曲目数量<sup>[22]</sup>，但可以被解锁需求识别。
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">主体</th>
+                                    <th class="border border-gray-300 px-4 py-2">初始回忆率</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关条件</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关标志</th>
+                                    <th class="border border-gray-300 px-4 py-2">覆写Clear</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Easy</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Pure + 1 × 回忆系数<br>
+                                        Far + 0.5 × 回忆系数<br>
+                                        Lost - 1.2
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">回忆率 ≥ 70</td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Play_result_clear_badge_easy.png" alt="Easy" class="h-10 mx-auto">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>说明</strong><br>
+                        回忆率首次达成通关条件时会播放音效作为提示
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">变体</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Overflow</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        EASY<br>
+                                        光（<a href="Partner.html"
+                                            class="text-blue-500 hover:underline">Fracture</a>）所使用的回忆条<br>
+                                        在达到100回忆率后会变为Hard难度回忆条的计算方式和通关条件，且会播放一次与达到通关条件时不同的特殊音效<br>
+                                        但无论是否触发困难模式，通关类型均为Easy Clear
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        HARD<br>
+                                        与正常Hard条相同
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Grade</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        初始回忆分数为理论值<br>
+                                        Pure - 0<br>
+                                        Far - 判定扣除分<br>
+                                        Lost - 判定扣除分
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <a href="Partner.html"
+                                            class="text-blue-500 hover:underline">DORO*C</a>未觉醒时所使用的回忆条<br>
+                                        回忆率被修改为回忆分数，回忆条会显示当前回忆分数的评级<br>
+                                        评级低于AA（9500000）后视为Track Lost<br>
+                                        如果游玩时达成了获得<a href="Judge.html" class="text-blue-500 hover:underline">Full
+                                            Recall</a>的条件，则通关类型固定为Full Recall
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">正常数值变体</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        爱托 & 露娜（冬日）、奈美（暮光）
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hard回忆条 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Hard</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        困难难度回忆条，采用困难难度的搭档即使用此种回忆条，通关类型为Hard Clear。
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">主体</th>
+                                    <th class="border border-gray-300 px-4 py-2">初始回忆率</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关条件</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关标志</th>
+                                    <th class="border border-gray-300 px-4 py-2">覆写Clear</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Hard</td>
+                                    <td class="border border-gray-300 px-4 py-2">100</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Pure + 1 × 回忆系数<br>
+                                        Far + 0.5 × 回忆系数<br>
+                                        Lost：<br>
+                                        回忆率 ≥ 40：-9<br>
+                                        40 > 回忆率 ≥ 30：-(24 - 减少前回忆率 ÷ 2)<br>
+                                        回忆率 < 30：-5 </td>
+                                    <td class="border border-gray-300 px-4 py-2">回忆率＞0</td>
+                                    <td class="border border-gray-300 px-4 py-2"><img
+                                            src="IMG/Play_result_clear_badge_hard.png" alt="Hard" class="h-10 mx-auto">
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Normal Clear<br>
+                                        Easy Clear
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>说明</strong><br>
+                        回忆率低于30时，屏幕边缘会闪烁红光警告回忆率过低<br>
+                        回忆率低于0时会立刻中断游玩，并获得Track Lost评价
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">变体</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">说明</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Life20</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        初始可Lost数为20<br>
+                                        Pure - 0<br>
+                                        Far - 0<br>
+                                        Lost - 1
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <a href="Partner.html"
+                                            class="text-blue-500 hover:underline">潘多拉涅墨西斯（MTA-XXX）</a>所使用的回忆条<br>
+                                        回忆率被修改为可Lost数，回忆条会显示当前的可Lost数<br>
+                                        当可Lost数归0时会立刻中断游玩，并获得Track Lost评价
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Life60</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        初始可Far/Lost数为60<br>
+                                        Pure - 0<br>
+                                        Far - 1<br>
+                                        Lost - 1
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <a href="Partner.html"
+                                            class="text-blue-500 hover:underline">不来方永爱</a>所使用的回忆条<br>
+                                        回忆率被修改为可Far/Lost数，回忆条会显示当前的可Far/Lost数<br>
+                                        当可Far/Lost数归0时会立刻中断游玩，并获得Track Lost评价<br>
+                                        由于dropdead [PST]难度物量不足60，使用此搭档游玩此曲目时不会Track Lost
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Tempest</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Pure + 2 × 回忆系数<br>
+                                        Far + 回忆系数<br>
+                                        Lost - 18
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <a href="Partner.html"
+                                            class="text-blue-500 hover:underline">对立（Tempest）</a>所使用的"风暴收集条"<br>
+                                        回忆条根据一段时间内累计的判定获得持续增加或减少的回忆率变化量<br>
+                                        该回忆条变化规律详细见搭档技能描述
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Tempestissimo Anomaly
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">保持主体</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        触发<a href="World_Mode.html"
+                                            class="text-blue-500 hover:underline">Tempestissimo</a>异象时所使用的回忆条<br>
+                                        回忆条根据一段时间内累计的判定获得持续增加或减少的回忆率变化量<br>
+                                        该回忆条详细见<a href="World_Mode.html"
+                                            class="text-blue-500 hover:underline">Tempestissimo</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Fatalis</td>
+                                    <td class="border border-gray-300 px-4 py-2">保持主体</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <a href="Partner.html"
+                                            class="text-blue-500 hover:underline">光（Fatalis）</a>所使用的"宿命收集条"<br>
+                                        回忆条存在一个会随着Pure数变化的下限，低于下限时回忆率立即归零并获得Track Lost评价<br>
+                                        回忆率接近回忆率下限时屏幕边缘并不会闪烁红光<br>
+                                        该回忆条的"下限"机制详细见搭档技能描述
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Grade</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        初始回忆分数为理论值<br>
+                                        最低回忆分数为该谱面最佳成绩评级对应最低分数，如果个人最好成绩≤9499999，则使用9500000代替<br>
+                                        Pure - 0<br>
+                                        Far - 判定扣除分<br>
+                                        Lost - 判定扣除分
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        <a href="Partner.html"
+                                            class="text-blue-500 hover:underline">DORO*C</a>觉醒时所使用的回忆条<br>
+                                        回忆率被修改为回忆分数，同时回忆条会显示当前回忆分数的评级<br>
+                                        评级低于AA（9500000）后视为Track Lost<br>
+                                        回忆分数低于最低回忆分数时，回忆条评级会根据当前分数自动计算，同时立刻中断游玩，并获得Track Lost评价<br>
+                                        回忆分数接近最低回忆分数时，屏幕边缘会闪烁红光警告回忆分数过低
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">正常数值变体</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        轩辕十四（MDA-21）、依莉丝（夏日）、阿莱乌斯、希尔、伊莎贝尔、刹那、依莉丝（觉醒）、紫黑、露恩（觉醒）、洞烛（至高：第八探索者）
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Course回忆条 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Course</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        在<a href="Rank_Challenge.html"
+                            class="text-blue-500 hover:underline">段位挑战</a>模式中强制使用的回忆条，基于Hard模式设计。<br>
+                        使用此回忆条在段位通过曲目时会获得Hard Clear，但在曲目的排行榜中会显示为Easy Clear。<br>
+                        该回忆条详细见<a href="Rank_Challenge.html" class="text-blue-500 hover:underline">段位挑战</a>页面。
+                    </p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">主体</th>
+                                    <th class="border border-gray-300 px-4 py-2">初始回忆率</th>
+                                    <th class="border border-gray-300 px-4 py-2">回忆率增减</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关条件</th>
+                                    <th class="border border-gray-300 px-4 py-2">通关标志</th>
+                                    <th class="border border-gray-300 px-4 py-2">覆写Clear</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold">Course</td>
+                                    <td class="border border-gray-300 px-4 py-2">100</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        Pure + 1 × 回忆系数<br>
+                                        Far + 0.5 × 回忆系数<br>
+                                        Lost：<br>
+                                        回忆率 ≥ 40：-10<br>
+                                        30 ≤ 回忆率 < 40：-(24 - 减少前回忆率 ÷ 2)<br>
+                                            回忆率 < 30：-5 </td>
+                                    <td class="border border-gray-300 px-4 py-2">回忆率＞0</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>说明</strong><br>
+                        回忆率低于30时，屏幕边缘会闪烁红光警告回忆率过低<br>
+                        回忆率低于0时会立刻中断此次段位挑战，并获得Course Failed评价
+                    </p>
+                </div>
+            </div>
+
+            <!-- 特殊说明 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">特殊</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        在<a href="World_Mode.html" class="text-blue-500 hover:underline">世界模式</a>失落章中，所有触发了<a
+                            href="World_Mode.html" class="text-blue-500 hover:underline">Beyond
+                            Challenge</a>的搭档，其Far判定会扣除Lost判定一半的回忆率。<br>
+                        在2023年愚人节期间，使用<a href="Partner.html"
+                            class="text-blue-500 hover:underline">潘多拉涅墨西斯（MTA-XXX）</a>和<a href="Partner.html"
+                            class="text-blue-500 hover:underline">不来方永爱</a>在结算界面"重试"愚人节谱面，会出现回忆条为Normal回忆条但回忆率不上涨的bug。此bug可导致即使判定全部为Pure，但由于回忆率未达到70从而结算判定为Track
+                        Lost。<br>
+                        当前已知可以在游玩中全连Track Lost的搭档为奈美（暮光）、<a href="Partner.html"
+                            class="text-blue-500 hover:underline">不来方永爱</a>、轩辕十四（MDA-21）。<br>
+                        迷尔在修正参数前可在常规游玩中Track Lost，参见在普通游玩。现已修复<br>
+                        在<a href="World_Mode.html" class="text-blue-500 hover:underline">Beyond挑战</a>中Track Lost的示例：<a
+                            href="World_Mode.html" class="text-blue-500 hover:underline">Beyond Challenge</a>游玩<br>
+                        目前已知可以放置（即全部Lost）通关的搭档仅有<a href="Partner.html"
+                            class="text-blue-500 hover:underline">不来方永爱</a>（可以放置通关的曲目仅有dropdead [PST]）。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 残片系统 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">残片</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        残片是免费获得的虚拟代币，通过游玩曲目或<a href="World_Mode.html"
+                            class="text-blue-500 hover:underline">世界模式</a>奖励台阶获得。残片可以离线获取与使用，但不能通过云端同步转移至其他设备，卸载游戏会导致残片丢失。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        当残片显示数量将超过9999时，将以残片显示值下方的一条短横线替代9999残片，而残片显示值则显示余下的残片数，即实际残片数=短横线个数 ×
+                        9999。短横线最多能有2条，因此最大能存储的残片上限为 9999 × 3
+                        =29997，当实际残片量达到该最大值时，残片显示值底色将变为紫色。点击残片显示位置可以获取当前的实际残片量具体数值。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        残片可用于：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>NS版</strong>：解锁曲包与曲目，升级搭档
+                        </li>
+                        <li>
+                            <strong>移动版</strong>：解锁曲目，扩充好友位，购买<a href="World_Mode.html"
+                                class="text-blue-500 hover:underline">世界模式</a>体力、LegacyMap Play+残片加成、失落章残片加成。
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-4">
+                        每次游玩谱面后都会获得一定数量的残片，分为"游玩"、"通关"、"精彩展现"、"初次通关"、"搭档"和"<a href="Link_Play.html"
+                            class="text-blue-500 hover:underline">LINK PLAY</a>"部分，最终获得的残片数量为：上述所有部分之和 × 搭档Frag值 ÷ 50。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        在NS版中，曾经在<a href="World_Mode.html"
+                            class="text-blue-500 hover:underline">世界模式</a>游玩不会获得残片，但是从2.0.0版本更新开始，可以获得残片。<br>
+                        封印搭档或游戏处于离线及游客模式下，Frag值固定为50
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>"游玩"奖励</strong>为Track Lost且分数至少为5,500,000时获得的奖励<br>
+                        <strong>"通关"奖励</strong>为Track Complete/<a href="Judge.html"
+                            class="text-blue-500 hover:underline">Full Recall</a>/<a href="Judge.html"
+                            class="text-blue-500 hover:underline">Pure Memory</a>时获得的通关奖励<br>
+                        <strong>"精彩展现"奖励</strong>为<a href="Judge.html" class="text-blue-500 hover:underline">Full
+                            Recall</a>/<a href="Judge.html" class="text-blue-500 hover:underline">Pure
+                            Memory</a>时获得的额外奖励<br>
+                        以上几项奖励均受谱面难度和等级影响，具体计算方式如下所示（计算结果向下取整）：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>游玩奖励</strong>：等级 ÷ 1.2<sup>[23]</sup> 与 1 的较大值（？视为等级0）
+                        </li>
+                        <li>
+                            <strong>通关奖励（Track Complete）</strong>：游玩奖励 + 8 + 难度（PST：0，PRS：1，FTR/ETR：2，BYD：3）
+                        </li>
+                        <li>
+                            <strong>通关奖励（<a href="Judge.html" class="text-blue-500 hover:underline">Full Recall</a> / <a
+                                    href="Judge.html" class="text-blue-500 hover:underline">Pure Memory</a>）</strong>：8
+                            + 难度（PST：0，PRS：1，FTR/ETR：2，BYD：3）
+                        </li>
+                        <li>
+                            <strong>精彩展现（<a href="Judge.html" class="text-blue-500 hover:underline">Full
+                                    Recall</a>）</strong>：游玩奖励 × 2
+                        </li>
+                        <li>
+                            <strong>精彩展现（<a href="Judge.html" class="text-blue-500 hover:underline">Pure
+                                    Memory</a>）</strong>：游玩奖励 × 2.7
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-4">
+                        具体数值见下表<sup>[参考 2]</sup>
+                    </p>
+
+                    <!-- 残片奖励表格（优化版） -->
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2" rowspan="2">谱面等级</th>
+                                    <th class="border border-gray-300 px-4 py-2" colspan="10">各等级对应残片奖励</th>
+                                </tr>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">1/2/?</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">3</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">4</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">5</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">6/7/7+</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">8/8+</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">9/9+</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">10/10+</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">11/11+</th>
+                                    <th class="border border-gray-300 px-2 py-2 text-sm">12</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- 游玩奖励 -->
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-50">游玩奖励</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">1</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">2</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">3</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">4</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">5</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">6</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">7</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">8</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">9</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">10</td>
+                                </tr>
+
+                                <!-- 通关奖励（分难度） -->
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-50" rowspan="4">
+                                        通关奖励</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center" colspan="10">
+                                        <span class="font-medium">未FR/PM时：</span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">PST</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">9</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">10</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">11</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">12</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">13</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-blue-50">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">PRS</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">11</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">12</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">13</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">14</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">15</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">16</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-purple-50">-</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">FTR/ETR</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">11</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">-</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">15</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">16</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">17</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">18</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center bg-pink-50">19</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-50">FR/PM时</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center" colspan="10">
+                                        <span style="color: #0783be">PST</span>：8，<span
+                                            style="color: #648c3c">PRS</span>：9，<span
+                                            style="color: #5a2753">FTR</span>/<span
+                                            style="color: #5e5078">ETR</span>：10，<span
+                                            style="color: #8e3a3e">BYD</span>：11（无视谱面等级）
+                                    </td>
+                                </tr>
+
+                                <!-- 精彩展现 -->
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-50">精彩展现(FR)</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">2</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">4</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">6</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">8</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">10</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">12</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">14</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">16</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">18</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">20</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-50">精彩展现(PM)</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">2</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">5</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">8</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">10</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">13</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">16</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">18</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">21</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">24</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center">27</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2 font-semibold bg-gray-50">
+                                        PM时总和<sup>[24]</sup></td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">10</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">14</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">17</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">19</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">23</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">26</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">29</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">32</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">35</td>
+                                    <td class="border border-gray-300 px-2 py-2 text-center font-medium">38</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>"初次通关"奖励</strong>为每个谱面首次达成非Track Lost评价时所获得的奖励，固定为10残片<br>
+                        在Nintendo Switch版Arcaea中，如果已经在任意控制方式中获得过该谱面的"初次通关"奖励，则无法在其他控制方式中再次获取该谱面的"初次通关"奖励
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>"搭档"</strong>为部分搭档拥有的技能产生的残片数量影响，可正可负，但通常为正向奖励残片。<br>
+                        这些搭档的影响方式不尽相同，具体数量请在各<a href="Partner.html"
+                            class="text-blue-500 hover:underline">搭档</a>页面或搭档数据简表中查看。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>"<a href="Link_Play.html" class="text-blue-500 hover:underline">LINK
+                                PLAY</a>"奖励</strong>残片为在<a href="Link_Play.html"
+                            class="text-blue-500 hover:underline">Link Play</a>房间内2人以上完成游玩时给予的奖励，计算方式如下：<br>
+                        Link Play奖励值 = (游玩奖励 + 通关奖励 + 精彩表现) × 全员连击奖励 × 游玩人数
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>全员连击奖励</strong>是基于所有玩家连击状态给予的奖励，其中：<br>
+                        未达成全连：×0.1，Linked <a href="Judge.html" class="text-blue-500 hover:underline">Full
+                            Recall</a>：×0.134，Linked <a href="Judge.html" class="text-blue-500 hover:underline">Pure
+                            Memory</a>: ×0.167
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>游玩人数</strong>是房间内玩家人数给予的奖励（掉线的玩家不计算）：<br>
+                        1人：×0，2人：×1，3人：×2，4人：×3
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>"STAFF LINK"</strong> 为在2024/09/13-2024/09/14期间，玩家进行公开<a href="Link_Play.html"
+                            class="text-blue-500 hover:underline">Link Play</a>时匹配到Lowiro的官方人员所给予的额外奖励，此残片奖励固定为100。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <a href="World_Mode.html"
+                            class="text-blue-500 hover:underline">世界模式</a>地图中也存在残片奖励台阶，经过这些台阶时会获得对应数量的残片。
+                    </p>
+                </div>
+            </div>
+            <!-- 记忆源点 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">记忆源点</span>
+                    <span class="text-sm text-gray-400 ml-2">（<a href="#"
+                            class="text-blue-500 hover:underline">移动端</a>独有）</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        记忆源点（Memory）是游戏内通过充值购买获得的虚拟代币，一般可以用来获取付费曲目或辅助游玩<a href="World_Mode.html"
+                            class="text-blue-500 hover:underline">世界模式</a>。记忆源点与账号绑定，因而只能在线获取与使用，但可以自动同步至所有该账号下的设备。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>购买方式：</strong><br>
+                        点击记忆源点数量图标即可在游戏内或前往Arcaea官方网站进行购买，可用的支付方式包括两大类：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>通过Google Play和App Store应用内购买，可用购买项目为：7元/100记忆源点，34元/510记忆源点，68元/1020记忆源点。</li>
+                        <li>通过Arcaea官网账户管理系统购买，固定为34元/550记忆源点，支持34元，68元，136元三档购买项。</li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-2">
+                        根据当前货币不同，价格可能存在微调，以给定价格为准。<br>
+                        此外，自2020年起lowiro会在每年元旦为当日登录Arcaea的玩家发放100记忆源点，领取时间限制为元旦当日。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>记忆源点可用于：</strong>
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>在游戏中购买曲包/Pack Append/单曲供游玩，详见<a href="Unlock.html"
+                                class="text-blue-500 hover:underline">记忆源点解歌系统</a>。</li>
+                        <li>购买的内容可在所有登录了同一账号的设备生效。</li>
+                        <li>在<a href="World_Mode.html"
+                                class="text-blue-500 hover:underline">世界模式</a>中购买6点体力，每次需要支付50记忆源点。</li>
+                        <li>激活<a href="World_Mode.html"
+                                class="text-blue-500 hover:underline">世界模式</a>中的"源韵强化"功能，每次需要支付50记忆源点。</li>
+                        <li>在官网账户管理系统修改用户名，每次修改需要支付100记忆源点。</li>
+                        <li>开通Arcaea Online付费订阅，费用为200记忆源点/30天。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 网络功能 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">网络</span>
+                    <span class="text-sm text-gray-400 ml-2">（<a href="#"
+                            class="text-blue-500 hover:underline">移动端</a>独有）</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        此章节的均为在线功能，需要注册并登录Arcaea账号，并通过点击主界面的"网络"（地球标志）按钮进入。
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">注册与登录</h3>
+                    <p class="text-gray-600">
+                        未登录时，"网络"界面显示为注册或登录账号。
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>需要使用邮箱注册并验证后才能完成注册，此邮箱将会用于密码找回（届时会由"noreply@lowiro.com"发送密码重置邮件）。</li>
+                        <li>可在官网账号管理系统登录后修改用户名（每次需支付100记忆源点）、管理原声专辑电子版资源、充值记忆源点、在Arcaea Online查询个人数据等。</li>
+                        <li>同一账号仅可同时在一台设备上游玩Arcaea，且24小时内不可登录3台以上的设备，否则将会触发封禁。</li>
+                        <li>根据封禁次数，单次封禁将持续1天、3天、7天、15天、31天。</li>
+                        <li>根据Arcaea服务条款，不得共享账户或持有多个账户（开小号），请确保你仅使用由自己注册的一个账户。</li>
+                        <li>同一账号仅能同时在两台设备上保持登录状态。登录第三台设备后，前两台设备中较早登陆的设备将会自动退出登录。</li>
+                    </ul>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">云端同步</h3>
+                    <p class="text-gray-600">
+                        v1.1.2起网络功能增加"云端同步"，可以将存档上传到云端保存，并在另一台设备下载存档以完成存档转移。
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>云存档功能并不推荐用于备份。</li>
+                        <li>v1.5.0起，云端同步不再同步残片。</li>
+                        <li>v1.6.1起，结算界面左上部增加快速同步按钮，点击即可快速同步，若显示为灰色即同步完成，若显示为红色则同步失败。</li>
+                        <li>v3.2.3起，存档之间存在冲突时将弹出存档确认界面，玩家可根据本地存档和云端存档的详细数据（包括通关曲目数、云端存档上一次上传时的设备名和上传时间）选择要保留的存档。</li>
+                    </ul>
+
+                    <h4 class="text-md font-semibold text-primary mt-4">同步内容</h4>
+                    <p class="text-gray-600">
+                        云端同步的内容包括：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>歌曲的解锁情况（包含异象等特殊解锁方式的歌曲）；</li>
+                        <li>歌曲的本地成绩与通关状态；</li>
+                        <li>故事模式的解锁进度；</li>
+                        <li>与部分歌曲相关的<a href="World_Mode.html" class="text-blue-500 hover:underline">世界模式</a>地图解锁情况。</li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-2">
+                        云端同步的内容不包括：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>游戏设置（语言，音符流速，偏移率等）；</li>
+                        <li>残片数量；</li>
+                        <li>收藏的<a href="Partner.html" class="text-blue-500 hover:underline">搭档</a>和Favorites所收藏的曲目。</li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-2">
+                        以下内容无需云端同步，与账号自动绑定和更新：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li><a href="PTT.html" class="text-blue-500 hover:underline">潜力值</a>、"隐藏潜力值"设置；</li>
+                        <li>好友列表；</li>
+                        <li><a href="World_Mode.html" class="text-blue-500 hover:underline">世界模式</a>进度；</li>
+                        <li><a href="Rank_Challenge.html" class="text-blue-500 hover:underline">段位挑战</a>成绩；</li>
+                        <li>已购买的曲包/曲目。</li>
+                    </ul>
+
+                    <h4 class="text-md font-semibold text-primary mt-4">同步机制</h4>
+                    <p class="text-gray-600">
+                        当玩家登录一台设备并进行云端同步后：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>若云端没有存档</strong>（即这个账号第一次执行云端同步）：
+                            <ul class="ml-6">
+                                <li>若本设备没有任何数据，则此功能无效；</li>
+                                <li>若本设备有数据，则将本地存档上传至云端（第一次上传）。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>若云端已有存档</strong>：
+                            <ul class="ml-6">
+                                <li>若本设备没有任何数据，则从云端下载存档；</li>
+                                <li>若本设备有数据：
+                                    <ul class="ml-6">
+                                        <li>若云端存档的设备与本设备相同，则将本地存档上传至云端；</li>
+                                        <li>若云端存档的设备与本设备不同，则将弹出存档确认界面选择要保留的存档，保留的存档将会覆盖另一个存档，此操作不可撤销。</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">好友（关注）系统</h3>
+                    <p class="text-gray-600">
+                        通过添加好友可以关注Ta的最近游玩与单曲成绩。
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>点击主界面的"网络"（地球标志）按钮即可在画面右侧查看好友列表。</li>
+                        <li>可以查看好友用户名、设定的显示<a href="Partner.html" class="text-blue-500 hover:underline">搭档</a>、<a
+                                href="PTT.html"
+                                class="text-blue-500 hover:underline">潜力值</a>与最近一次游玩成绩及记录时间。列表按最近游玩成绩的记录时间最近到最远排列。</li>
+                        <li>被添加的好友将会加入你的单曲好友排行榜中，从而可以在选择单曲时查看同谱面的好友成绩。</li>
+                        <li>点击左侧"添加"按钮输入9位ID来添加好友，你也可以在上方确认你自己的ID。</li>
+                        <li>默认好友上限为10个，可以通过支付残片增加好友上限。目前好友上限最多可以增加到30个，总计需要34000残片。</li>
+                    </ul>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-gray-200">
+                                    <th class="border border-gray-300 px-4 py-2">好友位数量变化</th>
+                                    <th class="border border-gray-300 px-4 py-2">每个好友位所需残片数量(个/上限增加1位)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">10→12</td>
+                                    <td class="border border-gray-300 px-4 py-2">500</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">12→14</td>
+                                    <td class="border border-gray-300 px-4 py-2">1000</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">14→16</td>
+                                    <td class="border border-gray-300 px-4 py-2">1500</td>
+                                </tr>
+                                <tr>
+                                    <td class="border border-gray-300 px-4 py-2">16→30</td>
+                                    <td class="border border-gray-300 px-4 py-2">2000</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>注意事项：</strong>
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>加好友是单向的，你加Ta≠Ta加你。</li>
+                        <li>双向好友会在好友右侧显示"相互关注"的标志。</li>
+                        <li>当添加好友时输入的ID分别为000000001和000000002时，好友列表中分别会新增名为Hikari和Tairitsu的好友，<a href="Partner.html"
+                                class="text-blue-500 hover:underline">搭档</a>分别显示为觉醒后的光和对立，默认显示相互关注，<a href="PTT.html"
+                                class="text-blue-500 hover:underline">潜力值</a>显示为6.16，不显示最近游玩记录。</li>
+                        <li>如果你输入了自己的ID，添加时会提示"你不能加自己为好友 ;_;"。</li>
+                        <li>v5.10.0更新以后，可以邀请双向好友加入自己所在的<a href="Link_Play.html"
+                                class="text-blue-500 hover:underline">Link Play</a>房间。</li>
+                    </ul>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">个人档案卡</h3>
+                    <p class="text-gray-600">
+                        展示个人资料卡。
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>可以显示你的用户名，好友ID，<a href="PTT.html" class="text-blue-500 hover:underline">潜力值</a>和当前<a
+                                href="Partner.html" class="text-blue-500 hover:underline">搭档</a>。</li>
+                        <li>同时显示你的某个难度下的游玩总览，可以通过点击显示<span style="color: #0783be">PST</span>/<span
+                                style="color: #648c3c">PRS</span>/<span style="color: #5a2753">FTR</span>/<span
+                                style="color: #5e5078">ETR</span>/<span style="color: #8e3a3e">BYD</span>的按钮来切换</li>
+                        <li>解锁前在选曲界面完全不可见的谱面<sup>[25]</sup>在解锁前不会计入谱面总数。</li>
+                        <li>所有曲目全部达到右侧相应条件时，数字会变色，其中FULL RECALL统计会变为紫色，PURE MEMORY统计会变为绿色。</li>
+                        <li>背景显示的是你现在所选用的主页面背景。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 其他在线功能 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">其他在线功能</span>
+                    <span class="text-sm text-gray-400 ml-2">（<a href="#"
+                            class="text-blue-500 hover:underline">移动端</a>独有）</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        若要使用在线功能（如<a href="World_Mode.html" class="text-blue-500 hover:underline">世界模式</a>、游玩付费曲目、<a
+                            href="Link_Play.html" class="text-blue-500 hover:underline">Link
+                            Play</a>等），你需要注册并登录Arcaea账号。
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">Link Play</h3>
+                    <p class="text-gray-600">
+                        参见：<a href="Link_Play.html" class="text-blue-500 hover:underline">Link Play</a><br>
+                        <a href="#" class="text-blue-500 hover:underline">移动版</a>v3.10.0新增<a href="Link_Play.html"
+                            class="text-blue-500 hover:underline">Link Play</a>功能，该功能支持最多4名玩家同时游玩一首曲目，并且在游戏中实时显示各自的分数差。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        v5.10.0后该功能得到重大更新，具体内容请在对应页面查看
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">段位挑战</h3>
+                    <p class="text-gray-600">
+                        参见：<a href="Rank_Challenge.html" class="text-blue-500 hover:underline">段位挑战</a><br>
+                        <a href="#" class="text-blue-500 hover:underline">移动版</a>于v4.0.0新增<a href="Rank_Challenge.html"
+                            class="text-blue-500 hover:underline">段位挑战</a>功能，玩家可选择不同段位的挑战，挑战中连续通关固定的4首曲目可获得背景框等奖励。
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">Arcaea Online</h3>
+                    <p class="text-gray-600">
+                        Arcaea Online为lowiro官方提供的网页版Arcaea游戏数据查询系统。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        只要已经注册了账号并登陆游戏，即可通过浏览器登陆Arcaea官网以访问Arcaea Online。
+                    </p>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>Arcaea Online包括以下免费功能：</strong>
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>档案</strong>：显示个人资料卡（包括当前<a href="Partner.html"
+                                class="text-blue-500 hover:underline">搭档</a>、<a href="PTT.html"
+                                class="text-blue-500 hover:underline">潜力值</a>、各难度曲目通关数、用户名与账户ID），登录Arcaea Online后的主页面。
+                            <ul class="ml-6">
+                                <li>可在此处切换要显示的场景。</li>
+                                <li>可选择的场景与游戏内数据同步，但默认选择"无央的决裂"，无论是否在游戏中解锁过。</li>
+                                <li>此功能也在部分其它页面中可用。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>好友</strong>：查看和管理好友列表（参见上述好友系统）。
+                            <ul class="ml-6">
+                                <li>因为增加好友上限需要读取游戏残片数据，因此无法增加好友上限。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>搭档</strong>：查看和选择<a href="Partner.html"
+                                class="text-blue-500 hover:underline">搭档</a>，确认持有道具数量（以太之滴、觉醒用核心、次元结晶等）。
+                            <ul class="ml-6">
+                                <li>无法升级或觉醒<a href="Partner.html" class="text-blue-500 hover:underline">搭档</a>。</li>
+                                <li>此处的选择<a href="Partner.html" class="text-blue-500 hover:underline">搭档</a>为"选择正在使用的<a
+                                        href="Partner.html"
+                                        class="text-blue-500 hover:underline">搭档</a>"并与游戏数据同步。如果你在进行在线游戏期间（如<a
+                                        href="World_Mode.html"
+                                        class="text-blue-500 hover:underline">世界模式</a>等）于此处修改了选择的<a href="Partner.html"
+                                        class="text-blue-500 hover:underline">搭档</a>，可能会因数据不同步导致在线游戏结果失效。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>排行榜</strong>：选中某个难度后（默认为<span
+                                style="color: #5a2753">FTR</span>），可确认自己在该难度下的曲目总分，以及该分数在世界范围内的排名（10000名以外则不显示）；默认显示该难度下世界前50名的排行榜，可通过点击"前50"图标切换至自己排名周围共50名玩家的排行榜位置。<sup>[26]</sup>
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-4">
+                        <strong>通过支付200记忆源点/30天的订阅费用，还可解锁额外内容：</strong>
+                    </p>
+
+                    <h4 class="text-md font-semibold text-primary mt-4">订阅者游戏内权益（可在"订阅"页面查阅）：</h4>
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>世界强化</strong>：进行<a href="World_Mode.html"
+                                class="text-blue-500 hover:underline">世界模式</a>游戏时获得额外步数加成。
+                            <ul class="ml-6">
+                                <li>基础加成为20%，每连续订阅一次提升5%，上限30%加成；订阅中断后重置加成提升状态。</li>
+                                <li>加成对Beyond章节/陷落章也生效。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>自定义名片显示</strong>：可以选择游戏中显示于顶部头像和名称上的背景框。
+                            <ul class="ml-6">
+                                <li>包括<a href="Rank_Challenge.html"
+                                        class="text-blue-500 hover:underline">段位挑战</a>通关过的所有背景框，订阅期间可自选。</li>
+                                <li>也可以选择不显示名片。</li>
+                                <li>订阅期间每月解锁一张订阅者专属每月限定背景框。</li>
+                                <li>（当前游戏内的所有名片详见名片一览）</li>
+                                <li>订阅过期后将会自动回退至<a href="Rank_Challenge.html"
+                                        class="text-blue-500 hover:underline">段位挑战</a>中获得过的最高段位的横幅，并且无法更改。</li>
+                                <li>在订阅服务期间内获得过的订阅者背景框也会被回退，但若后续再次开通订阅服务，则仍可以装扮获得过的订阅者背景框。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>月度权益礼</strong>：每月可选择下列三种礼物中的一个获取。
+                            <ul class="ml-6">
+                                <li>随机解锁一首尚未获得的Memory Archive曲目；</li>
+                                <li>2 源韵强化兑换券；</li>
+                                <li>20 以太之滴。</li>
+                            </ul>
+                            <ul class="ml-6">
+                                <li>源韵强化兑换券有效期为14天。在拥有兑换券时，每次激活源韵强化时将优先消耗一张兑换券。</li>
+                                <li>如果玩家已经获得Memory Archive所有遵从单曲计价规则的曲目，则在赠礼界面中"随机曲目"一项会被去除。</li>
+                                <li>如果玩家在当月未领取礼物，则会获得20 以太之滴。</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h4 class="text-md font-semibold text-primary mt-4">"排行榜"解锁好友排行榜。</h4>
+                    <ul class="ml-6 text-gray-600">
+                        <li>解锁"分数"页面：确认自己的单曲成绩（评级、得分、PM/FR状态），点击曲目封面可展开详细信息（年均游玩次数、最好成绩判定统计、单曲排行榜）。</li>
+                        <li>解锁"<a href="PTT.html" class="text-blue-500 hover:underline">潜力值</a>"页面：确认自己的<a
+                                href="PTT.html"
+                                class="text-blue-500 hover:underline">潜力值</a>变动情况曲线（支持1周/1月/1年/3年/5年内统计），以及最高的30个游玩成绩与近期最佳的10个游玩成绩（即best30与recent
+                            best10）；支持导出最高30个成绩为图片。
+                            <ul class="ml-6">
+                                <li>生成的图片背景即为玩家选择的场景。</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-4">
+                        订阅剩余时间可在档案页面右上角查询，也可在订阅管理中查询失效日期。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        订阅支持自动续费：记忆源点足够时，每30天自动扣费续订。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 新排名系统 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">新排名系统</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        v3.6.0新增了与<a href="PTT.html"
+                            class="text-blue-500 hover:underline">潜力值</a>无关的全新排名系统，并为该排名中世界前200的玩家增添特殊边框。
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">排名机制</h3>
+                    <p class="text-gray-600">
+                        排名算法根据所有<span style="color: #5a2753">FTR</span>、<span style="color: #5e5078">ETR</span>、<span
+                            style="color: #8e3a3e">BYD</span>难度谱面的单曲得分相加排名。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        单曲得分由分数部分和准度部分组成，每个部分的计算方式如下：
+                    </p>
+
+                    <ul class="ml-6 text-gray-600">
+                        <li>
+                            <strong>分数部分</strong>基于游玩分数计算，自9900000起从0开始线性增加，至10000000达到上限1
+                        </li>
+                        <li>
+                            <strong>准度部分</strong>统计大Pure判定数在总物量中的占比，自90%起从0开始线性增加，至99.5%达到上限1
+                        </li>
+                    </ul>
+
+                    <p class="text-gray-600 mt-2">
+                        在得到两个部分的参数后，按照如下公式得到单曲得分：<br>
+                        （准度部分+分数部分 × 3） × 定数
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        根据该算法，未达成PM的单曲内一个Far判定将等价于额外的14.25个小Pure判定，一个Lost判定将等价于额外的28.5个小Pure判定。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 隐藏功能 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">隐藏功能</span>
+                </div>
+                <div class="update-content">
+                    <h3 class="text-lg font-semibold text-primary">重置存档</h3>
+                    <p class="text-gray-600 text-sm italic">
+                        此功能已被移除。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        v5.3.0前点击云端同步，云端存档将被清空<br>
+                        <span style="color: #ff0000"><strong>警告：</strong>若您从未上传过本地数据，该操作将极其危险且无法撤销！<br>
+                            尝试此操作前请务必上传本地数据！Arcaea中文维基不对您误操作造成的数据丢失承担任何责任。
+                    </p>
+                    </span>
+
+                    <p class="text-gray-600 mt-2">
+                        在游戏内"其他"界面点击左上角 10 次将弹出重置存档的确认对话框（由于是隐藏功能所以皆显示英文）。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        确认重置后，当前设备上的本地成绩、歌曲解锁/通关状态和故事解锁进度将被全部清除和重置为初始状态。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        与账号相关的在线数据（如登录状态、已购买内容、已上传的在线成绩与<a href="PTT.html"
+                            class="text-blue-500 hover:underline">潜力值</a>）、残片数量和游戏设置不会被清除。省去了卸载重装带来的麻烦
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        于v5.3.0开始，如果玩家重置存档之后立即云端同步，游戏仍能成功从云端读取数据，云端上的所有数据还会回来，因此若未上传本地数据至云端，尝试本操作后本地数据将清除且无法挽回。<br>
+                        v5.8.0（疑似）更新后某一天，此功能被移除，点击已经不会触发任何弹窗。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 游戏指法 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">游戏指法</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        Arcaea一般有三种常见指法。
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">双手拇指游玩</h3>
+                    <p class="text-gray-600">
+                        该指法主要适用于使用手机或其他小型设备游玩Arcaea的玩家。<br>
+                        双手横持并托举设备，使用拇指进行游戏，在少数需要辅助指的谱面中可额外使用两手食指。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        <strong>优点：</strong>无需支架，可于大部分的情况下进行游玩。<br>
+                        <strong>缺点：</strong>对于跨度较大的键位处理的时候会有一定困难（一个典型例子就是<a href="#">Dreamin' Attraction!!</a>的反复大出张）。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        拇指玩法示例：BengaleeHS的拇指<a href="#">Grievous Lady</a>手元
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">双手食指游玩</h3>
+                    <p class="text-gray-600">
+                        该指法主要适用于使用iPad或其他大型设备游玩Arcaea的玩家，也有部分使用手机等小型设备的玩家使用双手食指游玩。<br>
+                        将设备平置于一稳定平面上，使用双手食指进行游戏，在少数需要辅助指的谱面中可额外使用拇指或中指（由具体情况决定）。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        <strong>优点：</strong>能够相对容易的处理各种键型；可较为容易的发展为多指游玩。<br>
+                        <strong>缺点：</strong>游玩地点受到限制。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        如果你是使用小型设备且使用此种指法的玩家，在游玩的时候请注意做好防滑工作，避免设备滑动或飞出桌面，导致影响游玩或设备损坏。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        食指玩法示例：h1r的食指<a href="#">Cyaegha</a>手元
+                    </p>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">多指游玩</h3>
+                    <p class="text-gray-600">
+                        该指法主要适用于使用iPad或其他大型设备游玩Arcaea的玩家，绝大多数的Ranker都是这种玩法。<br>
+                        将设备平置于一稳定平面上，使用双手所有的手指进行游戏（但绝大多数情况下都主要使用双手的食指和中指，处理部分简单配置时通常都仅使用双手食指）。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        <strong>优点：</strong>能够容易的处理各种键型，在高难度谱面的高难度段中能够有效的提高准度。<br>
+                        <strong>缺点：</strong>上手难度极高，如无足够音游基础不建议上手即使用此种指法。
+                    </p>
+
+                    <p class="text-gray-600 mt-2">
+                        多指玩法示例：Maintain的多指Grievous Lady手元
+                    </p>
+                </div>
+            </div>
+
+            <!-- 注释和参考资料 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">注释和参考资料</span>
+                </div>
+                <div class="update-content">
+                    <h3 class="text-lg font-semibold text-primary">注释</h3>
+                    <ol class="ml-6 text-gray-600 list-decimal">
+                        <li>目前没有既具有<span style="color: #5e5078">Eternal</span>又具有<span
+                                style="color: #8e3a3e">Beyond</span>难度的曲目</li>
+                        <li>在<a href="#" class="text-blue-500 hover:underline">Infinite Strife</a>,和<a href="#"
+                                class="text-blue-500 hover:underline">Arcana Eden</a>的谱面中出现了一种特殊的天键，同时带有一段黑线的引导。另外，在<a
+                                href="#"
+                                class="text-blue-500 hover:underline">Designant</a>的异象谱面中出现了特殊的红色天键，并且一部分超出了梯形界。</li>
+                        <li>愚人节谱面虽然使用<span style="color: #5a2753">Future</span>难度，但是并不遵循<span
+                                style="color: #5a2753">Future</span>难度的谱面规则，并且谱面等级为0（游戏中显示为？）</li>
+                        <li>目前仅<a href="#" class="text-blue-500 hover:underline">Good bye, Merry-Go-Round</a> 、<a
+                                href="#" class="text-blue-500 hover:underline">Manic Jeer</a>、<a href="#"
+                                class="text-blue-500 hover:underline">UNKNOWN LEVELS</a>、<a href="#"
+                                class="text-blue-500 hover:underline">To the Furthest Dream</a>中出现了超界天键</li>
+                        <li><span style="color: #5a2753">FTR</span>/<span
+                                style="color: #5e5078">ETR</span>也有个别谱面存在此现象，例如<a href="#"
+                                class="text-blue-500 hover:underline">PRIMITIVE LIGHTS</a> [<span
+                                style="color: #5a2753">FTR</span>]与<a href="#"
+                                class="text-blue-500 hover:underline">ALTER EGO</a> [<span
+                                style="color: #5e5078">ETR</span>]
+                        </li>
+                        <li>目前仅有<a href="#" class="text-blue-500 hover:underline">PRAGMATISM -RESURRECTION-</a>，<a
+                                href="#" class="text-blue-500 hover:underline">Vicious [ANTi] Heroism</a>，<a href="#"
+                                class="text-blue-500 hover:underline">Last | Moment</a> / <a href="#"
+                                class="text-blue-500 hover:underline">Last | Eternity</a></li>
+                        <li>主线第一幕曲包<a href="#" class="text-blue-500 hover:underline">Black Fate</a>和<a href="#"
+                                class="text-blue-500 hover:underline">Final Verdict</a>中，<span
+                                style="color: #8e3a3e">BYD</span>难度解锁前隐藏，需要达成特定条件后解锁；主线第二幕曲包Lucent Historia中，大多数<span
+                                style="color: #8e3a3e">BYD</span>难度谱面未隐藏可以根据提示解锁，个别隐藏需要达成特定条件后解锁；<a href="#"
+                                class="text-blue-500 hover:underline">Your Best Nightmare</a>
+                            <span style="color: #8e3a3e">BYD</span>是唯一的未隐藏且无需任何条件解锁的<span
+                                style="color: #8e3a3e">BYD</span>谱面
+                        </li>
+                        <li>v5.3.0后出现了槽位隐藏机制，在对应地图的前置地图完成之前，其附加难度槽位将会被隐藏（例如<a href="#"
+                                class="text-blue-500 hover:underline">Einherjar Joker</a>，其<span
+                                style="color: #8e3a3e">BYD</span>难度槽位需要先解锁<a href="#"
+                                class="text-blue-500 hover:underline">Libertas</a>的<span
+                                style="color: #8e3a3e">BYD</span>难度谱面才能显示）。</li>
+                        <li>v6.2.0版本更新前与<span style="color: #5a2753">FTR</span>在选曲界面共用一个列表，即选择<span
+                                style="color: #5a2753">FTR</span>或<span style="color: #5e5078">ETR</span>难度后，同一首曲目的<span
+                                style="color: #5a2753">FTR</span>与<span style="color: #5e5078">ETR</span>难度谱面会同时出现在列表中；
+                        </li>
+                        <li>目前只有<a href="#" class="text-blue-500 hover:underline">Pentiment</a>、<a href="#"
+                                class="text-blue-500 hover:underline">Testify</a>和<a href="#"
+                                class="text-blue-500 hover:underline">Arcana Eden</a>的全难度谱面 [<span
+                                style="color: #5a2753">FTR</span>]和<a href="#"
+                                class="text-blue-500 hover:underline">HIVEMIND INTERLINKED</a> [<span
+                                style="color: #5a2753">FTR</span>]会有这种事件发生。</li>
+                        <li>部分<span style="color: #8e3a3e">BYD</span>难度谱面中出现过长条引导的音弧以及没有在左上角和右上角开始的音弧，同时<a href="#"
+                                class="text-blue-500 hover:underline">Axium Crisis</a>
+                            [<span style="color: #5a2753">FTR</span>]、<a href="#"
+                                class="text-blue-500 hover:underline">Heavensdoor</a> [<span
+                                style="color: #5a2753">FTR</span>]谱面中出现了结束时间在音弧开始时间之前1ms的音轨（没有音轨与音弧直接连接）</li>
+                        <li>这种天键在刚刚被发现的时候一度以为这是需要手指滑动的Flick键 但是后来发现这仅仅就是特殊样式的天空单键</li>
+                        <li>也就是触点y&lt;0时或y&gt;Sky Input高度时y坐标都会被修正至对应边界上，但在愚人节谱面中不对Arctap应用此效果（否则部分超界Arctap将无法判定）</li>
+                        <li>消色侧的曲目使用光芒侧物件，但是这些曲目并不属于光芒侧。</li>
+                        <li>即为对立 & 托凛的技能触发时的note显示</li>
+                        <li>关于Pure基本分，参照计分方式</li>
+                        <li>在极少数情况下，连击数为1也会显示</li>
+                        <li>在解锁Fracture Ray的过程中击中<a href="#" class="text-blue-500 hover:underline">Ether
+                                Strike</a>的结尾追加note时，基本分达到10000000后不会增加；<br>
+                            触发<a href="#"
+                                class="text-blue-500 hover:underline">Tempestissimo</a>的异象时每个note的分数按照触发前的分数计算，且基本分没有上限
+                        </li>
+                        <li>实际游玩过程中也是按这公式，最终公式结果出来前，流程都是代入计算pure得分和far得分（可以理解为带入分数），再计算大pure的分</li>
+                        <li>游戏内Note数量最大的是<a href="#" class="text-blue-500 hover:underline">Testify</a>
+                            [<span style="color: #8e3a3e">BYD</span>](2221)，小于临界值2237，出现了一个Far判定得分依然会小于10000000</li>
+                        <li>6.0前原定级为11级（不包含）以下的回忆系数不会额外×0.8</li>
+                        <li>基于此，在Arcaea Online或游戏内档案查看各难度曲目通关数时，可能会出现Clear数目低于Full Recall数目的情况。</li>
+                        <li>此处1.2为单精度浮点数，实际值为1.2000000476837158203125</li>
+                        <li>按最高难度计算，不包含<span style="color: #5a2753">FTR</span>?</li>
+                        <li>包括：<br>
+                            <a href="#" class="text-blue-500 hover:underline">Testify</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Arcahv</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Loveless Dress</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Last</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Callima Karma</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Designant</a>,
+                            全难度谱面和除
+                            <a href="#" class="text-blue-500 hover:underline">Infinite Strife</a>,
+                            <a href="#" class="text-blue-500 hover:underline">World Ender</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Pentiment</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Arcana Eden</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Rays of Remnant</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Renegade</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Breach of Faith</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Lament Rain</a>,
+                            <a href="#" class="text-blue-500 hover:underline">Your Best Nightmare</a>,
+                            外的所有<span style="color: #8e3a3e">BYD</span>难度谱面
+                        </li>
+                        <li>默认为自己排名向上24名到向下25名，如果在排行榜边缘（即前24名或9976-10000名）则相应移动显示的排名使得排行榜仍显示50名玩家。如果排名在10000名以外，那么会显示9952-10000名的成绩，并在最后列出玩家的成绩。
+                        </li>
+                    </ol>
+
+                    <h3 class="text-lg font-semibold text-primary mt-6">参考</h3>
+                    <ol class="ml-6 text-gray-600 list-decimal">
+                        <li>算法参考：<a href="https://gist.github.com/" class="text-blue-500 hover:underline">GitHub
+                                Gist</a></li>
+                        <li>此处参考了JPwiki，见<a href="#" class="text-blue-500 hover:underline">JPwiki对应页面</a></li>
+                    </ol>
+                </div>
+            </div>
+
+        </div>
+    </main>
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki 是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="https://arcaea.lowiro.com/" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">
+                        登录编辑
+                    </button>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

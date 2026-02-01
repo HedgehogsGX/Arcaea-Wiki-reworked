@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>解锁曲目 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem 1.5rem 1rem 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+        }
+
+        .update-content li {
+            transform: translateX(0);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .update-content li:hover {
+            transform: translateX(10px);
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        table {
+            margin-top: 1rem;
+        }
+
+        table th,
+        table td {
+            padding: 0.75rem;
+        }
+
+        table th {
+            background-color: #e6e7eb;
+            color: #4a5568;
+        }
+
+        table td {
+            background-color: #ffffff;
+        }
+
+        table tr:nth-child(even) td {
+            background-color: #f7fafc;
+        }
+
+        .story-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .story-table th,
+        .story-table td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .story-table th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .story-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .story-table tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">解歌系统</h1>
+
+            <!-- 概述部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">概述</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">作为Arcaea的一种机制，要正常游玩某一曲目的谱面，需要获取 (Discover)该曲目并解锁 (Unlock)该难度的谱面。</p>
+                    <p class="text-gray-600 mt-2">通常情况下永久解锁，但仍存在某些极特殊条件使得谱面可以被回锁（参见后述）。</p>
+                </div>
+            </div>
+
+            <!-- 获取曲目部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">获取曲目</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600 mb-4">除免费曲包Arcaea部分曲目可直接获取外，其余曲目均通过以下方式的组合获取。</p>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2 text-gray-700">经由世界模式</h3>
+                    <div class="ml-6">
+                        <p class="text-gray-600">通过游玩世界模式地图，推进地图进到到一定程度可获取相应曲目。</p>
+                        <p class="text-gray-600 mt-2">除此以外，大部分Beyond谱面都需要通过Beyond章节进行解锁。</p>
+                        <p class="text-gray-600 mt-2">曲包World Extend中的曲目在发布时会开启限时地图，活动结束后地图将消失，此后可以通过购买解锁整个曲包来获取其中的歌曲。
+                        </p>
+                    </div>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2 text-gray-700">经由解锁曲包</h3>
+                    <div class="ml-6">
+                        <p class="text-gray-600">绝大多数曲目位于除Arcaea以及World Extend之外的曲包，这些曲包需要支付付费代币"记忆源点"解锁。</p>
+                        <ul class="mt-2 space-y-2 text-gray-600">
+                            <li>• 通常购买对象为一个完整曲包或一个Pack Append，购买后即解锁此曲包或此Pack Append及其关联的世界模式地图。</li>
+                            <li>• 特殊"曲包"Memory Archive（回忆档案馆）为单曲合集包，其中的每个曲目均需要单独付费。</li>
+                            <li>• 限免曲包World Extend中的曲目会在发布时同时开启一张世界模式限时活动地图以免费领取，玩家也可以付费，从而立即解锁整个曲包。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue with other sections following the same pattern -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">进度计算</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">进度的计算会根据结算时的游玩结果作两种计算：</p>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2">1.解锁曲目为异象曲 或 成功通关（Track Complete）</h3>
+                    <p class="text-gray-600">此种情况下，获得的解锁进度固定为100%（即立即解锁）。</p>
+
+                    <h3 class="text-lg font-semibold mt-4 mb-2">2.解锁曲目为终末曲，并在游玩过程中Track Lost</h3>
+                    <p class="text-gray-600">此种情况下，获得的解锁进度依据下方公式计算：</p>
+                    <p class="text-gray-600 text-center font-mono bg-gray-100 p-2 rounded">最大值 × ( 物量数Track Lost处 ÷ 物量数总
+                        ) 2</p>
+                    <p class="text-gray-600">若公式的计算结果小于最小值，则获得的解锁进度取最小值。</p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="story-table">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">获得进度</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">PST</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">PRS</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">FTR</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">BYD</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">最小值</td>
+                                    <td class="border border-gray-300 px-4 py-2">10</td>
+                                    <td class="border border-gray-300 px-4 py-2">7</td>
+                                    <td class="border border-gray-300 px-4 py-2">5</td>
+                                    <td class="border border-gray-300 px-4 py-2">5</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">最大值</td>
+                                    <td class="border border-gray-300 px-4 py-2">35</td>
+                                    <td class="border border-gray-300 px-4 py-2">23</td>
+                                    <td class="border border-gray-300 px-4 py-2">15</td>
+                                    <td class="border border-gray-300 px-4 py-2">15</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p class="text-gray-600 mt-4">特别地，如果解锁曲目为终末曲，其最小值和最大值将固定为15和40。</p>
+                    <p class="text-gray-600">6.0.0前，其最小值和最大值为5和15。</p>
+
+                    <!-- 快速链接 -->
+                    <div>
+                        <div class="overflow-x-auto mt-4">
+                            <table class="story-table">
+                                <thead>
+                                    <tr class="bg-[#e6e7eb]">
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">获得进度</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">PST</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">PRS</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">FTR</th>
+                                        <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">BYD</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="bg-white">
+                                        <td class="border border-gray-300 px-4 py-2">最小值</td>
+                                        <td class="border border-gray-300 px-4 py-2">10</td>
+                                        <td class="border border-gray-300 px-4 py-2">7</td>
+                                        <td class="border border-gray-300 px-4 py-2">5</td>
+                                        <td class="border border-gray-300 px-4 py-2">5</td>
+                                    </tr>
+                                    <tr class="bg-gray-50">
+                                        <td class="border border-gray-300 px-4 py-2">最大值</td>
+                                        <td class="border border-gray-300 px-4 py-2">35</td>
+                                        <td class="border border-gray-300 px-4 py-2">23</td>
+                                        <td class="border border-gray-300 px-4 py-2">15</td>
+                                        <td class="border border-gray-300 px-4 py-2">15</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-gray-600 mt-4">特别地，如果解锁曲目为终末曲，其最小值和最大值将固定为15和40。</p>
+                        <p class="text-gray-600">6.0.0前，其最小值和最大值为5和15。</p>
+                    </div>
+                </div>
+
+                <!-- 隐藏曲部分 -->
+                <div class="card mb-6">
+                    <div class="update-header">
+                        <span class="text-xl font-semibold text-primary">隐藏曲</span>
+                    </div>
+                    <div class="update-content">
+                        <p class="text-gray-600">Arcaea存在隐藏曲目，隐藏曲目信息、曲绘、预览音频、排行榜，以及部分或全部解锁条件。</p>
+                    </div>
+                </div>
+
+                <!-- Nintendo Switch版调整部分 -->
+                <div class="card mb-6">
+                    <div class="update-header">
+                        <span class="text-xl font-semibold text-primary">Nintendo Switch版调整</span>
+                    </div>
+                    <div class="update-content">
+                        <p class="text-gray-600 italic">此小节反映的内容为Nintendo Switch版独有。</p>
+                        <p class="text-gray-600">在Nintendo Switch版中，部分解锁条件经过了调整，包括：</p>
+                        <ul class="ml-6 text-gray-600">
+                            <li>因NS版本质为纯单机游戏，玩家可免费获得绝大多数需要在移动版付费的内容，包括：</li>
+                            <ul class="ml-6 text-gray-600">
+                                <li>曲包可通过残片解锁，也可通过世界模式解锁；</li>
+                                <li>曲包Divided Heart作为NS版先行独占内容无需额外条件直接解锁。</li>
+                            </ul>
+                            <li>由于存在两种游玩方式，故两种游玩方式的解锁状态共享。</li>
+                            <li>NS v1.3.0新增Pack Append，玩家需要在Nintendo eShop购买DLC以解锁这部分追加曲目。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

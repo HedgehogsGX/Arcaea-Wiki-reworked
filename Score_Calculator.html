@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>分数计算器 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        /* Enhanced input styling */
+        .calculator-input {
+            background: rgba(99, 102, 241, 0.1);
+            border: 2px solid rgba(99, 102, 241, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #4a5568;
+            font-size: 1rem;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .calculator-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+            background: rgba(99, 102, 241, 0.15);
+        }
+
+        .calculate-button {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            width: 100%;
+        }
+
+        .calculate-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        .result-box {
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .result-box:hover {
+            background: rgba(99, 102, 241, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">分数计算器</h1>
+    
+            <!-- 计算器输入区域 -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">输入参数</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="space-y-6">
+                            <!-- 输入参数表格 -->
+                            <div class="space-y-4">
+                                <!-- Note总数 -->
+                                <div class="space-y-2">
+                                    <label class="text-gray-700 font-medium">谱面Note总量</label>
+                                    <input type="number" id="totalNotes" class="calculator-input" placeholder="输入Note总数..." required>
+                                </div>
+    
+                                <!-- 总Pure输入 -->
+                                <div class="space-y-2">
+                                    <label class="text-gray-700 font-medium">总Pure数量（快速输入）</label>
+                                    <input type="number" id="totalPure" class="calculator-input" placeholder="输入总Pure数..." oninput="syncPureDetails()">
+                                    <p class="text-sm text-gray-500 mt-1">若需分开大小Pure，请展开下方高级选项</p>
+                                </div>
+    
+                                <!-- 高级选项折叠面板（保留原有详细输入） -->
+                                <div class="space-y-2">
+                                    <details class="cursor-pointer">
+                                        <summary class="text-primary font-medium">高级选项（分开输入大小Pure）</summary>
+                                        <div class="mt-2 space-y-4">
+                                            <div class="space-y-2">
+                                                <label class="text-gray-700 font-medium">大Pure数量</label>
+                                                <input type="number" id="pure" class="calculator-input" placeholder="输入大Pure数..." oninput="syncTotalPure()">
+                                            </div>
+                                            <div class="space-y-2">
+                                                <label class="text-gray-700 font-medium">小Pure数量</label>
+                                                <input type="number" id="smallPure" class="calculator-input" placeholder="输入小Pure数..." oninput="syncTotalPure()">
+                                            </div>
+                                        </div>
+                                    </details>
+                                </div>
+    
+                                <!-- Far和Lost输入（保持不变） -->
+                                <div class="space-y-2">
+                                    <label class="text-gray-700 font-medium">Far数量</label>
+                                    <input type="number" id="far" class="calculator-input" placeholder="输入Far数...">
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="text-gray-700 font-medium">Lost数量</label>
+                                    <input type="number" id="lost" class="calculator-input" placeholder="输入Lost数...">
+                                </div>
+                            </div>
+                            <button onclick="calculateScore()" class="calculate-button">计算分数</button>
+                        </div>
+    
+                        <!-- 结果显示区域（保持不变） -->
+                        <div class="result-box">
+                            <h3 class="text-xl font-semibold mb-6 text-gray-800">计算结果</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                    <span class="text-gray-600">基本分</span>
+                                    <span id="baseScore" class="text-lg font-medium text-gray-800">0</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                    <span class="text-gray-600">附加分</span>
+                                    <span id="bonus" class="text-lg font-medium text-gray-800">0</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                                    <span class="text-gray-600">总分</span>
+                                    <span id="totalScore" class="text-xl font-bold text-primary">0</span>
+                                </div>
+                                <div class="flex justify-between items-center py-2">
+                                    <span class="text-gray-600">评级</span>
+                                    <span id="grade" class="text-xl font-bold text-primary">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    
+            <!-- 计分规则说明（完全保留原有内容） -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">计分规则</span>
+                </div>
+                <div class="update-content">
+                    <ul class="ml-6 text-gray-600">
+                        <li><strong>基本分公式</strong>：单Note分数 = 10,000,000 ÷ 谱面Note总量</li>
+                        <li><strong>分数构成</strong>：
+                            <ul class="ml-6">
+                                <li>大/小Pure获得完整分数</li>
+                                <li>Far获得50%分数</li>
+                                <li>Lost不得分</li>
+                            </ul>
+                        </li>
+                        <li><strong>附加分</strong>：每个大Pure额外+1分</li>
+                        <li><strong>最终分数</strong> = floor(基本分 + 附加分)</li>
+                    </ul>
+                </div>
+            </div>
+    
+            <!-- 评级标准（完全保留原有内容） -->
+            <div class="card">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">评级标准</span>
+                </div>
+                <div class="update-content">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-4 py-2 border">评级</th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_ex+.png" class="h-8 inline-block">
+                                    </th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_ex.png" class="h-8 inline-block">
+                                    </th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_aa.png" class="h-8 inline-block">
+                                    </th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_a.png" class="h-8 inline-block">
+                                    </th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_b.png" class="h-8 inline-block">
+                                    </th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_c.png" class="h-8 inline-block">
+                                    </th>
+                                    <th class="px-4 py-2 border text-center">
+                                        <img src="IMG/Play_result_grade_d.png" class="h-8 inline-block">
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 py-2 border font-semibold">分数区间</td>
+                                    <td class="px-4 py-2 border text-center">≥9,900,000</td>
+                                    <td class="px-4 py-2 border text-center">9,800,000-9,899,999</td>
+                                    <td class="px-4 py-2 border text-center">9,500,000-9,799,999</td>
+                                    <td class="px-4 py-2 border text-center">9,200,000-9,499,999</td>
+                                    <td class="px-4 py-2 border text-center">8,900,000-9,199,999</td>
+                                    <td class="px-4 py-2 border text-center">8,600,000-8,899,999</td>
+                                    <td class="px-4 py-2 border text-center">≤8,599,999</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        // 总Pure输入 → 自动填充大Pure，小Pure设为0
+        function syncPureDetails() {
+            const totalPure = parseInt(document.getElementById('totalPure').value) || 0;
+            document.getElementById('pure').value = totalPure;
+            document.getElementById('smallPure').value = 0;
+        }
+    
+        // 大/小Pure输入 → 更新总Pure
+        function syncTotalPure() {
+            const pure = parseInt(document.getElementById('pure').value) || 0;
+            const smallPure = parseInt(document.getElementById('smallPure').value) || 0;
+            document.getElementById('totalPure').value = pure + smallPure;
+        }
+    
+        function calculateScore() {
+            // 获取输入值（优先使用详细输入）
+            const totalNotes = parseInt(document.getElementById('totalNotes').value) || 0;
+            const pure = parseInt(document.getElementById('pure').value) || 0;
+            const smallPure = parseInt(document.getElementById('smallPure').value) || 0;
+            const far = parseInt(document.getElementById('far').value) || 0;
+            const lost = parseInt(document.getElementById('lost').value) || 0;
+    
+            // 验证输入合法性
+            if (totalNotes === 0) {
+                alert("错误：Note总数不能为0");
+                return;
+            }
+            if (pure + smallPure + far + lost > totalNotes) {
+                alert("错误：总判定点数量超过谱面Note总数");
+                return;
+            }
+    
+            // 计算逻辑
+            const noteValue = 10000000 / totalNotes;
+            const baseScore = (pure + smallPure) * noteValue + far * (noteValue / 2);
+            const bonus = pure;
+            const total = Math.floor(baseScore + bonus);
+    
+            // 显示结果
+            document.getElementById('baseScore').textContent = Math.floor(baseScore).toLocaleString();
+            document.getElementById('bonus').textContent = bonus.toLocaleString();
+            document.getElementById('totalScore').textContent = total.toLocaleString();
+    
+            // 确定评级
+            const grade =
+                total >= 9900000 ? 'EX+' :
+                    total >= 9800000 ? 'EX' :
+                        total >= 9500000 ? 'AA' :
+                            total >= 9200000 ? 'A' :
+                                total >= 8900000 ? 'B' :
+                                    total >= 8600000 ? 'C' : 'D';
+            document.getElementById('grade').textContent = grade;
+        }
+    </script>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

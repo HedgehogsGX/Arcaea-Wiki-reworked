@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>成就系统 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        /* Add missing card styles */
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        /* 表格样式优化 */
+        table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        /* 添加标题装饰 */
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+
+        /* 注意信息样式 */
+        .notice {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* 滚动条美化 */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        /* 列表项动画 */
+        .update-content li {
+            transition: transform 0.2s ease;
+        }
+
+        .update-content li:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 2px rgba(0,0,0,0.5);">成就系统</h1>
+
+            <!-- 注意信息 -->
+            <div class="card mb-6">
+                <div class="update-content">
+                    <div class="notice">
+                        <p class="text-gray-600 font-bold">此条目内容为移动版独有。</p>
+                        <p class="text-gray-600">成就是Arcaea的一个纪念性挑战系统。玩家可通过达成特定条件以解锁成就。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 介绍部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">介绍</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">本系统于v1.5.3加入，但需要以下任一条件才能生效：</p>
+                    <ul class="ml-6 text-gray-600">
+                        <li>iOS系统下，从App Store下载安装游戏，并使用Apple ID登录Game Center后游玩Arcaea；</li>
+                        <li>Android系统下，从Google Play下载安装游戏，并使用Google账号登录"Google Play游戏"后游玩Arcaea。<sup>[1]</sup></li>
+                    </ul>
+                    <div class="mt-4">
+                        <p class="text-gray-600">通过独立安装包安装的c版游戏不搭载成就系统。</p>
+                        <p class="text-gray-600">成就系统生效后，达成对应的条件即可获得对应的成就；成就记录与当前登录的Apple ID/Google账号绑定。</p>
+                        <p class="text-gray-600">可在游戏主界面 - 其他 - 成就中查看成就列表。</p>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-gray-600">重要说明：</p>
+                        <ul class="ml-6 text-gray-600">
+                            <li>根据Game Center和Google Play游戏的机制，获得成就后可以获得点数和XP，这是Game Center和Google
+                                Play游戏的内容，玩家不会因获得成就而在Arcaea中获得任何奖励。</li>
+                            <li>绝大多数累计记录类成就会自动查询记录并立即刷新完成情况。</li>
+                            <li>部分成就的名称和达成条件是隐藏的，只有在达成对应条件后才能查看。</li>
+                            <li>成就中完成的"曲目"实际上是按照谱面数计算，同一首曲目的不同难度算作不同的"曲目"。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 非隐藏成就列表 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">非隐藏成就列表</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600 mb-4">以下列表按照iOS Game Center内的顺序排序。Google
+                        Play游戏内是按照达成时间排序的。<br>带有[＊]的成就表示此成就需要在登录成就系统后完成才会被记录。</p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">内容</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">成就点奖励</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]开始旅程</td>
+                                    <td class="border border-gray-300 px-4 py-2">在"世界模式"中完成一首曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]流星</td>
+                                    <td class="border border-gray-300 px-4 py-2">在"世界模式"的活动地图中完成一首曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">好朋友</td>
+                                    <td class="border border-gray-300 px-4 py-2">在"世界模式"中解开一位搭档的封印</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">探索者</td>
+                                    <td class="border border-gray-300 px-4 py-2">在"世界模式"中解开一首曲目的封印</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]熟能生巧</td>
+                                    <td class="border border-gray-300 px-4 py-2">任意曲目达成"完整重现（Full Recall）"</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]精益求精</td>
+                                    <td class="border border-gray-300 px-4 py-2">任意曲目达成"纯净回忆（Pure Memory）"</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">无法在教程中获得</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]反应训练</td>
+                                    <td class="border border-gray-300 px-4 py-2">用2.0及以上倍数完成一首曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">此处的"倍数"即为音符流速</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]挑战者</td>
+                                    <td class="border border-gray-300 px-4 py-2">以"困难（Hard）"的收集难度完成一首曲目五次</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        实际不需要完成同一首曲目，只需要完成五次即可。<br>对于【挑战者】和【救赎者】，使用对立（Tempest）、光（Fatalis）和光（Fracture）达成Hard和Easy通关无法累计达成进度
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]救赎者</td>
+                                    <td class="border border-gray-300 px-4 py-2">以"简单（Easy）"的收集难度完成一首曲目五次</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]镜中世界</td>
+                                    <td class="border border-gray-300 px-4 py-2">以"镜像（Mirror）"的收集难度完成一首曲目五次</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">知音难寻</td>
+                                    <td class="border border-gray-300 px-4 py-2">添加一名好友</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">胜友如云</td>
+                                    <td class="border border-gray-300 px-4 py-2">添加五名好友</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]登峰造极</td>
+                                    <td class="border border-gray-300 px-4 py-2">在任意曲目中获得满分</td>
+                                    <td class="border border-gray-300 px-4 py-2">30 PT / 3000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">即理论值<br>无法在教程中获得</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">尘封回忆</td>
+                                    <td class="border border-gray-300 px-4 py-2">购买任何数量的回忆精华</td>
+                                    <td class="border border-gray-300 px-4 py-2">30 PT / 3000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">"回忆精华"即"记忆源点"</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">不稳定世界</td>
+                                    <td class="border border-gray-300 px-4 py-2">体验一次异常</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        只要通过Tempestissimo的异象<sup>[3]</sup>或<br>通过Axium Crisis进入Grievous Lady或<br>通过Ether
+                                        Strike进入Fracture Ray即可</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]抢先一步</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        完成曲目时打出了5次以上的"模糊（Far）"，且所有的模糊都是过快（Early）</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">在Google Play中为隐藏成就</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]落后一步</td>
+                                    <td class="border border-gray-300 px-4 py-2">完成曲目时打出了5次以上的"模糊（Far）"，且所有的模糊都是过慢（Late）
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">漫游者</td>
+                                    <td class="border border-gray-300 px-4 py-2">完成50首曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">旅行者</td>
+                                    <td class="border border-gray-300 px-4 py-2">完成100首曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">收集者</td>
+                                    <td class="border border-gray-300 px-4 py-2">拥有1000个残片</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">收藏家</td>
+                                    <td class="border border-gray-300 px-4 py-2">拥有3000个残片</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">大收藏家</td>
+                                    <td class="border border-gray-300 px-4 py-2">拥有5000个残片</td>
+                                    <td class="border border-gray-300 px-4 py-2">30 PT / 3000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">挚友</td>
+                                    <td class="border border-gray-300 px-4 py-2">将一位搭档的等级提升至20级</td>
+                                    <td class="border border-gray-300 px-4 py-2">30 PT / 3000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">破晓</td>
+                                    <td class="border border-gray-300 px-4 py-2">在20首曲目中获得AA及以上评价</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">天顶</td>
+                                    <td class="border border-gray-300 px-4 py-2">在50首曲目中获得AA及以上评价</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">黄昏</td>
+                                    <td class="border border-gray-300 px-4 py-2">在20首曲目中获得EX评价</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">北极星</td>
+                                    <td class="border border-gray-300 px-4 py-2">在50首曲目中获得EX评价</td>
+                                    <td class="border border-gray-300 px-4 py-2">30 PT / 3000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">残存的回忆</td>
+                                    <td class="border border-gray-300 px-4 py-2">潜能到达2.00</td>
+                                    <td class="border border-gray-300 px-4 py-2">10 PT / 1000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">潜能即潜力值<br>四个成就名称分别对应Past Present Future
+                                        Beyond四个难度档</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">今日的约定</td>
+                                    <td class="border border-gray-300 px-4 py-2">潜能到达5.00</td>
+                                    <td class="border border-gray-300 px-4 py-2">20 PT / 2000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">未来的梦想</td>
+                                    <td class="border border-gray-300 px-4 py-2">潜能到达8.00</td>
+                                    <td class="border border-gray-300 px-4 py-2">30 PT / 3000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">超越领域</td>
+                                    <td class="border border-gray-300 px-4 py-2">潜能到达11.00</td>
+                                    <td class="border border-gray-300 px-4 py-2">40 PT / 4000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">[＊]探求者</td>
+                                    <td class="border border-gray-300 px-4 py-2">在5首未来（Future）难度曲目中达成"纯净回忆（Pure Memory）"
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">40 PT / 4000 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 隐藏成就列表 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">隐藏成就列表</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600 mb-4">以下成就均[＊]需要在登录成就系统后完成才会被记录。</p>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">内容</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">成就点奖励</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">你做到了</td>
+                                    <td class="border border-gray-300 px-4 py-2">以70%的回忆率完成任意曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">无法使用具有"困难（Hard）"技能的搭档获得</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">再加把劲</td>
+                                    <td class="border border-gray-300 px-4 py-2">以69%的回忆率完成任意曲目</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">至少通过了</td>
+                                    <td class="border border-gray-300 px-4 py-2">完成一首曲目并获得D评价</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">回忆之路有点滑</td>
+                                    <td class="border border-gray-300 px-4 py-2">在获得AA评价的时候曲目失败</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2">使用具有"困难（Hard）"技能的搭档也可以获得此成就</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">好学生</td>
+                                    <td class="border border-gray-300 px-4 py-2">在基本教学中达成"纯净回忆（Pure Memory）"</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">优等生</td>
+                                    <td class="border border-gray-300 px-4 py-2">在进阶教学中达成"纯净回忆（Pure Memory）"</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">永远被遗失</td>
+                                    <td class="border border-gray-300 px-4 py-2">完成曲目时有一个"流失（Lost）"并没有任何"模糊（Far）"</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">似乎离完美很遥远</td>
+                                    <td class="border border-gray-300 px-4 py-2">完成曲目时有一个"模糊（Far）"并没有任何"流失（Lost）"</td>
+                                    <td class="border border-gray-300 px-4 py-2">5 PT / 500 XP</td>
+                                    <td class="border border-gray-300 px-4 py-2"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 注释部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">注释</span>
+                </div>
+                <div class="update-content">
+                    <ul class="ml-6 text-gray-600">
+                        <li>安卓设备可能需要同时使用魔法上网工具并至少将其作用域设置到Arcaea与Play游戏上</li>
+                        <li>PT代表此成就奖励的iOS Game Center点数，XP代表此成就奖励的Google Play等级经验值</li>
+                        <li>并非解锁曲目，详见Tempestissimo异象与Beyond难度</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

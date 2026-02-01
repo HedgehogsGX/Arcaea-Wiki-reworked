@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>搭档 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: linear-gradient(to right, rgba(99, 102, 241, 0.1), transparent);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .update-content li::before {
+            content: "•";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        /* 表格样式优化 */
+        table {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        th {
+            background: linear-gradient(to right, #6366f1, #818cf8);
+            color: white !important;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        tr:hover {
+            background-color: rgba(99, 102, 241, 0.05) !important;
+        }
+
+        /* 添加标题装饰 */
+        h1.text-4xl::before,
+        h1.text-4xl::after {
+            content: '✦';
+            color: #6366f1;
+            margin: 0 1rem;
+            opacity: 0.8;
+        }
+
+        /* 注意信息样式 */
+        .notice {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin: 1rem 0;
+        }
+
+        /* 滚动条美化 */
+        .overflow-x-auto::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.5);
+            border-radius: 4px;
+        }
+
+        .overflow-x-auto::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
+        }
+
+        /* 列表项动画 */
+        .update-content li {
+            transition: transform 0.2s ease;
+        }
+
+        .update-content li:hover {
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 2px rgba(0,0,0,0.5);">搭档</h1>
+
+            <!-- 概述部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">概述</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">搭档（Partner）是<a href="index.html"
+                            class="text-blue-500 hover:underline">Arcaea</a>的重要机制之一，于v1.0.5添加，属性与技能于v1.5.0添加。</p>
+                    <p class="text-gray-600">搭档是玩家可以通过各种方式获取，可以让玩家在游玩时或游玩外提供特殊效果的游戏角色。</p>
+                    <p class="text-gray-600">搭档可以作为主页面和歌曲结算界面的看板，搭档的属性可以在残片结算、<a href="World_Mode.html"
+                            class="text-blue-500 hover:underline">世界模式</a>进度等方面提供加成，搭档的技能可以改变游玩机制。可以在搭档选择界面查看搭档的属性与技能，并进行搭档的设置操作。
+                    </p>
+                    <p class="text-gray-600">某些搭档在Arcaea的世界中拥有属于自己的故事。某些特殊歌曲需要指定搭档来解锁。</p>
+                </div>
+            </div>
+
+            <!-- 获取部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">获取</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">除光和对立以外的搭档都需要购买/获取曲包、单曲或Arcaea原声专辑方可获取。大多数搭档在购买曲包或单曲后，还要在<a
+                            href="World_Mode.html"
+                            class="text-blue-500 hover:underline">世界模式</a>中的地图获取，个别搭档对应的地图还需要前置条件（主要是异象等游玩效果）来解锁。对应的地图是限时活动的搭档称为限时活动搭档。
+                    </p>
+                </div>
+            </div>
+
+            <!-- Act II (Catastrophe) Card -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">Act II (Catastrophe)</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                        <a href="Partner_saya.html" class="text-center">
+                            <img src="IMG/Partner_saya_icon.png" class="mx-auto h-24">
+                            <p>咲弥</p>
+                        </a>
+                        <a href="Partner_saya_awaken.html" class="text-center">
+                            <img src="IMG/Partner_saya_awaken_icon.png" class="mx-auto h-24">
+                            <p>咲弥（觉醒）</p>
+                        </a>
+                        <a href="Partner_maya.html" class="text-center">
+                            <img src="IMG/Partner_maya_icon.png" class="mx-auto h-24">
+                            <p>摩耶</p>
+                        </a>
+                        <a href="Partner_insight.html" class="text-center">
+                            <img src="IMG/Partner_insight_icon.png" class="mx-auto h-24">
+                            <p>洞烛（至高：第八探索者）</p>
+                        </a>
+                        <a href="Partner_forlorn.html" class="text-center">
+                            <img src="IMG/Partner_forlorn_icon.png" class="mx-auto h-24">
+                            <p>哀寂（至高：第六探索者）</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 常驻支线搭档 Card -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">常驻支线搭档</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                        <a href="Partner_kou.html" class="text-center">
+                            <img src="IMG/Partner_kou_icon.png" class="mx-auto h-24">
+                            <p>红</p>
+                        </a>
+                        <a href="Partner_kou_awaken.html" class="text-center">
+                            <img src="IMG/Partner_kou_awaken_icon.png" class="mx-auto h-24">
+                            <p>红（觉醒）</p>
+                        </a>
+                        <a href="Partner_lethe.html" class="text-center">
+                            <img src="IMG/Partner_lethe_icon.png" class="mx-auto h-24">
+                            <p>忘却</p>
+                        </a>
+                        <a href="Partner_lethe_awaken.html" class="text-center">
+                            <img src="IMG/Partner_lethe_awaken_icon.png" class="mx-auto h-24">
+                            <p>忘却（觉醒）</p>
+                        </a>
+                        <a href="Partner_eto.html" class="text-center">
+                            <img src="IMG/Partner_eto_icon.png" class="mx-auto h-24">
+                            <p>爱托</p>
+                        </a>
+                        <a href="Partner_eto_awaken.html" class="text-center">
+                            <img src="IMG/Partner_eto_awaken_icon.png" class="mx-auto h-24">
+                            <p>爱托（觉醒）</p>
+                        </a>
+                        <a href="Partner_luna.html" class="text-center">
+                            <img src="IMG/Partner_luna_icon.png" class="mx-auto h-24">
+                            <p>露娜</p>
+                        </a>
+                        <a href="Partner_luna_awaken.html" class="text-center">
+                            <img src="IMG/Partner_luna_awaken_icon.png" class="mx-auto h-24">
+                            <p>露娜（觉醒）</p>
+                        </a>
+                        <a href="Partner_shirabe.html" class="text-center">
+                            <img src="IMG/Partner_shirabe_icon.png" class="mx-auto h-24">
+                            <p>调</p>
+                        </a>
+                        <a href="Partner_shirabe_awaken.html" class="text-center">
+                            <img src="IMG/Partner_shirabe_awaken_icon.png" class="mx-auto h-24">
+                            <p>调（觉醒）</p>
+                        </a>
+                        <a href="Partner_ayu.html" class="text-center">
+                            <img src="IMG/Partner_ayu_icon.png" class="mx-auto h-24">
+                            <p>彩梦</p>
+                        </a>
+                        <a href="Partner_ayu_awaken.html" class="text-center">
+                            <img src="IMG/Partner_ayu_awaken_icon.png" class="mx-auto h-24">
+                            <p>彩梦（觉醒）</p>
+                        </a>
+                        <a href="Partner_eto_luna_winter.html" class="text-center">
+                            <img src="IMG/Partner_eto_&_luna_winter_icon.png" class="mx-auto h-24">
+                            <p>爱托 & 露娜（冬日）</p>
+                        </a>
+                        <a href="Partner_kanae.html" class="text-center">
+                            <img src="IMG/Partner_kanae_icon.png" class="mx-auto h-24">
+                            <p>群愿</p>
+                        </a>
+                        <a href="Partner_kanae_awaken.html" class="text-center">
+                            <img src="IMG/Partner_kanae_awaken_icon.png" class="mx-auto h-24">
+                            <p>群愿（觉醒）</p>
+                        </a>
+                        <a href="Partner_sia.html" class="text-center">
+                            <img src="IMG/Partner_sia_icon.png" class="mx-auto h-24">
+                            <p>兮娅</p>
+                        </a>
+                        <a href="Partner_alice_tenniel.html" class="text-center">
+                            <img src="IMG/Partner_alice_&_tenniel_icon.png" class="mx-auto h-24">
+                            <p>爱丽丝 & 坦尼尔</p>
+                        </a>
+                        <a href="Partner_lagrange.html" class="text-center">
+                            <img src="IMG/Partner_lagrange_icon.png" class="mx-auto h-24">
+                            <p>拉格兰</p>
+                        </a>
+                        <a href="Partner_shirahime.html" class="text-center">
+                            <img src="IMG/Partner_shirahime_icon.png" class="mx-auto h-24">
+                            <p>白姬</p>
+                        </a>
+                        <a href="Partner_lethe_apophenia.html" class="text-center">
+                            <img src="IMG/Partner_lethe_apophenia_icon.png" class="mx-auto h-24">
+                            <p>忘却（Apophenia）</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 常驻联动搭档 Card -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">常驻联动搭档</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                        <a href="Partner_sapphire.html" class="text-center">
+                            <img src="IMG/Partner_sapphire_icon.png" class="mx-auto h-24">
+                            <p>萨菲亚</p>
+                        </a>
+                        <a href="Partner_hikari_fisica.html" class="text-center">
+                            <img src="IMG/Partner_hikari_&_fisica_icon.png" class="mx-auto h-24">
+                            <p>光 & 菲希卡</p>
+                        </a>
+                        <a href="Partner_tairitsu_trin.html" class="text-center">
+                            <img src="IMG/Partner_tairitsu_&_trin_icon.png" class="mx-auto h-24">
+                            <p>对立 & 托凛</p>
+                        </a>
+                        <a href="Partner_hikari_seine.html" class="text-center">
+                            <img src="IMG/Partner_hikari_&_seine_icon.png" class="mx-auto h-24">
+                            <p>光 & 赛依娜</p>
+                        </a>
+                        <a href="Partner_tairitsu_chuni_penguin.html" class="text-center">
+                            <img src="IMG/Partner_tairitsu_&_chuni_penguin_icon.png" class="mx-auto h-24">
+                            <p>对立 & 中二企鹅（Grievous Lady）</p>
+                        </a>
+                        <a href="Partner_luna_mia.html" class="text-center">
+                            <img src="IMG/Partner_luna_&_mia_icon.png" class="mx-auto h-24">
+                            <p>露娜 & 美亚</p>
+                        </a>
+                        <a href="Partner_saya_elizabeth.html" class="text-center">
+                            <img src="IMG/Partner_saya_&_elizabeth_icon.png" class="mx-auto h-24">
+                            <p>咲弥 & 伊丽莎白</p>
+                        </a>
+                        <a href="Partner_marija.html" class="text-center">
+                            <img src="IMG/Partner_marija_icon.png" class="mx-auto h-24">
+                            <p>玛莉嘉</p>
+                        </a>
+                        <a href="Partner_saki.html" class="text-center">
+                            <img src="IMG/Partner_saki_icon.png" class="mx-auto h-24">
+                            <p>咲姬</p>
+                        </a>
+                        <a href="Partner_milk.html" class="text-center">
+                            <img src="IMG/Partner_milk_universe_icon.png" class="mx-auto h-24">
+                            <p>咪璐库（大～宇～宙）</p>
+                        </a>
+                        <a href="Partner_shama.html" class="text-center">
+                            <img src="IMG/Partner_shama_universe_icon.png" class="mx-auto h-24">
+                            <p>夏玛（大～宇～宙）</p>
+                        </a>
+                        <a href="Partner_ilith_ivy.html" class="text-center">
+                            <img src="IMG/Partner_ilith_&_ivy_icon.png" class="mx-auto h-24">
+                            <p>Ilith & Ivy</p>
+                        </a>
+                        <a href="Partner_hikari_vanessa.html" class="text-center">
+                            <img src="IMG/Partner_hikari_&_vanessa_icon.png" class="mx-auto h-24">
+                            <p>Hikari & Vanessa</p>
+                        </a>
+                        <a href="Partner_luna_ilot.html" class="text-center">
+                            <img src="IMG/Partner_luna_&_ilot_icon.png" class="mx-auto h-24">
+                            <p>露娜 & 伊洛</p>
+                        </a>
+                        <a href="Partner_tsumugi.html" class="text-center">
+                            <img src="IMG/Partner_tsumugi_icon.png" class="mx-auto h-24">
+                            <p>纺</p>
+                        </a>
+                        <a href="Partner_salt.html" class="text-center">
+                            <img src="IMG/Partner_salt_icon.png" class="mx-auto h-24">
+                            <p>莎露朵</p>
+                        </a>
+                        <a href="Partner_hikari_selene_sheryl.html" class="text-center">
+                            <img src="IMG/Partner_hikari_&_selene_sheryl_icon.png" class="mx-auto h-24">
+                            <p>光 & 赛润妮·雪儿（Fracture & MIR-203）</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 限时原创搭档 Card -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">限时原创搭档</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                        <a href="Partner_ilith.html" class="text-center">
+                            <img src="IMG/Partner_ilith_icon.png" class="mx-auto h-24">
+                            <p>依莉丝</p>
+                        </a>
+                        <a href="Partner_ilith_awaken.html" class="text-center">
+                            <img src="IMG/Partner_ilith_awaken_icon.png" class="mx-auto h-24">
+                            <p>依莉丝（觉醒）</p>
+                        </a>
+                        <a href="Partner_hikari_summer.html" class="text-center">
+                            <img src="IMG/Partner_hikari_summer_icon.png" class="mx-auto h-24">
+                            <p>光（夏日）</p>
+                        </a>
+                        <a href="Partner_tairitsu_summer.html" class="text-center">
+                            <img src="IMG/Partner_tairitsu_summer_icon.png" class="mx-auto h-24">
+                            <p>对立（夏日）</p>
+                        </a>
+                        <a href="Partner_ilith_summer.html" class="text-center">
+                            <img src="IMG/Partner_ilith_summer_icon.png" class="mx-auto h-24">
+                            <p>依莉丝（夏日）</p>
+                        </a>
+                        <a href="Partner_mir.html" class="text-center">
+                            <img src="IMG/Partner_mir_icon.png" class="mx-auto h-24">
+                            <p>迷尔</p>
+                        </a>
+                        <a href="Partner_nami.html" class="text-center">
+                            <img src="IMG/Partner_nami_icon.png" class="mx-auto h-24">
+                            <p>奈美</p>
+                        </a>
+                        <a href="Partner_kanae_midsummer.html" class="text-center">
+                            <img src="IMG/Partner_kanae_midsummer_icon.png" class="mx-auto h-24">
+                            <p>群愿（盛夏）</p>
+                        </a>
+                        <a href="Partner_vita.html" class="text-center">
+                            <img src="IMG/Partner_vita_icon.png" class="mx-auto h-24">
+                            <p>维塔</p>
+                        </a>
+                        <a href="Partner_amane.html" class="text-center">
+                            <img src="IMG/Partner_amane_icon.png" class="mx-auto h-24">
+                            <p>天音</p>
+                        </a>
+                        <a href="Partner_kou_winter.html" class="text-center">
+                            <img src="IMG/Partner_kou_winter_icon.png" class="mx-auto h-24">
+                            <p>红（冬日）</p>
+                        </a>
+                        <a href="Partner_nami_twilight.html" class="text-center">
+                            <img src="IMG/Partner_nami_twilight_icon.png" class="mx-auto h-24">
+                            <p>奈美（暮光）</p>
+                        </a>
+                        <a href="Partner_aichan.html" class="text-center">
+                            <img src="IMG/Partner_aichan_icon.png" class="mx-auto h-24">
+                            <p>Ai酱</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 限时联动搭档 Card -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">限时联动搭档</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                        <a href="Partner_stella.html" class="text-center">
+                            <img src="IMG/Partner_stella_icon.png" class="mx-auto h-24">
+                            <p>星</p>
+                        </a>
+                        <a href="Partner_yume.html" class="text-center">
+                            <img src="IMG/Partner_yume_icon.png" class="mx-auto h-24">
+                            <p>柚梅</p>
+                        </a>
+                        <a href="Partner_yume_awaken.html" class="text-center">
+                            <img src="IMG/Partner_yume_awaken_icon.png" class="mx-auto h-24">
+                            <p>柚梅（觉醒）</p>
+                        </a>
+                        <a href="Partner_chuni_penguin.html" class="text-center">
+                            <img src="IMG/Partner_chuni_penguin_icon.png" class="mx-auto h-24">
+                            <p>中二企鹅</p>
+                        </a>
+                        <a href="Partner_haruna.html" class="text-center">
+                            <img src="IMG/Partner_haruna_icon.png" class="mx-auto h-24">
+                            <p>榛名</p>
+                        </a>
+                        <a href="Partner_haruna_awaken.html" class="text-center">
+                            <img src="IMG/Partner_haruna_awaken_icon.png" class="mx-auto h-24">
+                            <p>榛名（觉醒）</p>
+                        </a>
+                        <a href="Partner_nono.html" class="text-center">
+                            <img src="IMG/Partner_nono_icon.png" class="mx-auto h-24">
+                            <p>诺诺</p>
+                        </a>
+                        <a href="Partner_nono_awaken.html" class="text-center">
+                            <img src="IMG/Partner_nono_awaken_icon.png" class="mx-auto h-24">
+                            <p>诺诺（觉醒）</p>
+                        </a>
+                        <a href="Partner_pandora_nemesis.html" class="text-center">
+                            <img src="IMG/Partner_pandora_nemesis_icon.png" class="mx-auto h-24">
+                            <p>潘多拉涅墨西斯（MTA-XXX）</p>
+                        </a>
+                        <a href="Partner_pandora_nemesis_awaken.html" class="text-center">
+                            <img src="IMG/Partner_pandora_nemesis_awaken_icon.png" class="mx-auto h-24">
+                            <p>潘多拉涅墨西斯（觉醒）</p>
+                        </a>
+                        <a href="Partner_regulus.html" class="text-center">
+                            <img src="IMG/Partner_regulus_icon.png" class="mx-auto h-24">
+                            <p>轩辕十四（MDA-21）</p>
+                        </a>
+                        <a href="Partner_regulus_awaken.html" class="text-center">
+                            <img src="IMG/Partner_regulus_awaken_icon.png" class="mx-auto h-24">
+                            <p>轩辕十四（觉醒）</p>
+                        </a>
+                        <a href="Partner_doroc.html" class="text-center">
+                            <img src="IMG/Partner_doroc_icon.png" class="mx-auto h-24">
+                            <p>DORO*C</p>
+                        </a>
+                        <a href="Partner_doroc_awaken.html" class="text-center">
+                            <img src="IMG/Partner_doroc_awaken_icon.png" class="mx-auto h-24">
+                            <p>DORO*C（觉醒）</p>
+                        </a>
+                        <a href="Partner_brillante.html" class="text-center">
+                            <img src="IMG/Partner_brillante_icon.png" class="mx-auto h-24">
+                            <p>布丽兰特</p>
+                        </a>
+                        <a href="Partner_brillante_awaken.html" class="text-center">
+                            <img src="IMG/Partner_brillante_awaken_icon.png" class="mx-auto h-24">
+                            <p>布丽兰特（觉醒）</p>
+                        </a>
+                        <a href="Partner_areus.html" class="text-center">
+                            <img src="IMG/Partner_areus_icon.png" class="mx-auto h-24">
+                            <p>阿莱乌斯</p>
+                        </a>
+                        <a href="Partner_seele_haze.html" class="text-center">
+                            <img src="IMG/Partner_seele_icon.png" class="mx-auto h-24">
+                            <p>希尔</p>
+                        </a>
+                        <a href="Partner_seele_haze_awaken.html" class="text-center">
+                            <img src="IMG/Partner_seele_awaken_icon.png" class="mx-auto h-24">
+                            <p>希尔（觉醒）</p>
+                        </a>
+                        <a href="Partner_isabelle_yagrush.html" class="text-center">
+                            <img src="IMG/Partner_isabelle_icon.png" class="mx-auto h-24">
+                            <p>伊莎贝尔</p>
+                        </a>
+                        <a href="Partner_isabelle_awaken.html" class="text-center">
+                            <img src="IMG/Partner_isabelle_awaken_icon.png" class="mx-auto h-24">
+                            <p>伊莎贝尔（觉醒）</p>
+                        </a>
+                        <a href="Partner_lily.html" class="text-center">
+                            <img src="IMG/Partner_lily_icon.png" class="mx-auto h-24">
+                            <p>莉莉</p>
+                        </a>
+                        <a href="Partner_linka.html" class="text-center">
+                            <img src="IMG/Partner_linka_icon.png" class="mx-auto h-24">
+                            <p>凛可</p>
+                        </a>
+                        <a href="Partner_setsuna.html" class="text-center">
+                            <img src="IMG/Partner_setsuna_icon.png" class="mx-auto h-24">
+                            <p>刹那</p>
+                        </a>
+                        <a href="Partner_shikoku.html" class="text-center">
+                            <img src="IMG/Partner_shikoku_icon.png" class="mx-auto h-24">
+                            <p>紫黑</p>
+                        </a>
+                        <a href="Partner_mika_yurisaki.html" class="text-center">
+                            <img src="IMG/Partner_mika_yurisaki_icon.png" class="mx-auto h-24">
+                            <p>百合咲美香</p>
+                        </a>
+                        <a href="Partner_mithra_tercera.html" class="text-center">
+                            <img src="IMG/Partner_mithra_tercera_icon.png" class="mx-auto h-24">
+                            <p>密特拉·泰尔塞拉</p>
+                        </a>
+                        <a href="Partner_mithra_tercera_awaken.html" class="text-center">
+                            <img src="IMG/Partner_mithra_tercera_awaken_icon.png" class="mx-auto h-24">
+                            <p>密特拉·泰尔塞拉（觉醒）</p>
+                        </a>
+                        <a href="Partner_toa_kozukata.html" class="text-center">
+                            <img src="IMG/Partner_toa_kozukata_icon.png" class="mx-auto h-24">
+                            <p>不来方永爱</p>
+                        </a>
+                        <a href="Partner_luin.html" class="text-center">
+                            <img src="IMG/Partner_luin_icon.png" class="mx-auto h-24">
+                            <p>露恩</p>
+                        </a>
+                        <a href="Partner_luin_awaken.html" class="text-center">
+                            <img src="IMG/Partner_luin_awaken_icon.png" class="mx-auto h-24">
+                            <p>露恩（觉醒）</p>
+                        </a>
+                        <a href="Partner_eto_hoppe.html" class="text-center">
+                            <img src="IMG/Partner_eto_&_hoppe_icon.png" class="mx-auto h-24">
+                            <p>爱托 & 荷珀</p>
+                        </a>
+                        <a href="Partner_chinatsu.html" class="text-center">
+                            <img src="IMG/Partner_chinatsu_icon.png" class="mx-auto h-24">
+                            <p>千夏</p>
+                        </a>
+                        <a href="Partner_nai.html" class="text-center">
+                            <img src="IMG/Partner_nai_icon.png" class="mx-auto h-24">
+                            <p>奈伊</p>
+                        </a>
+                        <a href="Partner_nai_awaken.html" class="text-center">
+                            <img src="IMG/Partner_nai_awaken_icon.png" class="mx-auto h-24">
+                            <p>奈伊（觉醒）</p>
+                        </a>
+                        <a href="Partner_selene_sheryl.html" class="text-center">
+                            <img src="IMG/Partner_selene_sheryl_icon.png" class="mx-auto h-24">
+                            <p>赛润妮·雪儿（MIR-203）</p>
+                        </a>
+                        <a href="Partner_selene_sheryl_awaken.html" class="text-center">
+                            <img src="IMG/Partner_selene_sheryl_awaken_icon.png" class="mx-auto h-24">
+                            <p>赛润妮·雪儿（觉醒）</p>
+                        </a>
+                        <a href="Partner_acid.html" class="text-center">
+                            <img src="IMG/Partner_acid_icon.png" class="mx-auto h-24">
+                            <p>埃希德</p>
+                        </a>
+                        <a href="Partner_acid_awaken.html" class="text-center">
+                            <img src="IMG/Partner_acid_awaken_icon.png" class="mx-auto h-24">
+                            <p>埃希德（觉醒）</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 特殊搭档 Card -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">特殊搭档</span>
+                </div>
+                <div class="update-content">
+                    <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-4">
+                        <a href="Partner_hikari_fantasia.html" class="text-center">
+                            <img src="IMG/Partner_hikari_fantasia_icon.png" class="mx-auto h-24">
+                            <p>光（Fantasia）</p>
+                        </a>
+                        <a href="Partner_tairitsu_sonata.html" class="text-center">
+                            <img src="IMG/Partner_tairitsu_sonata_icon.png" class="mx-auto h-24">
+                            <p>对立（Sonata）</p>
+                        </a>
+                        <a href="Partner_saya_etude.html" class="text-center">
+                            <img src="IMG/Partner_saya_etude_icon.png" class="mx-auto h-24">
+                            <p>咲弥（Etude）</p>
+                        </a>
+                        <a href="Partner_alice_tenniel_minuet.html" class="text-center">
+                            <img src="IMG/Partner_alice_&_tenniel_minuet_icon.png" class="mx-auto h-24">
+                            <p>爱丽丝 & 坦尼尔（Minuet）</p>
+                        </a>
+                        <a href="Partner_tairitsu_elegy.html" class="text-center">
+                            <img src="IMG/Partner_tairitsu_elegy_icon.png" class="mx-auto h-24">
+                            <p>对立（Elegy）</p>
+                        </a>
+                        <a href="Partner_lagrange_aria.html" class="text-center">
+                            <img src="IMG/Partner_lagrange_aria_icon.png" class="mx-auto h-24">
+                            <p>拉格兰（Aria）</p>
+                        </a>
+                        <a href="Partner_vita_cadenza.html" class="text-center">
+                            <img src="IMG/Partner_vita_cadenza_icon.png" class="mx-auto h-24">
+                            <p>维塔（Cadenza）</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 搭档数据简表部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">搭档数据简表 (移动版)</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">本表显示了移动版下各个搭档在1级、20级、30级（如果有觉醒形态）时的Frag、Step、Over数值。</p>
+                    <p class="text-gray-600">如果需要查看搭档各级的详细数值，请前往对应搭档单页查看。</p>
+
+                    <div class="overflow-x-auto mt-4">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">#</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">搭档名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">类型</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="3">
+                                        Lv.1</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="3">
+                                        Lv.20</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="3">
+                                        Lv.30</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">技能</th>
+                                </tr>
+
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Frag</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Step</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Over</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Frag</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Step</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Over</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Frag</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Step</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Over</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari.html"
+                                            class="text-blue-500 hover:underline">光</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">支援型</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">35</td>
+                                    <td class="border border-gray-300 px-4 py-2">35</td>
+                                    <td class="border border-gray-300 px-4 py-2">78</td>
+                                    <td class="border border-gray-300 px-4 py-2">61</td>
+                                    <td class="border border-gray-300 px-4 py-2">61</td>
+                                    <td class="border border-gray-300 px-4 py-2">88</td>
+                                    <td class="border border-gray-300 px-4 py-2">71</td>
+                                    <td class="border border-gray-300 px-4 py-2">71</td>
+                                    <td class="border border-gray-300 px-4 py-2">简单 - 音符流失后的回忆率丢失程度减小</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">1</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_tairitsu.html"
+                                            class="text-blue-500 hover:underline">对立</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">2</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_kou.html"
+                                            class="text-blue-500 hover:underline">红</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">47</td>
+                                    <td class="border border-gray-300 px-4 py-2">25</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">47</td>
+                                    <td class="border border-gray-300 px-4 py-2">100</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">57</td>
+                                    <td class="border border-gray-300 px-4 py-2">（觉醒）以歌曲结算成绩为基准值获得最高 +20% 的残片奖励</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">3</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_sapphire.html"
+                                            class="text-blue-500 hover:underline">萨菲亚</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">75</td>
+                                    <td class="border border-gray-300 px-4 py-2">75</td>
+                                    <td class="border border-gray-300 px-4 py-2">75</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">4</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_lethe.html"
+                                            class="text-blue-500 hover:underline">忘却</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">47</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">47</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">100</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">镜像 - 所有的音符与音弧反转<br>（觉醒）视觉 - 探索遗缺的感知
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">5</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a
+                                            href="Partner_hikari_tairitsu_reunion.html"
+                                            class="text-blue-500 hover:underline">光 & 对立（Reunion）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">79</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">89</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">纷争 - 逆转光芒与纷争的规则<br>（觉醒）光芒 - 改写光芒与纷争的规则
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">6</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_tairitsu_axium.html"
+                                            class="text-blue-500 hover:underline">对立（Axium）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">47</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">72</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">95</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">7</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a
+                                            href="Partner_tairitsu_grievous.html"
+                                            class="text-blue-500 hover:underline">对立（Grievous Lady）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">57</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">57</td>
+                                    <td class="border border-gray-300 px-4 py-2">79</td>
+                                    <td class="border border-gray-300 px-4 py-2">102</td>
+                                    <td class="border border-gray-300 px-4 py-2">79</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">困难 - 回忆率归零后直接判定为乐曲失败</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">8</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_stella.html"
+                                            class="text-blue-500 hover:underline">星</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">41</< /td>
+                                    <td class="border border-gray-300 px-4 py-2">58</td>
+                                    <td class="border border-gray-300 px-4 py-2">41</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">84</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">在游玩 Stellights 的歌曲时得到 10 额外残片</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">9</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_fisica.html"
+                                            class="text-blue-500 hover:underline">光 & 菲希卡</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">支援型</td>
+                                    <td class="border border-gray-300 px-4 py-2">22</td>
+                                    <td class="border border-gray-300 px-4 py-2">45</td>
+                                    <td class="border border-gray-300 px-4 py-2">7</td>
+                                    <td class="border border-gray-300 px-4 py-2">40</td>
+                                    <td class="border border-gray-300 px-4 py-2">78</td>
+                                    <td class="border border-gray-300 px-4 py-2">31</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">简单 + 在游玩 Past / Present 的歌曲时得到 15 额外残片
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">9</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_fisica.html"
+                                            class="text-blue-500 hover:underline">光 & 菲希卡</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">支援型</td>
+                                    <td class="border border-gray-300 px-4 py-2">22</td>
+                                    <td class="border border-gray-300 px-4 py-2">45</td>
+                                    <td class="border border-gray-300 px-4 py-2">7</td>
+                                    <td class="border border-gray-300 px-4 py-2">40</td>
+                                    <td class="border border-gray-300 px-4 py-2">78</td>
+                                    <td class="border border-gray-300 px-4 py-2">31</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">简单 + 在游玩 Past / Present 的歌曲时得到 15 额外残片
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">10</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_ilith.html"
+                                            class="text-blue-500 hover:underline">依莉丝</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">10</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">105</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">110</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">困难 + 在 Track Lost 时丢失100残片<br>（觉醒）困难 +
+                                        流失判定时有 6% 概率丢失 6 倍回忆率 曲目通关时获得 +6 步数加成</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">11</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_eto.html"
+                                            class="text-blue-500 hover:underline">爱托</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">54</td>
+                                    <td class="border border-gray-300 px-4 py-2">45</td>
+                                    <td class="border border-gray-300 px-4 py-2">32</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">67</td>
+                                    <td class="border border-gray-300 px-4 py-2">59</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">77</td>
+                                    <td class="border border-gray-300 px-4 py-2">69</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        在游玩"光芒"之侧的歌曲时得到5额外残片<br>（觉醒）获得残片奖励时世界进度额外前进7</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">12</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_luna.html"
+                                            class="text-blue-500 hover:underline">露娜</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">42</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">63</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">100</td>
+                                    <td class="border border-gray-300 px-4 py-2">73</td>
+                                    <td class="border border-gray-300 px-4 py-2">100</td>
+                                    <td class="border border-gray-300 px-4 py-2">视觉 -
+                                        隐藏回忆收集率条<br>（觉醒）在歌曲限制格上游玩歌曲时世界进度额外前进7</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">13</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_shirabe.html"
+                                            class="text-blue-500 hover:underline">调</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">56</td>
+                                    <td class="border border-gray-300 px-4 py-2">46</td>
+                                    <td class="border border-gray-300 px-4 py-2">31</td>
+                                    <td class="border border-gray-300 px-4 py-2">82</td>
+                                    <td class="border border-gray-300 px-4 py-2">68</td>
+                                    <td class="border border-gray-300 px-4 py-2">58</td>
+                                    <td class="border border-gray-300 px-4 py-2">92</td>
+                                    <td class="border border-gray-300 px-4 py-2">78</td>
+                                    <td class="border border-gray-300 px-4 py-2">68</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        在游玩"纷争"之侧的歌曲时得到5额外残片<br>（觉醒）在游玩歌曲时先支付等同于歌曲难度值的残片 获得"EX"或更高成绩时额外奖励10残片</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">14</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_zero.html"
+                                            class="text-blue-500 hover:underline">光（Zero）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">78</td>
+                                    <td class="border border-gray-300 px-4 py-2">61</td>
+                                    <td class="border border-gray-300 px-4 py-2">61</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">流失音符时回忆率归零</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">15</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_fracture.html"
+                                            class="text-blue-500 hover:underline">光（Fracture）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">???/创世型</td>
+                                    <td class="border border-gray-300 px-4 py-2">42</td>
+                                    <td class="border border-gray-300 px-4 py-2">67</td>
+                                    <td class="border border-gray-300 px-4 py-2">53</td>
+                                    <td class="border border-gray-300 px-4 py-2">61</td>
+                                    <td class="border border-gray-300 px-4 py-2">99</td>
+                                    <td class="border border-gray-300 px-4 py-2">78</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">溢出 - "简单"模式回忆率，但当回忆率到达100%后转变为"困难"</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">16</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_summer.html"
+                                            class="text-blue-500 hover:underline">光（夏日）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">支援型</td>
+                                    <td class="border border-gray-300 px-4 py-2">41</td>
+                                    <td class="border border-gray-300 px-4 py-2">49</td>
+                                    <td class="border border-gray-300 px-4 py-2">31</td>
+                                    <td class="border border-gray-300 px-4 py-2">67</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">简单 + 所有的音符与音弧反转</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">83</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_salt.html"
+                                            class="text-blue-500 hover:underline">莎露朵</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">20</td>
+                                    <td class="border border-gray-300 px-4 py-2">23</td>
+                                    <td class="border border-gray-300 px-4 py-2">20</td>
+                                    <td class="border border-gray-300 px-4 py-2">44</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">44</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">根据单个章节地图的完成情况额外获得最高10的世界模式进度</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">84</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_acid.html"
+                                            class="text-blue-500 hover:underline">埃希德</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">43</td>
+                                    <td class="border border-gray-300 px-4 py-2">24</td>
+                                    <td class="border border-gray-300 px-4 py-2">25</td>
+                                    <td class="border border-gray-300 px-4 py-2">79</td>
+                                    <td class="border border-gray-300 px-4 py-2">43</td>
+                                    <td class="border border-gray-300 px-4 py-2">46</td>
+                                    <td class="border border-gray-300 px-4 py-2">89</td>
+                                    <td class="border border-gray-300 px-4 py-2">53</td>
+                                    <td class="border border-gray-300 px-4 py-2">56</td>
+                                    <td class="border border-gray-300 px-4 py-2">困难 + 每推进1/5歌曲游玩进度减少10点回忆率并获得两个残片</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">85</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a
+                                            href="Partner_hikari_selene_sheryl.html"
+                                            class="text-blue-500 hover:underline">光 & 赛润妮·雪儿（Fracture & MIR-203）</a>
+                                    </td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">46</td>
+                                    <td class="border border-gray-300 px-4 py-2">46</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">84</td>
+                                    <td class="border border-gray-300 px-4 py-2">84</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">CHUNITHM + 困难 - 曲目结算时每满一格收集条增加2步数与2超量值
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nintendo Switch版数据表 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">搭档数据简表 (Nintendo Switch版)</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">本表显示了Nintendo Switch版下各个搭档在1级、20级、30级（如果有觉醒形态）时的Frag、Step数值。</p>
+                    <p class="text-gray-600">如果需要查看搭档各级的详细数值，请前往对应搭档单页查看。</p>
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full border-collapse border border-gray-300 text-gray-600">
+                            <thead>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">#</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">搭档名称</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">类型</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="2">
+                                        Lv.1</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="2">
+                                        Lv.20</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700" colspan="2">
+                                        Lv.30</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">技能</th>
+                                </tr>
+                                <tr class="bg-[#e6e7eb]">
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Frag</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Step</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Frag</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Step</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Frag</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700">Step</th>
+                                    <th class="border border-gray-300 px-4 py-2 text-left text-gray-700"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari.html"
+                                            class="text-blue-500 hover:underline">光</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">支援型</td>
+                                    <td class="border border-gray-300 px-4 py-2">45</td>
+                                    <td class="border border-gray-300 px-4 py-2">20</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">35</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">95</td>
+                                    <td class="border border-gray-300 px-4 py-2">简单 - 音符流失后的回忆率丢失程度减小</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">1</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_tairitsu.html"
+                                            class="text-blue-500 hover:underline">对立</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">40</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">75</td>
+                                    <td class="border border-gray-300 px-4 py-2">110</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">2</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_kou.html"
+                                            class="text-blue-500 hover:underline">红</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">95</td>
+                                    <td class="border border-gray-300 px-4 py-2">155</td>
+                                    <td class="border border-gray-300 px-4 py-2">（觉醒）以歌曲结算成绩为基准值获得最高 +20% 的残片奖励</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">4</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_lethe.html"
+                                            class="text-blue-500 hover:underline">忘却</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">110</td>
+                                    <td class="border border-gray-300 px-4 py-2">85</td>
+                                    <td class="border border-gray-300 px-4 py-2">185</td>
+                                    <td class="border border-gray-300 px-4 py-2">镜像 - 所有的音符与音弧反转<br>（觉醒）视觉 - 探索遗缺的感知
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">5</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a
+                                            href="Partner_hikari_tairitsu_reunion.html"
+                                            class="text-blue-500 hover:underline">光 & 对立（Reunion）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">72</td>
+                                    <td class="border border-gray-300 px-4 py-2">102</td>
+                                    <td class="border border-gray-300 px-4 py-2">纷争 - 逆转光芒与纷争的规则<br>（觉醒）光芒 - 改写光芒与纷争的规则
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">6</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_tairitsu_axium.html"
+                                            class="text-blue-500 hover:underline">对立（Axium）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">95</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">7</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a
+                                            href="Partner_tairitsu_grievous.html"
+                                            class="text-blue-500 hover:underline">对立（Grievous Lady）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">52</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">125</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">困难 - 回忆率归零后直接判定为乐曲失败</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">9</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_fisica.html"
+                                            class="text-blue-500 hover:underline">光 & 菲希卡</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">支援型</td>
+                                    <td class="border border-gray-300 px-4 py-2">52</td>
+                                    <td class="border border-gray-300 px-4 py-2">40</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">65</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">简单 + 在游玩 Past / Present 的歌曲时得到 15 额外残片
+                                    </td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">10</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_ilith.html"
+                                            class="text-blue-500 hover:underline">依莉丝</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">120</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">185</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">困难 + 在 Track Lost 时丢失100残片</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">11</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_eto.html"
+                                            class="text-blue-500 hover:underline">爱托</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">110</td>
+                                    <td class="border border-gray-300 px-4 py-2">95</td>
+                                    <td class="border border-gray-300 px-4 py-2">155</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        在游玩"光芒"之侧的歌曲时得到5额外残片<br>（觉醒）获得残片奖励时世界进度额外前进7</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">12</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_luna.html"
+                                            class="text-blue-500 hover:underline">露娜</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">140</td>
+                                    <td class="border border-gray-300 px-4 py-2">85</td>
+                                    <td class="border border-gray-300 px-4 py-2">185</td>
+                                    <td class="border border-gray-300 px-4 py-2">视觉 -
+                                        隐藏回忆收集率条<br>（觉醒）在歌曲限制格上游玩歌曲时世界进度额外前进7</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">13</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_shirabe.html"
+                                            class="text-blue-500 hover:underline">调</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">30</td>
+                                    <td class="border border-gray-300 px-4 py-2">60</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">95</td>
+                                    <td class="border border-gray-300 px-4 py-2">155</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        在游玩"纷争"之侧的歌曲时得到5额外残片<br>（觉醒）在游玩歌曲时先支付等同于歌曲难度值的残片 获得"EX"或更高成绩时额外奖励10残片</td>
+                                </tr>
+                                <tr class="bg白">
+                                    <td class="border border-gray-300 px-4 py-2">14</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_zero.html"
+                                            class="text-blue-500 hover:underline">光（Zero）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">挑战型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">35</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">0</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">流失音符时回忆率归零</td>
+                                </tr>
+                                <tr class="bg-gray-50">
+                                    <td class="border border-gray-300 px-4 py-2">15</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_hikari_fracture.html"
+                                            class="text-blue-500 hover:underline">光（Fracture）</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">???/创世型</td>
+                                    <td class="border border-gray-300 px-4 py-2">55</td>
+                                    <td class="border border-gray-300 px-4 py-2">90</td>
+                                    <td class="border border-gray-300 px-4 py-2">70</td>
+                                    <td class="border border-gray-300 px-4 py-2">140</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">-</td>
+                                    <td class="border border-gray-300 px-4 py-2">溢出 - "简单"模式回忆率，但当回忆率到达100%后转变为"困难"</td>
+                                </tr>
+                                <tr class="bg-white">
+                                    <td class="border border-gray-300 px-4 py-2">19</td>
+                                    <td class="border border-gray-300 px-4 py-2"><a href="Partner_ayumi.html"
+                                            class="text-blue-500 hover:underline">彩梦</a></td>
+                                    <td class="border border-gray-300 px-4 py-2">平衡型</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">80</td>
+                                    <td class="border border-gray-300 px-4 py-2">50</td>
+                                    <td class="border border-gray-300 px-4 py-2">185</td>
+                                    <td class="border border-gray-300 px-4 py-2">
+                                        歌曲游玩结束时奖励随机数量的残片<br>（觉醒）世界进度在+5和-5之间随机增减</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 注释部分 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">注释</span>
+                </div>
+                <div class="update-content">
+                    <ul class="ml-6 text-gray-600">
+                        <li><strong>排序说明：</strong></li>
+                        <ul class="ml-6">
+                            <li>[1] 获取顺序：按搭档获取时间排序（新获取的排前面）</li>
+                            <li>[2] 名称排序：英文字典序（A-Z）</li>
+                            <li>[3] 数值排序：均为降序（数值高的排前面）</li>
+                        </ul>
+
+                        <li class="mt-2"><strong>数值说明：</strong></li>
+                        <ul class="ml-6">
+                            <li>显示数值 = 实际加成倍率 × 50（向下取整）</li>
+                            <li>实际加成量会比显示数值略高（因计算时使用精确值）</li>
+                            <li>例外：20级Ai酱的Frag值为61.6（显示61，实际倍率1.232显示为×1.2）</li>
+                        </ul>
+
+                        <li class="mt-2"><strong>类型说明：</strong></li>
+                        <ul class="ml-6">
+                            <li>支援型：通常提供残片加成或降低游玩难度</li>
+                            <li>平衡型：属性均衡，技能效果中性</li>
+                            <li>挑战型：通常增加游玩难度但可能提供特殊奖励</li>
+                            <li>特殊类型（如???/创世型）：具有独特机制</li>
+                        </ul>
+
+                        <li class="mt-2"><strong>经验值系统：</strong></li>
+                        <ul class="ml-6">
+                            <li>移动版经验公式：单曲潜力值 × 6 × 体力消耗</li>
+                            <li>使用Play+时：经验值 × 消耗体力数</li>
+                            <li>源韵强化：经验值 × 4</li>
+                            <li>以太之滴：移动版+250/个，NS版+125/个</li>
+                            <li>从1级到20级需：移动版10,000经验 / NS版5,000经验</li>
+                            <li>从20级到30级需：移动版15,000经验 / NS版7,500经验</li>
+                        </ul>
+
+                        <li class="mt-2"><strong>特殊机制：</strong></li>
+                        <ul class="ml-6">
+                            <li>光（Fatalis）技能会双倍消耗体力但只按基础值计算经验</li>
+                            <li>洞烛无法使用以太之滴获取经验</li>
+                            <li>NS版可使用残片升级（2经验/残片）</li>
+                            <li>封印状态下无法在世界模式获取经验</li>
+                        </ul>
+
+                        <li class="mt-2"><strong>版本差异：</strong></li>
+                        <ul class="ml-6"></ul>
+                        <li>移动版属性成长曲线：近似easeInOutCubic（先慢中快后慢）</li>
+                        <li>NS版属性成长：线性变化</li>
+                        <li>部分搭档/核心为移动版独占（如CHUNITHM联动内容）</li>
+                    </ul>
+
+                    <li class="mt-2"><strong>其他说明：</strong></li>
+                    <ul class="ml-6">
+                        <li>技能背景色：绿色=简单，红色=困难，黄色=视觉特效</li>
+                        <li>觉醒后切换：可自由切换觉醒/未觉醒形态（部分搭档技能会变化）</li>
+                        <li>搭档封印：锁定所有属性和技能（数值固定为50/SEALED）</li>
+                        <li>最大以太之滴获取量：当前版本理论最多1089个（可能随更新变化）</li>
+                    </ul>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text白"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text白"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text白"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text白 mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text白"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text白"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text白"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text白 mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button class="bg白 bg-opacity-10 text白 px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

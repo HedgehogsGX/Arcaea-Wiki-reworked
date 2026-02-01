@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Arcaea 游戏界面详细介绍 - 主界面、选曲界面、游玩界面等功能说明">
+    <meta name="keywords" content="Arcaea, 界面, 游戏界面, 选曲, 游玩界面, 设定">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>界面 - Arcaea Wiki</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preload" href="css/style.css" as="style">
+
+    <!-- Stylesheets -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- Scripts -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="js/main.js" defer></script>
+    <script src="js/component-loader.js" defer></script>
+
+</head>
+
+<body class="bg-gray-900">
+    <!-- Shared Navigation Component -->
+    <div id="navigation-container"></div>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">界面</h1>
+
+            <!-- 主界面 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">主界面</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">玩家进入游戏后首先看到的页面，包含了多个功能入口与信息聚合显示。</p>
+                    <h3 class="text-lg font-semibold text-primary mt-4">主界面 (移动版)</h3>
+                    <div class="relative mb-6">
+                        <img src="IMG/layout_mobile.png" alt="layout_mobile" class="rounded-lg w-full">
+                    </div>
+                    <h3 class="text-lg font-semibold text-primary mt-4">主界面 (Nintendo Switch版)</h3>
+                    <div class="relative mb-6">
+                        <img src="IMG/layout_switch.png" alt="layout_switch" class="rounded-lg w-full">
+                    </div>
+                    <p class="text-gray-600">玩家进入游戏后首先看到的页面，包含了多个功能入口与信息聚合显示。</p>
+                </div>
+            </div>
+
+            <!-- 功能菜单 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">功能菜单</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">位于主界面左部，包含以下功能按钮：</p>
+                    <ul class="space-y-4">
+                        <li>
+                            <strong>开始游戏</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>★本功能可离线使用</li>
+                                <li>位于左侧第1行，点击即可进入曲包界面或选曲界面。</li>
+                                <li>点击后进入的界面与上次退出时最后浏览的界面相同。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>故事模式</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>★本功能可离线使用</li>
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">故事模式_(消歧义)</a></li>
+                                <li>位于左侧第2行，点击可查看游戏相关的故事。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>段位挑战</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">段位挑战</a></li>
+                                <li>★在移动版中，本功能为在线功能，离线状态下该按钮将显示为灰色，点击将会弹出不可用提示。</li>
+                                <li>在NS版中，本功能可离线使用。</li>
+                                <li>位于左侧第3行，点击可挑战不同段位。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>网络</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>★本功能为在线功能，仅移动版具备。</li>
+                                <li>位于移动版左侧第4行的左半部，点击后弹出遮罩界面。</li>
+                                <li>界面左侧为"Network"，可注册或登录帐号，登录后可查看账号信息、添加好友、扩充好友位、查看档案卡、云端成绩存取等。</li>
+                                <li>界面右侧为"Friends"，可查看好友的最近游玩记录。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>其他</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>位于左侧第4行的右半部，点击后弹出遮罩界面。</li>
+                                <li>界面左侧为"About"，可查看鸣谢列表。</li>
+                                <li>界面右侧为"More"，可查看游戏教程、更换游戏语言、管理你的下载项目、查看成就。</li>
+                                <li>NS版v2.0.1前，该按钮叫“关于”。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>World</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">世界模式_(消歧义)</a></li>
+                                <li>在移动版中，本功能为在线功能，离线状态下该按钮将显示为灰色，点击将会弹出不可用提示。</li>
+                                <li>在NS版中，本功能可离线使用。</li>
+                                <li>位于功能列表右侧，点击可进入世界模式，点击下方“继续”，可回到当前游玩的地图。</li>
+                                <li>在移动版中，该图标右下角标示了当前世界模式内的剩余体力数量，当前体力小于等于0时标志背景会变淡；右上角标示了当前开放的限时地图距离结束的剩余时间，点击将跳转至限时地图(若当前无限时地图则不显示；若同时存在多张限时地图将显示距离结束剩余时间最短的那张地图的剩余时间，点击也将跳转至这张地图)。
+                                </li>
+                                <li>在NS版中，由于世界模式不存在体力限制，且NS版没有在线活动，上述功能均不具备。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>新手任务</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">新手任务</a></li>
+                                <li>位于功能列表右上角，点击弹出任务列表。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 其他内容 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">其他内容</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>
+                            <strong>右侧</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>展示你当前选择的搭档的立绘。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>左下</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>场景选择按钮，点击后可选择在主界面和档案卡中显示的背景图片。</li>
+                                <li>场景可在世界模式的部分地图获得。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>右下</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>更新内容宣传栏，滚动显示最近更新的曲目和曲包。</li>
+                                <li>点击后将跳转到选曲界面或曲包界面的对应位置。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>顶栏</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>位于界面最上端，显示多种信息。</li>
+                                <li>中央显示当前采用的搭档的头像，点击可更换搭档。</li>
+                                <li>移动版中，如果登陆了账号，那么头像左侧会显示当前账号的名字，如果没有登陆账号或退出了已登录的账号，该位置会显示“游客”；而如果登陆过账号但在本次启动时离线游玩，该位置会显示“离线”。
+                                </li>
+                                <li>在NS版中无法设定或显示名字。</li>
+                                <li>头像左侧有一背景框，如果完成了段位挑战，则默认显示玩家所完成的最高段位对应的背景。</li>
+                                <li>移动版中，Arcaea Online订阅期间的玩家可以自由切换所有拥有的背景(包括段位背景和Arcaea Online的每月限定背景)。</li>
+                                <li>移动版中，如果排名进入世界前200，则头像右上角将显示排名。</li>
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">排名系统</a></li>
+                                <li>头像右下角在一斜置方框中显示当前的潜力值。</li>
+                                <li>左侧显示当前界面标题。</li>
+                                <li>在主界面显示为“Arcaea”，在选曲界面或曲包界面显示为“选择一首歌曲”。</li>
+                                <li>在NS版中，顶栏左端显示当前控制方式，点击后可设置控制方式。</li>
+                                <li>右侧在移动版中，自左向右为“设定”按钮与“残片”、“记忆源点”数量。</li>
+                                <li>在NS版中，自左向右为“残片”数量、“设定”按钮。</li>
+                                <li>点击“设定”按钮后，将弹出设定界面。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 曲包选择 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">曲包选择</span>
+                </div>
+                <!-- <div class="relative mb-6">
+                    <img src="IMG/song_pack_select.png" alt="song_pack_select" class="rounded-lg w-full">
+                </div> -->
+                <div class="update-content">
+                    <p class="text-gray-600">曲包界面为横排分布，点击曲包封面可进入相应曲包的选曲界面。</p>
+                    <ul class="space-y-4">
+                        <li>
+                            <strong>未解锁的曲包</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>未解锁的曲包封面将会显示一个锁形图标。</li>
+                                <li>部分曲包的封面右下角会显示购买该曲包后可获得的常驻搭档。</li>
+                                <li>NS版中，只有未购买的DLC曲包会显示可获得的搭档。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲包分类</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>在界面中，曲包之间存在小长条形的标志，用于标识曲包的分类。</li>
+                                <li>位于标志右侧至下一标志左侧的所有曲包，均归属为该标志所对应的分类。</li>
+                                <li>在移动版中，曲包的排序大致分为：收藏夹Favorites→单曲档案包Memory Archive、世界档案包(限免单曲包)Extend Archive 1和Extend
+                                    Archive 2→免费包(Free)→主线包第二幕(Main Story Act II)→主线包(Main Story)→支线包(Side
+                                    Story)→联动包(Collaboration)。</li>
+                                <li>在NS版中，曲包的排序大致分为：收藏夹Favorites→单曲档案包Memory Archive、免费包Arcaea、曲包Divided
+                                    Heart→主线包(Story)→支线包(Side Story)→DLC曲包(DLC)。</li>
+                                <li>目前，DLC曲包在购买后将移入支线包。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>附加包</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>部分曲包拥有附加包(Pack Append)，它们包含若干首曲目，通常作为隶属曲包的延伸或更新存在。</li>
+                                <li>拥有附加包的曲包会在封面下方展示当前尚未解锁的较新的附加包；若所有附加包均已购买，则留空。</li>
+                                <li>附加包可以单独购买，并且购买后仅会解锁附加包内的曲目，不会影响隶属曲包的购买情况。</li>
+                                <li>购买附加包后，附加包内的所有曲目均会合并入隶属曲包，同时隶属曲包的锁形图标将会消失。</li>
+                                <li>特别地，附加包Silent Answer是解锁曲目Loveless Dress后直接出现在曲包界面上的。</li>
+                                <li>其实际上是Final Verdict的一部分(无需额外购买)，点击其曲包封面会跳转到Final Verdict选曲界面。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>统计数据</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>每个曲包封面上部有三个数值，由左到右分别代表：该曲包内对应难度Full Recall或Pure Memory曲目数，该曲包内对应难度Track
+                                    Complete(不包括Easy Clear)曲目数，该曲包内曲目总数。</li>
+                                <li>若曲包拥有附加包，则附加包内的曲目也会被计入。</li>
+                                <li>若右侧两个数字为黄色则表明该曲包对应难度全Track Complete(不包括Easy Clear)，三个数字均为黄色代表该曲包对应难度全Full
+                                    Recall，三个数字均为蓝色代表该曲包对应难度全Pure Memory。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>下端</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>左下角为“主菜单”按钮，点击回到主界面。</li>
+                                <li>右下角为“全部曲目”按钮，点击即可进入包含所有曲目的选曲界面。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 选曲界面 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">选曲界面</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">选曲界面是玩家选择曲目并开始游玩的界面。</p>
+                    <ul class="space-y-4">
+                        <li>
+                            <strong>难度选择</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>在选曲界面的左上角可选择本曲的难度。</li>
+                                <li>玩家第一次选择Present、Future难度时，会提示出现了新的游戏元素，是否进入进阶教程。</li>
+                                <li>此时若选择的是Future难度，提示框会额外提示建议游玩Present难度。</li>
+                                <li>部分曲目额外具有Beyond或Eternal难度谱面作为第四难度，Beyond谱面的解锁通常有前置条件，而Eternal谱面的解锁目前均没有。</li>
+                                <li>大部分存在Beyond难度但未解锁该难度的曲目，第四难度的位置会有一个空框，用来提示本曲有未解锁的Beyond难度。但该曲目的Beyond难度在失落章或陷落章中对应的前置谱面尚未获取，则并不会显示该空框。
+                                </li>
+                                <li>对于存在拥有第四难度的曲目的选曲列表，玩家点击任意不存在第四难度的曲目的第四难度选择位置时会跳转至BYD/ETR难度的曲目选择界面，优先跳转至BYD难度，若不存在BYD难度则跳转至ETR难度，若列表内同时存在拥有ETR和BYD难度的曲目则会在第四难度右上角显示切换图标，再次点击即可切换BYD/ETR难度。
+                                </li>
+                            </ul>
+                        </li>
+                        <div class="relative mb-6">
+                            <img src="IMG/song_selecting.png" alt="song_selecting" class="rounded-lg w-full">
+                        </div>
+                        <li>
+                            <strong>排名</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>在选曲界面的左下角，按范围可以显示世界排名/无/我的排名/好友排名。</li>
+                                <li>点击曲目封面以切换。</li>
+                                <li>世界排名为世界前20名，好友排名为自己和所有好友的排名。</li>
+                                <li>自己的成绩在世界前9999名时显示排名靠近自己的20名(包括自己)的成绩，否则显示世界第9981-9999名和自己的成绩。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲包界面按钮</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>按钮显示该曲包内对应难度Full Recall或Pure Memory曲目数，该曲包内对应难度Track Complete(不包括Easy
+                                    Clear)曲目数，该曲包内曲目总数。</li>
+                                <li>点击上方紫色的曲包选择按钮可以退到曲包界面。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲目列表</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>位于右侧，通过上下拖动滚动列表以选择曲目。选中曲目后，点击"START"开始游戏。</li>
+                                <li>曲目的解锁方式请参阅解歌系统。</li>
+                                <li>曲目列表项右侧展示了曲目的获取方式：需要经由世界模式获取的，为蓝绿色；否则，需要经由记忆源点购买获取的，为紫色；其余为玫红色。Beyond难度统一显示为鲜红色。
+                                </li>
+                                <li>向右拖动选中的曲目列表项，可以收藏曲目。</li>
+                                <li>游玩过的曲目列表项上会显示分数评级和通关状态所分别达到的最高级别，详见机制的判定、计分方式。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>随机曲目按钮</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>位于曲目列表底端，点击可进行随机选曲，范围为目前对应难度已解锁的曲目。</li>
+                                <li>在点击过一次随机按钮后，界面右下角会出现一个小型的随机按钮，方便多次随机曲目，在选中其他曲目后消失。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>快捷选择按钮</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>位于右下角，有两个按钮SongSelect up button.png和SongSelect down button.png。</li>
+                                <li>点击SongSelect up button.png，会选择当前曲包内位于最顶端的曲目。</li>
+                                <li>点击SongSelect down button.png，会选择当前曲包内位于最底端的曲目。</li>
+                                <li>如果使用曲目分类模式时，点击SongSelect up button.png会选择上个分类夹内位于最顶端的曲目，点击SongSelect down
+                                    button.png会选择下个分类夹内位于最顶端的曲目。</li>
+                                <li>如果选择的分类夹为第一个，点击SongSelect up button.png时会选择最后一个分类夹。</li>
+                                <li>如果选择的分类夹为最后一个，点击SongSelect down button.png时会选择第一个分类夹。</li>
+                                <li>点击了随机曲目按钮后，两个按钮都会隐藏，同时到达曲目列表底端时同样也会被隐藏。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲目整理</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>选曲界面曲目封面的正下方是曲目整理按钮，按钮两侧显示当前选择的曲目排序与分类方式。</li>
+                                <li>在NS版中，点击左侧按钮可以更改曲目排序，点击右侧按钮可以更改曲目分类。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲目整理界面</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>点击按钮后，左侧会显示曲目整理界面。从上至下依次为：</li>
+                                <li>曲目检索框，可以搜索曲目的名字或者曲师，点击曲目检索框时可以输入检索字符。输入后，游戏会自动检索全部曲目内符合条件的曲目。</li>
+                                <li>同时也会切换至全部曲目列表。</li>
+                                <li>不同难度会显示对应难度的检索结果。</li>
+                                <li>切换曲包时，会清空当前的检索条件。</li>
+                                <li>如果没有检索到任何曲目，曲目列表也会显示为空。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲目排序与分类方式设定</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>重置按钮，点击后会重置曲目的检索条件，曲目的排序方式与分类方式为默认值。</li>
+                                <li>曲目的检索条件会直接清空。</li>
+                                <li>当可以游玩分类方式显示时，归属于重置按钮的区域会缩小。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲目排序</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>曲目排序方式设定种类包括标题，难度，日期，评级，通关(状态)，作曲家，默认设定为难度。如果排序时遇到多个符合相同条件的曲目时，最后会按标题+日期排序。</li>
+                                <li>按照标题排序时，根据忽略大小写的字典序对标题排序。</li>
+                                <li>按照难度排序时，根据曲目等级升序、世界模式解锁情况、再按标题排序。</li>
+                                <li>按照日期排序时，根据谱面的更新日期对曲目进行升序排序。</li>
+                                <li>按照评级排序时，根据玩家游玩的评级和分数对曲目进行降序排序。</li>
+                                <li>按照通关排序时，根据玩家游玩的通关状态和分数对曲目进行降序排序。</li>
+                                <li>按照作曲家排序时，根据忽略大小写的字典序对作曲家排序。</li>
+                                <li>除日期排序外，特殊解锁曲目(一般为?级)解锁之前，总是位于最底端。</li>
+                                <li>NS版总会先按世界模式解锁情况排序。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>曲目分类</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>曲目分类方式设定种类包括无，游戏版本，等级，评级，通关。使用Link Play加入房间后，额外显示“可以游玩”分类；在Memory
+                                    Archive中，额外增加“分区”分类，通过点击分类按钮“无”进行切换。</li>
+                                <li>按照游戏版本分类时，根据谱面的更新版本分类，忽略小版本号，分类夹按升序排列。</li>
+                                <li>按照等级分类时，根据曲目的等级分类，分类夹按升序排列。</li>
+                                <li>按照评级分类时，根据玩家游玩的评级分类，分类夹按升序排列。</li>
+                                <li>按照通关分类时，根据玩家游玩的通关状态分类，分类夹按升序排列。</li>
+                                <li>按照可以游玩分类时，根据玩家当前曲目的可用情况，包括是否购买/是否解锁/是否已在世界模式解锁来分类。</li>
+                                <li>按照分区分类时，根据“流行/推荐”、“搭档”、“原创”、“综合”和“音乐游戏”来分类。</li>
+                                <li>选择一种分类时，游戏会对曲目列表进行分组，创建分类夹。</li>
+                                <li>分类夹内，按照设置的排序方式排列曲目。</li>
+                                <li>没有对应曲目的类别不会创建分类夹。</li>
+                                <li>分类夹右侧会显示本分类夹内的曲目数量。类似于曲包界面的统计数据，如果一个分类夹内的通关状态均为Full Recall，曲目数量的颜色呈现为黄字棕边；若均为Pure
+                                    Memory，呈现为蓝字黑边；其他情况呈现为黑字白边。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>其他内容</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>下端左下角为“主菜单”按钮，点击回到主界面。</li>
+                                <li>正下方为"Link Play"按钮，用于开启Link Play联机房间游玩模式。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+
+            </div>
+
+            <!-- 游玩界面 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">游玩界面</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">游玩界面是玩家进行游戏的主要界面。</p>
+                    <ul class="space-y-4">
+                        <li>
+                            <strong>谱面加载</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>选中曲目并点击开始后会进入谱面加载界面，显示谱面的部分信息，包括该曲目的曲绘、名称、曲师、画师，及谱面的谱师，加载完成后开始游戏。</li>
+                            </ul>
+                        </li>
+                        <div class="relative mb-6">
+                            <img src="IMG/playing_light.png" alt="playing_light" class="rounded-lg w-full">
+                        </div>
+                        <div class="relative mb-6">
+                            <img src="IMG/playing_dark.png" alt="playing_dark" class="rounded-lg w-full">
+                        </div>
+                        <li>
+                            <strong>游玩区域</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>屏幕下方的“地面”为4key下落式玩法区域(Final
+                                    Verdict中部分曲目的谱面游玩过程中将出现6key下落式)，在地面上出现的物件[地键(tap)和长条(hold)]会沿4条固定轨道(上述6key情况下为6条)的其中一条下落；在屏幕底部有一条地面判定线，当地键或长条的底部触及这条判定线时就是你该点击的时候。
+                                </li>
+                                <li>屏幕中部有一条天空判定线(Sky Input)，天空判定线与地面判定线所组成的矩形平面便是音弧(Arc)和天键(arctap)的判定位置。</li>
+                                <li>玩家的手指接触屏幕后，游戏会产生一条灰色的线以指示该手指的实际判定高度，最多同时存在4条指示线。</li>
+                                <li>屏幕天空判定线与地面判定线中间的数字是Combo数，显示了目前的连击数，不过在其为1时不会显示，因为击中1个不是“连”击。</li>
+                                <li>但连击数为0时，若击中的第一个note是音弧判定，combo数仍然会显示为1。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>背景</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">背景列表</a></li>
+                                <li>游玩时，不同歌曲拥有不同背景。</li>
+                                <li>在回忆率达到通关要求时(Easy和Normal收集条达到70，Hard和风暴收集条不低于70)，背景(轨道上方三角周围)将会出现规律闪动，即Diamond特效。
+                                </li>
+                                <li>Diamond特效会周期性出现和消失。</li>
+                                <li>不同的游玩背景具有不同的Diamond特效。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>回忆收集条</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">回忆收集条</a></li>
+                                <li>屏幕左部为回忆收集条，其机制与搭档相关。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>暂停</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>屏幕左上角为暂停按钮。</li>
+                                <li>Link Play游玩状态与触发某些游玩效果时将屏蔽暂停按钮。</li>
+                                <li>常规游玩时的暂停界面有三个按钮：“返回”、“重试”、“退出”。</li>
+                                <li>不同于市面上的部分音游，这个游戏的“返回”是立即返回，不会给玩家任何准备时间。</li>
+                                <li>世界模式游玩时的暂停界面有两个按钮：“返回”、“退出”，若点击“退出”会提示体力已扣除并进行二次确认。</li>
+                                <li>触发异象后的游玩：如果可以暂停，暂停时的选项跟世界模式游玩时相同，但是点击退出时不会进行二次确认。</li>
+                                <li>谱面结束后，游戏不可被暂停(切换后台等操作同样无效)。</li>
+                                <li>在此期间强制退出，游玩分数不会被计算，也不会影响ptt，扣除的体力不会返还，但是以“游玩(Experience)”为解锁条件的曲目会正常解锁。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>游玩信息</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>屏幕右上角信息框为本次游玩信息，包括了目前分数、曲目进度、难度、难度等级、曲目信息等。</li>
+                                <li>最上方的数字为当前分数，具体算法参考计分方式。</li>
+                                <li>分数下方的白色进度条显示当前曲目的进度。</li>
+                                <li>进度条右下方显示了谱面的难度与等级。</li>
+                                <li>信息框最底部显示了曲目的相关信息：曲目封面、曲名、曲师。</li>
+                                <li>默认信息框下方会出现一粉一蓝两个小点作为FR/PM指示器，可进入设定界面对其显示进行修改。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>游玩效果</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>参见：<a href="#" class="text-blue-500 hover:underline">游玩效果</a></li>
+                                <li>游戏中存在着数个与正常游玩有着巨大差别的游玩过程，目前包括如下内容：</li>
+                                <li>Grievous Lady、Fracture Ray、Tempestissimo的“异象”(Anomaly)。</li>
+                                <li>在Axiom of the End下解锁Infinite Strife,、World Ender、Pentiment、Arcana Eden、Testify的游玩过程。
+                                </li>
+                                <li>其中Testify会出现“异象”。</li>
+                                <li>Singularity的无情的挑战。</li>
+                                <li>Arcahv的初次游玩过程。</li>
+                                <li>Last达成一定条件下的游玩过程。</li>
+                                <li>Aegleseeker的初次游玩过程。</li>
+                                <li>使用搭档摩耶游玩Arghena的游玩过程。</li>
+                                <li>解锁ALTER EGO需要完成的磨难挑战和初次游玩过程。</li>
+                                <li>Designant.解锁过程中出现的地图9-?、满足条件后Lament Rain和Designant.出现的红色音轨。</li>
+                                <li>除ALTER EGO的磨难挑战外，4.0版本后这些特殊游玩效果在满足一定条件后均可重复触发，请查看对应曲目的“游玩效果”章节以获取所需的条件。</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <strong>游玩结算界面</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>在一次完整游玩之后，将出现游玩结果画面。该画面展示了玩家本次游玩的分数，判定等信息。</li>
+                                <div class="relative mb-6">
+                                    <img src="IMG/Finish_song.png" alt="Finish_song" class="rounded-lg w-full">
+                                </div>
+                                <li>游玩结果显示玩家的详细谱面游玩结果，集中在界面中央。</li>
+                                <li>上部为本次游玩的通关结果。</li>
+                                <li>左侧紧挨曲绘的窄条为本次游玩的回忆收集条，回忆率向下取整。</li>
+                                <li>中间为分数面板，包括本次游玩的分数，最高分栏以及本次游玩的评级。</li>
+                                <li>获得了理论值成绩时，分数下方将有蓝色阴影。</li>
+                                <li>最高分栏包括本次游玩前的最高分，右侧为本次游玩与最高分的分数差，低于最高分为负，否则为正。</li>
+                                <li>当高于最高分，取得新的纪录时，最高分栏左侧"HIGH SCORE"会被高亮。</li>
+                                <li>评级判定依据请参照计分方式。</li>
+                                <li>评级下方为判定统计。</li>
+                                <li>点击此处将出现详细判定信息，此时PURE行新增大Pure判定记数，FAR行新增打早/打晚的Far判定记数。</li>
+                                <li>若开启了纯粹(过早/过晚)选项，详细判定信息还会在FAR行新增打早/打晚的小Pure记数。</li>
+                                <li>关于判定请参照判定部分。</li>
+                                <li>此外，界面主体还有：</li>
+                                <li>上部横幅，展示游玩的歌曲以及曲师。</li>
+                                <li>左侧，包括谱面的难度与等级，"MAX RECALL"字样与本次游玩的最高连击数，曲目封面。</li>
+                                <li>右侧，包括玩家使用的搭档，右下角为本次游玩的奖励。</li>
+                                <li>世界模式游玩时，显示为获得残片数与搭档的等级和经验值，可点击右下角切换。</li>
+                                <li>顶栏左侧界面标题显示为“结果”。</li>
+                                <li>右侧将展示残片的增减情况。</li>
+                                <li>当玩家在线游玩时，顶栏会新增上传按钮和潜力值变化信息。离线状态不会出现。</li>
+                                <li>在成绩上传结束后，上方的状态栏将出现“同步”按钮，点击后可以将本地存档与云端同步。</li>
+                                <li>若成绩成功上传，玩家潜力值右侧将展示本次游玩后潜力值的变化状况，未开启“显示潜力值”不会显示。</li>
+                                <li>下端左下角为“返回”按钮，点击回到选曲界面，有时“返回”按钮可能会被其他功能替代。</li>
+                                <li>右下角为“重试”按钮，点击将立即重新开始游玩本谱面。</li>
+                                <li>触发部分特殊游玩效果、世界模式游玩、Link Play游玩下不可重试。</li>
+                                <li>正下方为“分享”按钮，点击将生成成绩截图，供玩家保存或分享给他人。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 设定界面 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">设定界面</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">设定界面为弹窗显示，分为3个模块：玩法，音频和视觉。</p>
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr>
+                                <th class="p-2 border-b">模块</th>
+                                <th class="p-2 border-b">设定项</th>
+                                <th class="p-2 border-b">功能</th>
+                                <th class="p-2 border-b">备注</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">纯粹【过早/过晚】</td>
+                                <td class="p-2 border-b">开启后会在纯粹(Pure)时显示【过早/过晚】</td>
+                                <td class="p-2 border-b">即连击数上方的Early/Late</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">音符流速</td>
+                                <td class="p-2 border-b">控制音符的下落速度</td>
+                                <td class="p-2 border-b">最低为1.0，最高为6.5，精确到0.1</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">显示潜力值</td>
+                                <td class="p-2 border-b">开启时将展示玩家的潜力值</td>
+                                <td class="p-2 border-b">如果关闭此项，原来潜力值框的颜色将会以灰色代替，潜力值显示变为“--”</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">技能显示</td>
+                                <td class="p-2 border-b">在歌曲开始前显示搭档技能</td>
+                                <td class="p-2 border-b"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">暂停模式</td>
+                                <td class="p-2 border-b">设置或停用暂停功能</td>
+                                <td class="p-2 border-b">选项：单击/双击/长按/隐藏</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">体力槽通知</td>
+                                <td class="p-2 border-b">体力槽完全恢复后将发送通知提醒玩家</td>
+                                <td class="p-2 border-b"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">玩法</td>
+                                <td class="p-2 border-b">Link Play邀请通知</td>
+                                <td class="p-2 border-b">收到Link Play邀请时向我发送通知</td>
+                                <td class="p-2 border-b"></td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">音频</td>
+                                <td class="p-2 border-b">音频音量</td>
+                                <td class="p-2 border-b">调整音符的音效音量</td>
+                                <td class="p-2 border-b">当偏移率大于100或小于-100时，音符音效会自动关闭不可打开</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">音频</td>
+                                <td class="p-2 border-b">偏移率</td>
+                                <td class="p-2 border-b">调整音乐的同步性</td>
+                                <td class="p-2 border-b">最小偏移率为-2000，最大偏移率为2000</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">音频</td>
+                                <td class="p-2 border-b">音频预设</td>
+                                <td class="p-2 border-b">点击切换预设项目</td>
+                                <td class="p-2 border-b">可保存两种预设，预设项目包括游戏音量、偏移率和音效音量</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">音频</td>
+                                <td class="p-2 border-b">游戏音量</td>
+                                <td class="p-2 border-b">调整游戏音量</td>
+                                <td class="p-2 border-b">最小音量为0%，最大音量为100%，默认音量为70%，调节分度值为10%</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">音频</td>
+                                <td class="p-2 border-b">振动</td>
+                                <td class="p-2 border-b">开启或关闭振动</td>
+                                <td class="p-2 border-b">当开启本选项时，在选择菜单以及游戏内判定音弧时手柄将震动</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">色彩辅助</td>
+                                <td class="p-2 border-b">开启以改变音弧配色</td>
+                                <td class="p-2 border-b">实际效果见Note显示效果</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">FR/PM指示灯</td>
+                                <td class="p-2 border-b">调整 FR/PM指示灯的显示位置</td>
+                                <td class="p-2 border-b">选项：关闭/界面顶端/连击数量</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">【过早/过晚】位置</td>
+                                <td class="p-2 border-b">调整【过早/过晚】判定的显示位置</td>
+                                <td class="p-2 border-b">选项：界面底部/界面中央/界面顶端</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">帧率</td>
+                                <td class="p-2 border-b">以 >60FPS 运行游戏会消耗更多电量</td>
+                                <td class="p-2 border-b">该选项只会在部分屏幕刷新率高于60Hz的安卓设备上出现</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">图像质量</td>
+                                <td class="p-2 border-b">使用较低的图像质量以确保设备运行稳定</td>
+                                <td class="p-2 border-b">选项：“标准/高”/“较低”</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">触控显示</td>
+                                <td class="p-2 border-b">显示屏幕的触控视觉效果</td>
+                                <td class="p-2 border-b">选项：关闭/仅菜单/开启</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 border-b">视觉</td>
+                                <td class="p-2 border-b">剧情文本显示速度</td>
+                                <td class="p-2 border-b">调整剧情文本显示速度</td>
+                                <td class="p-2 border-b">选项：默认/快/即刻显示/慢/稍慢</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- 注释和参考资料 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">注释和参考资料</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>
+                            <strong>注释</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>背景对应的段位等级可用背景左侧的点数进行区分。</li>
+                                <li>Lasting Eden Chapter 2除外。</li>
+                                <li>所有显示数据均为进入曲包界面前选择的难度下的数据(FTR/ETR难度合并计算)，在选曲界面调节难度时曲包上的数据也会相应变化。</li>
+                                <li>对于解锁前完全不可见的曲目，其数据只会在曲目解锁后计入。</li>
+                                <li>将英文字母转为小写后的Unicode顺序，即空格、#、-、0~9、[、a~z、扩展拉丁字母、希腊字母(区分大小写)、汉字。</li>
+                                <li>按难度1~12顺序，有"+"的更高，最高为难度???。</li>
+                                <li>未在世界模式解锁的曲目更高。</li>
+                                <li>从低到高为无游玩记录、D~EX+、PM。</li>
+                                <li>从低到高为无游玩记录、通关失败、简单通关、通关、困难通关、FR、PM。</li>
+                                <li>地面轨道数量变为6key，视野扩大且天空判定线升高。</li>
+                                <li>部分愚人节曲目除外。</li>
+                                <li>这是一个比较安全的血量，而非Hard或风暴收集条的通关要求。</li>
+                                <li>该选项不会在屏幕刷新率不高于60Hz的安卓设备和任何iOS/iPadOS设备上出现。屏幕支持高刷新率的iOS/iPadOS设备会自动以高帧率进行游戏。</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Shared Footer Component -->
+    <div id="footer-container"></div>
+</body>
+
+</html>

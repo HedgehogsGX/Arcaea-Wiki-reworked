@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>游戏玩法 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .nav-dropdown {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+            background: rgba(99, 102, 241, 0.05);
+            border-radius: 16px 16px 0 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+            line-height: 1.6;
+        }
+
+        .update-content p {
+            margin-bottom: 1rem;
+        }
+
+        .update-content a {
+            position: relative;
+            display: inline-block;
+        }
+
+        .update-content a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: currentColor;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+            transform-origin: right;
+        }
+
+        .update-content a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html" class="block px-4 py-2 text-white hover:bg-primary/20">Link
+                                        Play</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <!-- 在 <main> 标签内替换为以下内容 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <!-- 界面 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-desktop text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">界面</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="layout.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            界面
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        界面是指游戏内的用户交互界面，主条目阐述了Arcaea内的界面。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 机制 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-cogs text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">机制</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="Judge.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            机制
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        机制是指游戏核心部分的规则、流程以及数据。主条目阐述了
+                        Arcaea 的物件，判定，回忆收集条，计分方式，残片，在线功能。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 搭档 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-user-friends text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">搭档</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="Partner.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            搭档
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        搭档（Partner）是Arcaea的重要机制之一。搭档是玩家可以通过各种方式获取，可以让玩家在游玩时或游玩外提供特殊效果的游戏角色。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 潜力值 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-chart-line text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">潜力值</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="PTT.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            潜力值
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        潜力值（Potential）是衡量玩家水平的标准之一，简称ptt，同时也是潜力值解歌系统等机制的基础。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 新手任务 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-tasks text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">新手任务</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="#"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            新手任务 (即将推出)
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        新手任务为Arcaea面向新人玩家快速熟悉Arcaea各类系统的奖励性任务系统。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 世界模式 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-globe text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">世界模式</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="World_Mode.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            世界模式
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        世界模式（World模式）是Arcaea的一种游戏模式，可以在世界模式通过消耗体力进行曲目游玩。通过世界模式可以解锁曲目和搭档；与此同时，搭档也会随着世界模式的游玩提升等级，在个别世界章节拥有特殊的体力消耗机制。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 故事模式 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-book text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">故事模式</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="Story_Mode.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            故事模式
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        故事模式（Story模式）是Arcaea的一种游戏模式，讲述了Arcaea世界观下的故事情节。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 段位挑战 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-trophy text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">段位挑战</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="Rank_Challenge.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            段位挑战
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        段位挑战（Course
+                        Mode）是Arcaea的一种游戏模式，供玩家挑战自我。和世界模式类似，在此模式中，游玩曲目与普通状态下也有许多不同，每个段位各有4首曲目，休息时间为60秒，段位挑战成功后会获得相对应的段位框和残片奖励，在9段及以上会获得额外的以太之滴的奖励。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 解歌系统 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-unlock-alt text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">解歌系统</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="Unlock.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            解歌系统
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        歌曲解锁是Arcaea的一种机制，在Arcaea中部分曲目需要达成某种条件才可以解锁。Arcaea的解歌系统目前分为六种。在技术上，这六种解歌系统可并存，但目前没有同时存在这六种解歌系统的曲目/谱面。
+                    </p>
+                </div>
+            </div>
+
+            <!-- 成就系统 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <i class="fas fa-medal text-primary text-xl"></i>
+                    <span class="text-xl font-semibold text-primary">成就系统</span>
+                </div>
+                <div class="update-content">
+                    <p class="text-gray-600">
+                        主条目：&nbsp;
+                        <a href="Achievement.html"
+                            class="text-blue-500 hover:underline hover:text-blue-700 transition duration-200">
+                            成就系统
+                        </a>
+                    </p>
+                    <p class="text-gray-600 mt-2">
+                        成就是Arcaea的一种机制，游戏内游玩曲目达成某种要求后，会解锁成就。
+                    </p>
+                </div>
+            </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="IMG/0_icon.png">
+    <title>潜力值 - Arcaea Wiki</title>
+
+    <!-- 继承所有主页的样式和资源 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.core.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/Glide.js/3.6.0/css/glide.theme.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 完全继承主页的CSS */
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('IMG/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(10px);
+            transform: translateZ(0);
+            will-change: transform;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+
+        .glass-effect {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link {
+            position: relative;
+            color: #fff;
+            text-decoration: none;
+            padding: 8px 16px;
+            transition: all 0.3s;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #6366f1;
+            transition: width 0.3s;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: #fff;
+        }
+
+        .search-box::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .update-header {
+            padding: 1.5rem;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.1);
+        }
+
+        .update-content {
+            padding: 1.5rem;
+            color: #4a5568;
+        }
+
+        .update-content ul {
+            list-style: none;
+            padding-left: 1.5rem;
+        }
+
+        .update-content li::before {
+            content: "•";
+            color: #6366f1;
+            margin-right: 0.5rem;
+        }
+
+        .nav-dropdown a:hover {
+            background: rgba(99, 102, 241, 0.2);
+            /* primary/20 */
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900">
+    <!-- 完全复制的导航栏 -->
+    <nav class="fixed w-full z-50 glass-effect">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold text-white">Arcaea Wiki</div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex items-baseline space-x-4 text-lg">
+                            <a href="index.html" class="nav-link">主页</a>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    版本信息
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="version-updates.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">版本更新日志</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    游戏指南
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="gameplay.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">游戏玩法</a>
+                                    <a href="layout.html" class="block px-4 py-2 text-white hover:bg-primary/20">界面</a>
+                                    <a href="Judge.html" class="block px-4 py-2 text-white hover:bg-primary/20">机制</a>
+                                    <a href="Partner.html" class="block px-4 py-2 text-white hover:bg-primary/20">搭档</a>
+                                    <a href="PTT.html" class="block px-4 py-2 text-white hover:bg-primary/20">潜力值</a>
+                                    <a href="Link_Play.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">LinkPlay</a>
+                                    <a href="World_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">世界模式</a>
+                                    <a href="Story_Mode.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">故事模式</a>
+                                    <a href="Rank_Challenge.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">段位挑战</a>
+                                    <a href="Achievement.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">成就系统</a>
+                                    <a href="Unlock.html"
+                                        class="block px-4 py-2 text-white hover:bg-primary/20">解歌系统</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    工具
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">定数表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲目列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲包列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">曲师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">谱师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">画师列表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">背景列表</a>
+                                </div>
+                            </div>
+                            <div class="relative group">
+                                <a href="#" class="nav-link flex items-center">
+                                    社区
+                                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                                </a>
+                                <div
+                                    class="absolute left-0 mt-2 w-48 rounded-lg overflow-hidden bg-gray-900/95 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300">
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">世界模式地图详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">故事模式剧情详表</a>
+                                    <a href="#" class="block px-4 py-2 text-white hover:bg-primary/20">解歌关系列表</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="relative">
+                        <input type="text" placeholder="搜索..." class="search-box w-64 text-lg">
+                        <i
+                            class="fas fa-search absolute right-4 top-1/2 transform -translate-y-1/2 text-white opacity-70"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 子页面专属内容区域 -->
+    <main class="pt-20 pb-12 px-4">
+        <div class="max-w-7xl mx-auto">
+            <h1 class="text-4xl font-bold text-white mb-8" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                潜力值(Potential)</h1>
+
+            <!-- 更新提示卡片 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">内容更新提示</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>经编辑组验证，潜力值构成中的best30和recent10具体机制并未被完全探索，需要进一步的测试。</li>
+                        <li>在下文中此部分内容会使用"可能过时？"这样的小标记来说明。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 概述卡片 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">概述</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li>潜力值(Potential，通常简称"ptt")于移动版1.1版本/NS版1.0.0c版本添加。</li>
+                        <li>是潜力值解歌系统等机制的基础，同时是衡量玩家水平的标准的数值之一。</li>
+                        <li>游戏将根据玩家的最佳成绩，以及最近游玩的成绩计算出玩家的潜力值。</li>
+                        <li>潜力值受制于玩家所拥有的曲目数量、谱面难度上限、游玩风格与近期状态等多方面因素。</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 潜力值图标卡片 - 横向表格 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">潜力值图标与范围</span>
+                </div>
+                <div class="update-content">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead>
+                                <tr>
+                                    <th class="px-4 py-2 border">潜力值范围</th>
+                                    <th class="px-4 py-2 border">0.00 - 3.49</th>
+                                    <th class="px-4 py-2 border">3.50 - 6.99</th>
+                                    <th class="px-4 py-2 border">7.00 - 9.99</th>
+                                    <th class="px-4 py-2 border">10.00 - 10.99</th>
+                                    <th class="px-4 py-2 border">11.00 - 11.99</th>
+                                    <th class="px-4 py-2 border">12.00 - 12.49</th>
+                                    <th class="px-4 py-2 border">12.50 - 12.99</th>
+                                    <th class="px-4 py-2 border">13.00+</th>
+                                    <th class="px-4 py-2 border">隐藏</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="px-4 py-2 border font-semibold">潜力值图标</td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_0.png" alt="0-3.49"
+                                            class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_1.png" alt="3.50-6.99"
+                                            class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_2.png" alt="7.00-9.99"
+                                            class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_3.png"
+                                            alt="10.00-10.99" class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_4.png"
+                                            alt="11.00-11.99" class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_5.png"
+                                            alt="12.00-12.49" class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_6.png"
+                                            alt="12.50-12.99" class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_7.png" alt="13.00+"
+                                            class="inline-block h-8"></td>
+                                    <td class="px-4 py-2 border text-center"><img src="IMG/Rating_off.png" alt="隐藏"
+                                            class="inline-block h-8"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 潜力值相关内容卡片 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">潜力值相关内容</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li><strong>Arcaea Online</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>玩家在登陆Arcaea Online后也可查看到自己的潜力值</li>
+                                <li>在订阅状态下可以查看参与计算的30个"最好成绩"和10个"近期最佳表现"</li>
+                                <li>可以将最好成绩生成为图片以方便查看和分享</li>
+                                <li>网页中只能看到每个谱面提供的潜力值（精确到两位小数）</li>
+                                <li>订阅状态下可以查看潜力值变化历史曲线（最长5年）</li>
+                            </ul>
+                        </li>
+                        <li><strong>设定</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>可以关闭"显示潜力值"选项，显示为"--"，背景为灰色</li>
+                                <li>关闭后好友无法看到你的潜力值，结算时不显示变化值</li>
+                                <li>关闭显示不代表关闭潜力值系统，系统仍会继续计算</li>
+                                <li>Arcaea Online中将始终显示潜力值</li>
+                            </ul>
+                        </li>
+                        <li><strong>解歌系统</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>潜力值是部分歌曲解锁条件的一部分</li>
+                                <li>详情可查看解歌系统#潜力值解歌系统</li>
+                            </ul>
+                        </li>
+                        <li><strong>世界模式</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>游玩世界模式获得的进展度和Beyond强化槽填充量与单曲潜力值有关</li>
+                                <li>部分地图的解锁与潜力值相关</li>
+                                <li>目前与潜力值相关的内容为"无情的挑战"</li>
+                                <li>失落章：Beyond与陷落章需要潜力值达到9.00以解锁[仅移动版]</li>
+                            </ul>
+                        </li>
+                        <li><strong>成就</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>在达到特定潜力值时，可获得成就</li>
+                                <li>可前往成就系统查阅</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 计算方法卡片 -->
+            <div class="card mb-6">
+                <div class="update-header">
+                    <span class="text-xl font-semibold text-primary">计算方法</span>
+                </div>
+                <div class="update-content">
+                    <ul class="space-y-4">
+                        <li><strong>单曲潜力值</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li><strong>谱面定数</strong>
+                                    <ul class="ml-6">
+                                        <li>所有正式谱面都有一个由lowiro内部确定的难度系数</li>
+                                        <li>谱面定级决定定数的整数部分</li>
+                                        <li>8级及以上谱面按照0.1精度细分</li>
+                                        <li>7/7+级谱面分为7.0,7.5和7.8</li>
+                                        <li>6级及以下谱面按照0.5精度细分</li>
+                                        <li>完整谱面定数可查看：定数详表</li>
+                                        <li>直观定数表可查看：定数表</li>
+                                    </ul>
+                                </li>
+                                <li><strong>单曲潜力值计算</strong>
+                                    <div class="overflow-x-auto mt-2">
+                                        <table class="min-w-full bg-white">
+                                            <thead>
+                                                <tr>
+                                                    <th class="px-4 py-2 border">分数</th>
+                                                    <th class="px-4 py-2 border">单次成绩潜力值</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">≥ 10,000,000（即PM）</td>
+                                                    <td class="px-4 py-2 border">定数+2 (此时屏蔽物量影响)</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">≥ 9,800,000 且 < 10,000,000</td>
+                                                    <td class="px-4 py-2 border">定数+1+(分数 - 9,800,000)/200,000</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">
+                                                        < 9,800,000</td>
+                                                    <td class="px-4 py-2 border">定数+(分数 - 9,500,000)/300,000 (下限为0）</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="overflow-x-auto mt-4">
+                                        <table class="min-w-full bg-white">
+                                            <thead>
+                                                <tr>
+                                                    <th class="px-4 py-2 border">分数</th>
+                                                    <th class="px-4 py-2 border">单次成绩潜力值</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">10,00x,xxx</td>
+                                                    <td class="px-4 py-2 border">定数+2.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">10,000,000</td>
+                                                    <td class="px-4 py-2 border">定数+2.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">9,950,000</td>
+                                                    <td class="px-4 py-2 border">定数+1.75</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">9,900,000</td>
+                                                    <td class="px-4 py-2 border">定数+1.50</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">9,800,000</td>
+                                                    <td class="px-4 py-2 border">定数+1.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">9,500,000</td>
+                                                    <td class="px-4 py-2 border">定数</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">9,200,000</td>
+                                                    <td class="px-4 py-2 border">定数-1.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">8,900,000</td>
+                                                    <td class="px-4 py-2 border">定数-2.00</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="px-4 py-2 border">8,600,000</td>
+                                                    <td class="px-4 py-2 border">定数-3.00</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>整体潜力值计算</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li>潜力值由40个单曲潜力值取均值而成</li>
+                                <li>来源为30个历史最高成绩(best30)和30个最近游玩成绩中的10个最高成绩(recent10)</li>
+                                <li>计算公式：(best30总和+recent10总和)/40</li>
+                                <li>best30是所有谱面中最高的30个成绩，中间没有相同的谱面出现</li>
+                                <li>recent10是较近30次的曲目游玩成绩中取10次不同谱面的最高成绩</li>
+                                <li>截至移动端V6.3.2理论上最高潜力值为13.27</li>
+                                <li>仅使用免费内容理论上最高潜力值为12.03</li>
+                                <li>截至NS版V2.0.3理论上最高潜力值为13.01</li>
+                            </ul>
+                        </li>
+                        <li><strong>潜力值更迭</strong>
+                            <ul class="ml-6 text-gray-600">
+                                <li><strong>更迭过程</strong>
+                                    <ul class="ml-6">
+                                        <li>游玩结束并联网上传成绩后，系统返回潜力值并计算变化值</li>
+                                        <li>开启"显示潜力值"状态下将显示变化值，相同则显示"keep"</li>
+                                    </ul>
+                                </li>
+                                <li><strong>更迭原理</strong>
+                                    <ul class="ml-6">
+                                        <li>best30部分：重新取30个最高的单曲潜力值</li>
+                                        <li>recent10/30部分：r30队列中单曲潜力值最高的10次成绩组成r10</li>
+                                        <li>r30更新有两种途径：直接写入和条件写入</li>
+                                        <li>直接写入：上传成绩插入r30，刷出最早的成绩</li>
+                                        <li>条件写入：满足条件时，成绩有条件的写入队列</li>
+                                        <li>触发条件写入的情形：
+                                            <ul class="ml-6">
+                                                <li>分数达到EX及以上(≥9,800,000)</li>
+                                                <li>困难模式Track Lost</li>
+                                                <li>第一次联网提交某一个谱面的成绩</li>
+                                                <li>提交的分数大于远程服务器记录</li>
+                                                <li>写入后会导致recent30内不同谱面数量低于10种</li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="glass-effect py-8" style="background: rgba(0, 0, 0, 0.8);">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        关于我们</h4>
+                    <p class="text-gray-300" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Arcaea Wiki
+                        是由社区维护的非官方
+                        Arcaea 游戏百科全书。</p>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        快速链接</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">官方网站</a></li>
+                        <li><a href="version-updates.html" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">更新日志</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">常见问题</a></li>
+                    </ul>
+                </div>
+
+                <!-- 社区 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        社区</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Discord</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Twitter</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white"
+                                style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">Reddit</a></li>
+                    </ul>
+                </div>
+
+                <!-- 编辑者入口 -->
+                <div>
+                    <h4 class="text-lg font-semibold text-white mb-4" style="text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                        编辑者入口</h4>
+                    <button
+                        class="bg-white bg-opacity-10 text-white px-4 py-2 rounded-button hover:bg-opacity-20">登录编辑</button>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="mt-8 pt-8 border-t border-gray-700">
+                <p class="text-center text-gray-400">© 2023 Arcaea Wiki. 本站与 lowiro 无关。</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
